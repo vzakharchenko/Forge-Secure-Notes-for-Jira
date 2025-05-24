@@ -1,0 +1,37 @@
+{
+  "name": "jira-global-page-custom-ui",
+  "version": "1.1.4",
+  "main": "index.js",
+  "license": "MIT",
+  "private": true,
+  "dependencies": {
+    "@atlaskit/button": "^23.2.0",
+    "@atlaskit/datetime-picker": "^17.0.2",
+    "@atlaskit/form": "^12.0.4",
+    "@atlaskit/icon": "^26.1.1",
+    "@atlaskit/lozenge": "^12.2.3",
+    "@atlaskit/primitives": "^14.8.0",
+    "@atlaskit/radio": "^8.1.0",
+    "@atlaskit/section-message": "^8.2.4",
+    "@atlaskit/select": "^20.6.0",
+    "@atlaskit/textarea": "^8.0.3",
+    "@atlaskit/theme": "^18.0.1",
+    "@forge/events": "^1.0.1",
+    "@forge/resolver": "1.6.10",
+    "@forge/sql": "^2.5.0",
+    "class-validator": "^0.14.2",
+    "forge-sql-orm": "2.0.21",
+    "uuid": "^11.1.0"
+  },
+  "scripts": {
+    "models:create": "forge-sql-orm-cli generate:model --output src/database/entities",
+    "migration:create": "forge-sql-orm-cli migrations:create --force",
+    "migration:update": "forge-sql-orm-cli migrations:update",
+    "migration:drop": "forge-sql-orm-cli migrations:drop",
+    "build:ci": "tsc --target esnext --project tsconfig.json  --outDir dist && rm -rf dist",
+    "forge:debug": "forge tunnel -d -f index.handler"
+  },
+  "devDependencies": {
+    "forge-sql-orm-cli": "^2.0.21"
+  }
+}
