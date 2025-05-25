@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<project name="MySql" database="MySql" id="9deeffea-eeb1-4e88-b976-5abf39c6ce0a" >
+	<schema name="forgehackaton" >
+		<table name="security_notes" prior="table_" >
+			<column name="id" type="VARBINARY" length="16" jt="-3" mandatory="y" >
+				<defo><![CDATA[UUID_TO_BIN(UUID())]]></defo>
+			</column>
+			<column name="target_user_id" type="VARCHAR" length="255" jt="12" mandatory="y" />
+			<column name="target_user_name" type="VARCHAR" length="255" jt="12" mandatory="y" />
+			<column name="expiry" type="VARCHAR" length="100" jt="12" mandatory="y" />
+			<column name="is_custom_expiry" type="BOOLEAN" jt="16" mandatory="y" />
+			<column name="encryption_key_hash" type="VARCHAR" length="255" jt="12" mandatory="y" />
+			<column name="iv" type="VARCHAR" length="255" jt="12" mandatory="y" />
+			<column name="salt" type="VARCHAR" length="255" jt="12" mandatory="y" />
+			<column name="created_at" type="DATETIME" jt="93" mandatory="y" >
+				<defo><![CDATA[CURRENT_TIMESTAMP]]></defo>
+			</column>
+			<column name="created_by" type="VARCHAR" length="255" jt="12" mandatory="y" />
+			<column name="status" type="VARCHAR" length="100" jt="12" mandatory="y" />
+			<column name="deleted_at" type="DATETIME" jt="93" />
+			<column name="expired_at" type="DATETIME" jt="93" />
+			<column name="expiry_date" type="DATETIME" jt="93" mandatory="y" />
+			<column name="viewed_at" type="DATETIME" jt="93" />
+			<column name="target_avatar_url" type="VARCHAR" length="255" jt="12" mandatory="y" />
+			<column name="created_user_name" type="VARCHAR" length="255" jt="12" mandatory="y" />
+			<column name="created_avatar_url" type="VARCHAR" length="255" jt="12" mandatory="y" />
+			<column name="issue_id" type="VARCHAR" length="255" jt="12" />
+			<column name="issue_key" type="VARCHAR" length="255" jt="12" />
+			<index name="pk_security_notes" unique="PRIMARY_KEY" >
+				<column name="id" />
+			</index>
+			<options><![CDATA[engine=InnoDB]]></options>
+		</table>
+	</schema>
+	<layout name="Main Diagram" id="72db4ea2-f79d-4a35-af96-3eef8ee4c27b" show_relation="columns" >
+		<entity schema="forgehackaton" name="security_notes" color="C1D8EE" x="280" y="200" />
+		<callout x="60" y="60" pointer="Round" >
+			<comment><![CDATA[Create new tables by right-clicking the diagram.
+Double-click the table headers, columns, or foreign keys to edit.
+The schema structure will be saved to the design model file.]]></comment>
+		</callout>
+	</layout>
+</project>

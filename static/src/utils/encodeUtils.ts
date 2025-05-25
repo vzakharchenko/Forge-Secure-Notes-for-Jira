@@ -1,4 +1,6 @@
 
+export const DERIVE_PURPOSE_ENCRYPTION = 'forge-secure-note:v1:encrypt';
+export const DERIVE_PURPOSE_VERIFICATION = 'forge-secure-note:v1:verify';
 
 function bufferToHex(buffer: ArrayBuffer | Uint8Array) {
     return Array.from(new Uint8Array(buffer))

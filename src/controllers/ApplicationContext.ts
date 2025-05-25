@@ -1,7 +1,11 @@
 import {AsyncLocalStorage} from "async_hooks";
+import {ForgeTypes} from "../core/Types";
+import {BaseContext} from "../core/services/ContextTypes";
 
 export interface AppContext {
   accountId: string;
+  forgeType:ForgeTypes;
+  context: BaseContext
 }
 
 export const applicationContext = new AsyncLocalStorage<AppContext>();

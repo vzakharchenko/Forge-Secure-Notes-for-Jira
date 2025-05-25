@@ -2,8 +2,8 @@ import "reflect-metadata";
 import Resolver, {Request} from "@forge/resolver";
 import {ErrorResponse, ForgeTypes} from "../Types";
 import {getTypeFromRequest} from "../utils/forgeUtils";
-import {BaseContext} from "../services/ContextTypes";
 import {applicationContext} from "../../controllers/ApplicationContext";
+import {CONTEXT_SERVICE} from "../services/contextService";
 
 export abstract class ActualResolver<T extends ErrorResponse> {
     abstract functionName(): string;
@@ -13,15 +13,12 @@ export abstract class ActualResolver<T extends ErrorResponse> {
         return getTypeFromRequest(req);
     }
 
-    getAccountId(req: Request): string {
-        const context = req.context as BaseContext;
-        return context.accountId;
-    }
-
     register(resolver: Resolver): void {
         resolver.define(this.functionName(), async (req: Request) => {
+            const forgeModuleType = this.getForgeModuleType(req);
+            const context = CONTEXT_SERVICE.getContext(req);
             return applicationContext.run(
-                { accountId: req.context.accountId },
+                { accountId: req.context.accountId, forgeType: forgeModuleType, context },
                 async () => {
                     return this.response(req);
                 },

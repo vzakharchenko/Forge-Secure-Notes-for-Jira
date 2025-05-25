@@ -61,7 +61,7 @@ export interface Project {
     type: string;
 }
 
-export interface IssueActivityContext extends BaseContext {
+export interface IssueContext extends BaseContext {
     extension: {
         issue: Issue;
         project: Project;
@@ -69,6 +69,6 @@ export interface IssueActivityContext extends BaseContext {
     };
 }
 
-export const isIssueActivityContext = (context: BaseContext): context is IssueActivityContext =>
-    (context as IssueActivityContext).extension?.issue !== undefined &&
-    (context as IssueActivityContext).extension?.project !== undefined;
+export const isIssueContext = (context: BaseContext): context is IssueContext =>
+    (context as IssueContext).extension?.issue !== undefined &&
+    (context as IssueContext).extension?.project !== undefined;

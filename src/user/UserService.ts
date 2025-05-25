@@ -23,9 +23,9 @@ export enum ServiceType {
 export interface UserService {
     getServiceType(): ServiceType;
 
-    getCurrentUser(): Promise<CurrentUser>;
+    getCurrentUser(): Promise<CurrentUser| undefined>;
 
-    getUserById(userId: string): Promise<CurrentUser>;
+    getUserById(userId: string): Promise<CurrentUser| undefined>;
 }
 
 export interface UserFactory {

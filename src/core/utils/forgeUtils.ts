@@ -7,7 +7,7 @@ export function getTypeFromContext(context: { moduleKey: string }): ForgeTypes {
         case "global-page": {
             return ForgeTypes.globalJira;
         }
-        case "issue-panel": {
+        case "forge-secure-notes-for-jira": {
             return ForgeTypes.issue;
         }
         case "GDPR-credentials":

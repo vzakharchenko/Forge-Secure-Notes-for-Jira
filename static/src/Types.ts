@@ -1,5 +1,3 @@
-import {EncryptedPayload} from "./utils/encodeUtils";
-
 export type ErrorType = "NOT_LICENSING" | "GENERAL" | "NO_PERMISSION";
 
 export type ViewTimeOutType = "1min" | "3mins" | "5mins" | "15mins" | "30mins";
@@ -11,7 +9,9 @@ export type NoteDataType = {
     expiry: string,
     isCustomExpiry: boolean,
     encryptionKeyHash: string,
-    encryptedPayload: EncryptedPayload,
+    encryptedPayload: string;
+    iv: string;
+    salt: string;
 };
 
 

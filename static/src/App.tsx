@@ -6,6 +6,7 @@ import Loading from "./components/Loading";
 import Issue from "./Issue";
 import CenterDiv from "./components/CenterDiv";
 import NewSecureNote from "./NewSecureNote";
+import GlobalPage from "./global/GlobalPage";
 
 const App = () => {
     const [context, setContext] = useState<FullContext>();
@@ -42,11 +43,18 @@ const App = () => {
     }
     switch (context!.moduleKey) {
         case "forge-secure-notes-for-jira": {
+            const appUrlParts = context!.localId.split("/");
+            const appUrl = `${appUrlParts[1]}/${appUrlParts[2]}/view/`;
             return (
                 <div>
-                    <Issue accountId={context?.accountId ?? ''}/>
+                    <Issue accountId={context?.accountId ?? ''} appUrl={appUrl}/>
                 </div>
             );
+        }
+        case "global-page": {
+           return (
+             <GlobalPage accountId={context!.accountId ??''}/>
+           )
         }
         default: {
             return (

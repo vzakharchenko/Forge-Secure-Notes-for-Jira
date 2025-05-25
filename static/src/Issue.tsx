@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {Box, Inline, Stack, Text} from "@atlaskit/primitives";
 import Button, {ButtonGroup} from "@atlaskit/button";
 import AddIcon from "@atlaskit/icon/glyph/add";
@@ -10,116 +10,118 @@ import {ViewMySecurityNotes} from "./models/ViewMySecurityNotes";
 import {formatDateTime} from "./utils/dateUtils";
 import {showNewIssueModal} from "./utils/ModalUtils";
 import {NoteDataType} from "./Types";
+import Spinner from "@atlaskit/spinner";
+import {invoke, router, showFlag} from "@forge/bridge";
 
-// Пример данных в формате ViewMySecurityNotes
-const initialNotes: ViewMySecurityNotes[] = [
-  {
-    id: "1",
-    createdBy: {
-      accountId: "user1",
-      displayName: "Alice",
-      avatarUrl: "https://example.com/avatar1.png"
-    },
-    targetUser: {
-      accountId: "currentUser",
-      displayName: "Current User",
-      avatarUrl: "https://example.com/avatar2.png"
-    },
-    viewTimeOut: "3mins",
-    status: "NEW",
-    expiration: new Date(Date.now() + 2 * 60 * 60 * 1000), // 2 hours from now
-    issueId: "123",
-    issueKey: "PROJ-123",
-    createdAt: new Date(),
-    isError: false
-  },
-  {
-    id: "2",
-    createdBy: {
-      accountId: "user2",
-      displayName: "Bob",
-      avatarUrl: "https://example.com/avatar3.png"
-    },
-    targetUser: {
-      accountId: "currentUser",
-      displayName: "Current User",
-      avatarUrl: "https://example.com/avatar2.png"
-    },
-    viewTimeOut: "5mins",
-    status: "VIEWED",
-    expiration: new Date(Date.now() - 24 * 60 * 60 * 1000), // expired
-    issueId: "124",
-    issueKey: "PROJ-124",
-    createdAt: new Date(),
-    viewedAt: new Date(),
-    isError: false
-  },
-  {
-    id: "3",
-    createdBy: {
-      accountId: "currentUser",
-      displayName: "Current User",
-      avatarUrl: "https://example.com/avatar2.png"
-    },
-    targetUser: {
-      accountId: "user3",
-      displayName: "Carol",
-      avatarUrl: "https://example.com/avatar4.png"
-    },
-    viewTimeOut: "15mins",
-    status: "NEW",
-    expiration: new Date(Date.now() + 24 * 60 * 60 * 1000), // 1 day from now
-    issueId: "125",
-    issueKey: "PROJ-125",
-    createdAt: new Date(),
-    isError: false
-  },
-  {
-    id: "4",
-    createdBy: {
-      accountId: "currentUser",
-      displayName: "Current User",
-      avatarUrl: "https://example.com/avatar2.png"
-    },
-    targetUser: {
-      accountId: "user4",
-      displayName: "Dave",
-      avatarUrl: "https://example.com/avatar5.png"
-    },
-    viewTimeOut: "30mins",
-    status: "VIEWED",
-    expiration: new Date(Date.now() + 3 * 60 * 60 * 1000), // 3 hours from now
-    issueId: "126",
-    issueKey: "PROJ-126",
-    createdAt: new Date(),
-    viewedAt: new Date(),
-    isError: false
-  }
-];
 
-function App(props: Readonly<{accountId: string}>) {
-  const [notes, setNotes] = useState(initialNotes);
-  const currentUserId = props.accountId
+function Issue(props: Readonly<{accountId: string, appUrl: string}>) {
+  const [notes, setNotes] = useState<ViewMySecurityNotes[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const currentUserId = props.accountId;
+
+  useEffect(() => {
+    const fetchNotes = async () => {
+      try {
+        const response = await invoke<{result:ViewMySecurityNotes[]}>('getMySecuredNotes');
+        setNotes(response?.result ??[] );
+      } catch (error:any) {
+        console.error('Error fetching notes:', error);
+
+        showFlag({
+          id: 'loadNote',
+          title: 'Failed to load Security Notes',
+          description: 'Load Security Notes are failed with error '+error.message,
+          type: 'error',
+          appearance: 'error',
+          isAutoDismiss: true
+        })
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchNotes();
+  }, []);
 
   const incomingNotes = notes.filter(note => note.targetUser.accountId === currentUserId);
-  const sentNotes = notes.filter(note => note.targetUser.accountId !== currentUserId);
+  // const sentNotes = notes.filter(note => note.targetUser.accountId !== currentUserId);
+  const sentNotes = notes.filter(note => note.createdBy.accountId === currentUserId);
 
   const handleNewNote = async () => {
     await showNewIssueModal(async (noteDate?:NoteDataType)=>{
       if (!noteDate) {
         return
       }
-      console.error(JSON.stringify(noteDate))
+      setIsLoading(true);
+      try {
+        const response =  await invoke<{result:ViewMySecurityNotes[]}>('createSecurityNote', noteDate);
+        setNotes(response?.result ?? []);
+        showFlag({
+          id: 'newNote',
+          title: 'Security Note successfully created',
+          description: 'Security Note successfully created, remember send key over slack, telegram or etc...',
+          type: 'success',
+          appearance: 'success',
+          isAutoDismiss: true
+        })
+      } catch (error:any) {
+        console.error('Error creating note:', error);
+        showFlag({
+          id: 'newNote',
+          title: 'Failed to create Security Note',
+          description: 'creating Security Note is failed with error '+error.message,
+          type: 'error',
+          appearance: 'error',
+          isAutoDismiss: true
+        })
+      } finally {
+        setIsLoading(false);
+      }
     })
   };
 
-  const handleOpenNote = (noteId: string) => {
-    alert(`Открыть заметку: ${noteId}`);
+  const handleOpenNote = async (noteId: string) => {
+    await router.open(`/jira/apps/${props.appUrl}${noteId}`)
   };
 
-  const handleDeleteNote = (noteId: string) => {
-    alert(`Удалить заметку: ${noteId}`);
+  const handleDeleteNote = async (noteId: string) => {
+    setIsLoading(true);
+    try {
+      const response = await invoke<{result:ViewMySecurityNotes[]}>('deleteSecurityNote', {id:noteId});
+      setNotes(response?.result ??[] );
+      showFlag({
+        id: 'deleteNote',
+        title: 'Security Note successfully deleted',
+        description: 'Security Note successfully deleted, audit logs are still available',
+        type: 'success',
+        appearance: 'success',
+        isAutoDismiss: true
+      })
+    } catch (error:any) {
+      console.error('Error deleted notes:', error);
+      showFlag({
+        id: 'deleteNote',
+        title: 'Failed to delete Security Note',
+        description: 'Deleted Security Note is failed with error '+error.message,
+        type: 'error',
+        appearance: 'error',
+        isAutoDismiss: true
+      })
+    } finally {
+      setIsLoading(false);
+    }
   };
+
+  if (isLoading) {
+    return (
+      <Box padding="space.400" style={{ maxWidth: 600, margin: "32px auto", textAlign: "center" }}>
+        <Stack space="space.400" alignInline="center">
+          <Spinner size="large" />
+          <Text>Loading secure notes...</Text>
+        </Stack>
+      </Box>
+    );
+  }
 
   return (
     <Box padding="space.400" style={{ maxWidth: 600, margin: "32px auto" }}>
@@ -152,16 +154,18 @@ function App(props: Readonly<{accountId: string}>) {
                       <Lozenge appearance="success">✅ VIEWED</Lozenge>
                     )}
                     <Text>From: {note.createdBy.displayName}</Text>
-                    <Text>({formatDateTime(note.expiration)})</Text>
+                    <Text>({formatDateTime(note.status === "NEW" ? note.expiration: note.viewedAt as Date)})</Text>
                   </Inline>
                   <ButtonGroup>
+                    {  note.status === "NEW" ?
                     <Button
                       appearance="subtle"
                       iconBefore={<OpenIcon label="Open" />}
                       onClick={() => handleOpenNote(note.id)}
                     >
                       Open
-                    </Button>
+                    </Button>: null
+                    }
                   </ButtonGroup>
                 </Inline>
               </Box>
@@ -182,11 +186,14 @@ function App(props: Readonly<{accountId: string}>) {
                 <Inline spread="space-between" alignBlock="center">
                   <Inline space="space.200" alignBlock="center">
                     <Text>To: {note.targetUser.displayName}</Text>
-                    <Text>({formatDateTime(note.expiration)})</Text>
-                    {note.status === "NEW" && (
-                      <Lozenge appearance="new">NEW</Lozenge>
+                    <Text>({formatDateTime(note.status === "NEW" ? note.expiration: note.viewedAt as Date)})</Text>
+                    {note.status === "NEW" ? (
+                        <Lozenge appearance="new">🕒 NEW</Lozenge>
+                    ) : (
+                        <Lozenge appearance="success">✅ VIEWED</Lozenge>
                     )}
                   </Inline>
+                  { note.status === "NEW" ?
                   <ButtonGroup>
                     <Button
                       appearance="subtle"
@@ -195,7 +202,8 @@ function App(props: Readonly<{accountId: string}>) {
                     >
                       Delete
                     </Button>
-                  </ButtonGroup>
+                  </ButtonGroup>:null
+                  }
                 </Inline>
               </Box>
             ))}
@@ -207,4 +215,4 @@ function App(props: Readonly<{accountId: string}>) {
   );
 }
 
-export default App;
+export default Issue;
