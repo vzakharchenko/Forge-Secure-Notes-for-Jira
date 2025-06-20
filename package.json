@@ -22,6 +22,7 @@
     "forge:debug": "forge tunnel -d -f index.handler"
   },
   "devDependencies": {
+    "@types/node": "^24.0.3",
     "forge-sql-orm-cli": "^2.0.23",
     "typescript": "^5.8.3"
   }
