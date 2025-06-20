@@ -31,4 +31,5 @@ jobs:
     - run: cd static && npm ci
     - run: cd static && npm run build
     - run: npm install -g @forge/cli && forge settings set usage-analytics true
-    - run: export FORGE_EMAIL=${{ secrets.FORGE_EMAIL }} && export FORGE_API_TOKEN=${{ secrets.FORGE_API_TOKEN }}  && forge deploy --non-interactive
+    - run: export FORGE_EMAIL=${{ secrets.FORGE_EMAIL }} && export FORGE_API_TOKEN=${{ secrets.FORGE_API_TOKEN }}  && forge deploy --non-interactive -e production
+    - run: export FORGE_EMAIL=${{ secrets.FORGE_EMAIL }} && export FORGE_API_TOKEN=${{ secrets.FORGE_API_TOKEN }} && forge install -e production  -s  ${{ secrets.FORGE_HOSTNAME }} -p Jira --confirm-scopes  --non-interactive --upgrade
