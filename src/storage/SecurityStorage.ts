@@ -12,7 +12,7 @@ class SecurityStorageImpl implements SecurityStorage {
     }
 
     getPayload(id: string): Promise<string|undefined> {
-        return kvs.getSecret<string>(id)
+        return kvs.getSecret<string>(id) as Promise<string>
     }
 
     async savePayload(id: string, payload: string): Promise<void> {

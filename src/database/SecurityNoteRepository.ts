@@ -18,12 +18,12 @@ class SecurityNoteRepositoryImpl extends DbRepository implements SecurityNoteRep
 
 
     async viewSecurityNote(id: string): Promise<void> {
-        await this.getForgeSql().modify().updateById({status: 'VIEWED', viewedAt: new Date(), id}, securityNotes);
+        await this.getForgeSql().modifyWithVersioning().updateById({status: 'VIEWED', viewedAt: new Date(), id}, securityNotes);
     }
 
     @withAppContext()
     async createSecurityNote(data: Partial<InferInsertModel<typeof securityNotes>>): Promise<void> {
-       await this.getForgeSql().modify().insert(securityNotes,[data as InferInsertModel<typeof securityNotes>]);
+       await this.getForgeSql().modifyWithVersioning().insert(securityNotes,[data as InferInsertModel<typeof securityNotes>]);
     }
 
     @withAppContext()
@@ -54,11 +54,11 @@ class SecurityNoteRepositoryImpl extends DbRepository implements SecurityNoteRep
     }
 
     async deleteSecurityNote(id: string): Promise<void> {
-        await this.getForgeSql().modify().updateById({status: 'DELETED', deletedAt: new Date(), id}, securityNotes);
+        await this.getForgeSql().modifyWithVersioning().updateById({status: 'DELETED', deletedAt: new Date(), id}, securityNotes);
     }
 
     async expireSecurityNote(ids: string[]): Promise<void> {
-        await this.getForgeSql().modify().updateFields({status: 'EXPIRED', expiredAt: new Date()}, securityNotes, inArray(securityNotes.id, ids));
+        await this.getForgeSql().modifyWithVersioning().updateFields({status: 'EXPIRED', expiredAt: new Date()}, securityNotes, inArray(securityNotes.id, ids));
     }
 
     async getSecurityNode(id: string): Promise<InferSelectModel<typeof securityNotes> | undefined> {
