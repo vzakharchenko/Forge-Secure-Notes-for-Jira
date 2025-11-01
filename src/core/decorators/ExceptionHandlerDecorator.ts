@@ -2,7 +2,7 @@ import {isResolver} from "./ResolverDecorator";
 import {ActualResolver} from "../resolver/ActualResolver";
 import {isSchedulerTrigger} from "./SchedulerDecorator";
 import {SchedulerTrigger, SchedulerTriggerResponse} from "../trigger/SchedulerTrigger";
-import {ErrorResponse} from "../Types";
+import {ErrorResponse} from "../../../shared/Types";
 
 export const exceptionHandler =
     () =>
@@ -16,12 +16,13 @@ export const exceptionHandler =
                 return await originalMethod.apply(this, args);
             } catch (e) {
                 console.error(`Catch Exception ${propertyKey}: ${e.message}`, e);
-                if (e.debug) {
-                    console.error("SQL Error :" + JSON.stringify(e.debug));
+                const error = e?.cause ?? e;
+                if (error.debug) {
+                    console.error("SQL Error :" + JSON.stringify(error.debug));
                 }
                 return {
                     isError: true,
-                    message: e.message,
+                    message: error.message,
                 };
             }
         };

@@ -1,8 +1,8 @@
-import {ViewMySecurityNotes} from "../../controllers/responses/ViewMySecurityNotes";
+import {ViewMySecurityNotes} from "../../../shared/responses/ViewMySecurityNotes";
 import {SECURITY_NOTE_REPOSITORY} from "../../database/SecurityNoteRepository";
-import {SecurityNoteStatus} from "../Types";
+import {SecurityNoteStatus} from "../../../shared/Types";
 import {applicationContext, getAppContext, withAppContext} from "../../controllers/ApplicationContext";
-import {NewSecurityNote} from "../../controllers/dto/NewSecurityNote";
+import {NewSecurityNote} from "../../../shared/dto/NewSecurityNote";
 import {SECURITY_STORAGE} from "../../storage/SecurityStorage";
 import {InferInsertModel} from "drizzle-orm";
 import {USER_FACTORY} from "../../user/UserServiceFactory";
@@ -15,7 +15,7 @@ import {
     sendNoteDeletedNotification
 } from "../utils/sendIssueNotification";
 import {isIssueContext, IssueContext} from "./ContextTypes";
-import {SecurityNoteData} from "../../controllers/responses/SecurityNoteData";
+import {SecurityNoteData} from "../../../shared/responses/SecurityNoteData";
 
 export interface SecurityNoteService {
     getMySecurityNoteIssue(): Promise<ViewMySecurityNotes[]>

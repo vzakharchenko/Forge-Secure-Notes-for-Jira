@@ -1,4 +1,4 @@
-import {ForgeTypes} from "../core/Types";
+import {ForgeTypes} from "../../shared/Types";
 
 export type CurrentUser = {
     accountId: string;

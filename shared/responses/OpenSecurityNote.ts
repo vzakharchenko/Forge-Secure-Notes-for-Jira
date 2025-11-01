@@ -1,4 +1,4 @@
-import {ErrorResponse} from "../../core/Types";
+import {ErrorResponse} from "../Types";
 
 
 export interface OpenSecurityNote extends ErrorResponse {

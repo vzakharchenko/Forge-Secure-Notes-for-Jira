@@ -2,7 +2,7 @@ import {isResolver} from "./ResolverDecorator";
 import {Request} from "@forge/resolver";
 import {validate} from "class-validator";
 import {ActualResolver} from "../resolver/ActualResolver";
-import {ErrorResponse} from "../Types";
+import {ErrorResponse} from "../../../shared/Types";
 
 export const validBodyHandler = <T extends object>(validateClass: new () => T) => {
     return (target: unknown, propertyKey: string, descriptor: PropertyDescriptor): PropertyDescriptor => {

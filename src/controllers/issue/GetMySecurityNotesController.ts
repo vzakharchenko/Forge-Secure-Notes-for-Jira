@@ -1,8 +1,8 @@
 import {resolver} from "../../core/decorators/ResolverDecorator";
 import {ActualResolver} from "../../core/resolver/ActualResolver";
-import {ResolverNames} from "../ResolverNames";
+import {ResolverNames} from "../../../shared/ResolverNames";
 import {exceptionHandler} from "../../core/decorators/ExceptionHandlerDecorator";
-import {ViewMySecurityNotesList} from "../responses/ViewMySecurityNotesList";
+import {ViewMySecurityNotesList} from "../../../shared/responses/ViewMySecurityNotesList";
 import {SECURITY_NOTE_SERVICE} from "../../core/services/SecurityNoteService";
 
 @resolver

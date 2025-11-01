@@ -1,12 +1,12 @@
 import {resolver} from "../../core/decorators/ResolverDecorator";
 import {ActualResolver} from "../../core/resolver/ActualResolver";
-import {ResolverNames} from "../ResolverNames";
+import {ResolverNames} from "../../../shared/ResolverNames";
 import {exceptionHandler} from "../../core/decorators/ExceptionHandlerDecorator";
 import {SECURITY_NOTE_SERVICE} from "../../core/services/SecurityNoteService";
 import {validBodyHandler} from "../../core/decorators/ValidBodyHandlerDecorator";
 import {Request} from "@forge/resolver";
-import {SecurityNoteIdAndSecurityHashKey} from "../dto/SecurityNoteIdAndSecurityHashKey";
-import {PERMISSION_ERROR_OBJECT, SecurityNoteData} from "../responses/SecurityNoteData";
+import {SecurityNoteIdAndSecurityHashKey} from "../../../shared/dto/SecurityNoteIdAndSecurityHashKey";
+import {PERMISSION_ERROR_OBJECT, SecurityNoteData} from "../../../shared/responses/SecurityNoteData";
 
 @resolver
 class FetchSecurityNoteController extends ActualResolver<SecurityNoteData> {

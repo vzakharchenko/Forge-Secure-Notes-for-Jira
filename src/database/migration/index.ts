@@ -1,5 +1,5 @@
-import {MigrationRunner} from "@forge/sql/out/migration";
-import {MIGRATION_VERSION} from "./migrationCount";
+import { MigrationRunner } from "@forge/sql/out/migration";
+import { MIGRATION_VERSION } from "./migrationCount";
 
 export type MigrationType = (
   migrationRunner: MigrationRunner,

@@ -4,10 +4,10 @@ export enum ForgeTypes {
     jiraTrigger = "jiraTrigger",
 }
 
-export type ErrorType = "NOT_LICENSING" | "GENERAL" | "NO_PERMISSION";
-
 export type ViewTimeOutType = "1min" | "3mins" | "5mins" | "15mins" | "30mins";
+
 export type SecurityNoteStatus = "NEW" | "VIEWED" | "DELETED" | "EXPIRED"
+export type ErrorType = "NOT_LICENSING" | "GENERAL" | "NO_PERMISSION"|'INSTALLATION';
 
 export interface ErrorResponse {
     isError?: boolean;

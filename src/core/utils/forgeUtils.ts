@@ -1,6 +1,6 @@
 import {Request} from "@forge/resolver";
 import {BaseContext} from "../services/ContextTypes";
-import {ForgeTypes} from "../Types";
+import {ForgeTypes} from "../../../shared/Types";
 
 export function getTypeFromContext(context: { moduleKey: string }): ForgeTypes {
     switch (context.moduleKey) {
