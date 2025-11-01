@@ -39,8 +39,7 @@ jobs:
 
       - name: Frontend install & build
         run: |
-          cd static && npm ci
-          cd static && npm run build
+          cd static && npm ci && npm run build
 
       - name: Forge CLI setup
         run: npm install -g @forge/cli && forge settings set usage-analytics true
@@ -81,8 +80,7 @@ jobs:
 
       - name: Frontend install & build
         run: |
-          cd static && npm ci
-          cd static && npm run build
+          cd static && npm ci && npm run build
 
       - name: Forge CLI setup
         run: npm install -g @forge/cli && forge settings set usage-analytics true
@@ -123,8 +121,7 @@ jobs:
 
       - name: Frontend install & build
         run: |
-          cd static && npm ci
-          cd static && npm run build
+          cd static && npm ci && npm run build
 
       - name: Forge CLI setup
         run: npm install -g @forge/cli && forge settings set usage-analytics true
