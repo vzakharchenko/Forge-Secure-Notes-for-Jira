@@ -26,6 +26,11 @@ modules:
       function: runSchemaMigration
       events:
         - avi:forge:installed:app
+  webtrigger:
+    - key: fetch-schema
+      function: fetchSchema
+    - key: drop-schema-migration
+      function: dropMigrations
   sql:
     - key: main
       engine: mysql
@@ -40,6 +45,10 @@ modules:
       handler: index.handlerMigration
     - key: runSlowQueryFunc
       handler: index.runSlowQuery
+    - key: dropMigrations
+      handler: index.dropMigrations
+    - key: fetchSchema
+      handler: index.fetchMigrations
 resources:
   - key: main
     path: static/site

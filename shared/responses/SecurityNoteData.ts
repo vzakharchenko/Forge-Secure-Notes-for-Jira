@@ -1,4 +1,4 @@
-import {ErrorResponse} from "../../core/Types";
+import {ErrorResponse} from "../Types";
 
 export interface SecurityNoteData extends ErrorResponse{
     id: string

@@ -1,6 +1,6 @@
 import {UserFactory, UserService} from "./UserService";
 import {JiraUserService} from "./jira/jiraUserService";
-import {ForgeTypes} from "../core/Types";
+import {ForgeTypes} from "../../shared/Types";
 
 class UserFactoryImpl implements UserFactory {
     private readonly jiraUserService: UserService = new JiraUserService();

@@ -1,5 +1,5 @@
 import {ActualResolver} from "../resolver/ActualResolver";
-import {ErrorResponse} from "../Types";
+import {ErrorResponse} from "../../../shared/Types";
 
 export const resolver = <T extends { new (...args: unknown[]): unknown }>(constructor: T): T => {
     if (!("prototype" in constructor) || typeof constructor.prototype.response !== "function") {

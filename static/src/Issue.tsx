@@ -6,12 +6,14 @@ import TrashIcon from "@atlaskit/icon/glyph/trash";
 import OpenIcon from "@atlaskit/icon/glyph/open";
 import Lozenge from "@atlaskit/lozenge";
 import {token} from "@atlaskit/tokens";
-import {ViewMySecurityNotes} from "./models/ViewMySecurityNotes";
 import {formatDateTime} from "./utils/dateUtils";
 import {showNewIssueModal} from "./utils/ModalUtils";
 import {NoteDataType} from "./Types";
 import Spinner from "@atlaskit/spinner";
 import {invoke, router, showFlag} from "@forge/bridge";
+import {ViewMySecurityNotesList} from "../../shared/responses/ViewMySecurityNotesList";
+import {ViewMySecurityNotes} from "../../shared/responses/ViewMySecurityNotes";
+import {ResolverNames} from "../../shared/ResolverNames";
 
 
 function Issue(props: Readonly<{accountId: string, appUrl: string}>) {
@@ -22,7 +24,13 @@ function Issue(props: Readonly<{accountId: string, appUrl: string}>) {
   useEffect(() => {
     const fetchNotes = async () => {
       try {
-        const response = await invoke<{result:ViewMySecurityNotes[]}>('getMySecuredNotes');
+        let response = await invoke<ViewMySecurityNotesList>(ResolverNames.GET_MY_SECURED_NOTES);
+        
+        while (response.isError && response.errorType === "INSTALLATION") {
+          await new Promise(resolve => setTimeout(resolve, 10000));
+          response = await invoke<ViewMySecurityNotesList>('getMySecuredNotes');
+        }
+        
         setNotes(response?.result ??[] );
       } catch (error:any) {
         console.error('Error fetching notes:', error);
@@ -40,7 +48,7 @@ function Issue(props: Readonly<{accountId: string, appUrl: string}>) {
       }
     };
 
-    fetchNotes();
+    fetchNotes().catch(console.error);
   }, []);
 
   const incomingNotes = notes.filter(note => note.targetUser.accountId === currentUserId);
@@ -54,7 +62,7 @@ function Issue(props: Readonly<{accountId: string, appUrl: string}>) {
       }
       setIsLoading(true);
       try {
-        const response =  await invoke<{result:ViewMySecurityNotes[]}>('createSecurityNote', noteDate);
+        const response =  await invoke<{result:ViewMySecurityNotes[]}>(ResolverNames.CREATE_SECURITY_NOTE, noteDate);
         setNotes(response?.result ?? []);
         showFlag({
           id: 'newNote',
@@ -87,7 +95,7 @@ function Issue(props: Readonly<{accountId: string, appUrl: string}>) {
   const handleDeleteNote = async (noteId: string) => {
     setIsLoading(true);
     try {
-      const response = await invoke<{result:ViewMySecurityNotes[]}>('deleteSecurityNote', {id:noteId});
+      const response = await invoke<{result:ViewMySecurityNotes[]}>(ResolverNames.DELETE_SECURITY_NOTE, {id:noteId});
       setNotes(response?.result ??[] );
       showFlag({
         id: 'deleteNote',

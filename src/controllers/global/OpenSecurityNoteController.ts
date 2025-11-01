@@ -1,12 +1,12 @@
 import {resolver} from "../../core/decorators/ResolverDecorator";
 import {ActualResolver} from "../../core/resolver/ActualResolver";
-import {ResolverNames} from "../ResolverNames";
+import {ResolverNames} from "../../../shared/ResolverNames";
 import {exceptionHandler} from "../../core/decorators/ExceptionHandlerDecorator";
 import {SECURITY_NOTE_SERVICE} from "../../core/services/SecurityNoteService";
 import {validBodyHandler} from "../../core/decorators/ValidBodyHandlerDecorator";
 import {Request} from "@forge/resolver";
-import {SecurityNoteId} from "../dto/SecurityNoteId";
-import {OpenSecurityNote} from "../responses/OpenSecurityNote";
+import {SecurityNoteId} from "../../../shared/dto/SecurityNoteId";
+import {OpenSecurityNote} from "../../../shared/responses/OpenSecurityNote";
 
 @resolver
 class OpenSecurityNoteController extends ActualResolver<OpenSecurityNote> {

@@ -1,12 +1,12 @@
 import {resolver} from "../../core/decorators/ResolverDecorator";
 import {ActualResolver} from "../../core/resolver/ActualResolver";
-import {ResolverNames} from "../ResolverNames";
+import {ResolverNames} from "../../../shared/ResolverNames";
 import {exceptionHandler} from "../../core/decorators/ExceptionHandlerDecorator";
 import {SECURITY_NOTE_SERVICE} from "../../core/services/SecurityNoteService";
 import {validBodyHandler} from "../../core/decorators/ValidBodyHandlerDecorator";
 import {Request} from "@forge/resolver";
-import {ViewMySecurityNotesList} from "../responses/ViewMySecurityNotesList";
-import {SecurityNoteId} from "../dto/SecurityNoteId";
+import {ViewMySecurityNotesList} from "../../../shared/responses/ViewMySecurityNotesList";
+import {SecurityNoteId} from "../../../shared/dto/SecurityNoteId";
 
 @resolver
 class DeleteSecurityNoteController extends ActualResolver<ViewMySecurityNotesList> {

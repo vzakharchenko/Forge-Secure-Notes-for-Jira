@@ -1,4 +1,4 @@
-import {ErrorResponse, SecurityNoteStatus, ViewTimeOutType} from "../../core/Types";
+import {ErrorResponse, SecurityNoteStatus, ViewTimeOutType} from "../Types";
 
 
 export type UserViewInfoType = {

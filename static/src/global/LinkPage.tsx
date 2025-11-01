@@ -14,8 +14,9 @@ import {
   DERIVE_PURPOSE_VERIFICATION
 } from "../utils/encodeUtils";
 import NotFoundClosedImage from "../img/404.png";
-import {SecurityNoteData} from "../models/SecurityNoteData";
 import {Renderer} from "../utils/CountDownUtils";
+import {SecurityNoteData} from "../../../shared/responses/SecurityNoteData";
+import {ResolverNames} from "../../../shared/ResolverNames";
 
 const GLOBAL_ROUTES = {
   all: { route: "/" }
@@ -34,7 +35,7 @@ export default function LinkPage(props:Readonly<{accountId:string}>) {
   useEffect(() => {
     const validateNote = async () => {
       try {
-        const response = await invoke<{ valid: boolean }>("openSecurityNote", {
+        const response = await invoke<{ valid: boolean }>(ResolverNames.OPEN_LINK_SECURITY_NOTE, {
           id: params.recordId
         });
         setIsValid(response.valid);
@@ -46,7 +47,7 @@ export default function LinkPage(props:Readonly<{accountId:string}>) {
       }
     };
 
-    validateNote();
+    validateNote().catch(console.error);
   }, [params.recordId]);
 
   const handleKeySubmit = async () => {
@@ -61,7 +62,7 @@ export default function LinkPage(props:Readonly<{accountId:string}>) {
     const keyForEncryption = await calculateHash(baseKey, DERIVE_PURPOSE_ENCRYPTION, 1000);
     const keyForServer = await calculateHash(baseKey, DERIVE_PURPOSE_VERIFICATION, 1000);
     try {
-      const response = await invoke<SecurityNoteData>("fetchSecurityNote", {
+      const response = await invoke<SecurityNoteData>(ResolverNames.FETCH_SECURITY_NOTE, {
         id: params.recordId,
         keyHash:keyForServer
       });
