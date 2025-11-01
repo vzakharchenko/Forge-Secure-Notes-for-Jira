@@ -56,16 +56,6 @@
     "vite": "^7.1.12",
     "vite-plugin-html": "^3.2.2"
   },
-  "jest-junit": {
-    "suiteName": "Mria crm tests",
-    "outputDirectory": "./.junit",
-    "outputName": "junit.xml",
-    "uniqueOutputName": "false",
-    "classNameTemplate": "{classname}-{title}",
-    "titleTemplate": "{classname}-{title}",
-    "ancestorSeparator": " › ",
-    "usePathForSuiteName": "true"
-  },
   "scripts": {
     "build": "vite build",
     "build:husky": "vite build",
