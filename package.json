@@ -5,13 +5,13 @@
   "license": "MIT",
   "private": true,
   "dependencies": {
-    "@forge/events": "^1.0.3",
-    "@forge/kvs": "^0.1.4",
-    "@forge/resolver": "1.6.12",
-    "@forge/sql": "^2.5.2",
+    "@forge/events": "^2.0.9",
+    "@forge/kvs": "^1.1.0",
+    "@forge/resolver": "1.7.1",
+    "@forge/sql": "^3.0.9",
     "class-validator": "^0.14.2",
-    "forge-sql-orm": "2.0.23",
-    "uuid": "^11.1.0"
+    "forge-sql-orm": "2.1.11",
+    "uuid": "^13.0.0"
   },
   "scripts": {
     "models:create": "forge-sql-orm-cli generate:model --output src/database/entities",
@@ -22,8 +22,8 @@
     "forge:debug": "forge tunnel -d -f index.handler"
   },
   "devDependencies": {
-    "@types/node": "^24.0.3",
-    "forge-sql-orm-cli": "^2.0.23",
-    "typescript": "^5.8.3"
+    "@types/node": "^24.9.2",
+    "forge-sql-orm-cli": "^2.1.11",
+    "typescript": "^5.9.3"
   }
 }
