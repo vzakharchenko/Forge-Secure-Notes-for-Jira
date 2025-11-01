@@ -1,11 +1,17 @@
 import Resolver from "@forge/resolver";
 
-import ForgeSQL, {applySchemaMigrations, dropSchemaMigrations, fetchSchemaWebTrigger,} from "forge-sql-orm";
+import ForgeSQL, {
+    applySchemaMigrations,
+    dropSchemaMigrations,
+    fetchSchemaWebTrigger,
+    slowQuerySchedulerTrigger,
+} from "forge-sql-orm";
 import {additionalMetadata} from "./database/entities";
 import migration from "./database/migration";
 import issue from "./resolvers/issue";
 import global from "./resolvers/global";
 import FiveMinuteTrigger from "./controllers/triggers/FiveMinutesTrigger";
+import SlowQueryTriggerTrigger from "./controllers/triggers/SlowQueryTriggerTrigger";
 
 const issueResolver = new Resolver();
 const globalResolver = new Resolver();
@@ -19,6 +25,8 @@ export const handlerIssue = issueResolver.getDefinitions();
 export const handlerGlobal = globalResolver.getDefinitions();
 
 export const handlerFiveMinute =FiveMinuteTrigger.handler
+
+export const runSlowQuery = SlowQueryTriggerTrigger.handler
 
 export const handlerMigration = async () => {
   return applySchemaMigrations(migration);
