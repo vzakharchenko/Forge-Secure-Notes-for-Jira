@@ -3,6 +3,6 @@ import OpenSecurityNoteController from "../../controllers/global/OpenSecurityNot
 import FetchSecurityNoteController from "../../controllers/global/FetchSecurityNoteController";
 
 export default function (resolver: Resolver): void {
-    OpenSecurityNoteController.register(resolver);
-    FetchSecurityNoteController.register(resolver);
+  OpenSecurityNoteController.register(resolver);
+  FetchSecurityNoteController.register(resolver);
 }

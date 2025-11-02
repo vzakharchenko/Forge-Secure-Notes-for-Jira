@@ -4,7 +4,7 @@ import createSecurityNoteController from "../../controllers/issue/CreateSecurity
 import deleteSecurityNoteController from "../../controllers/issue/DeleteSecurityNoteController";
 
 export default function (resolver: Resolver): void {
-    getMySecurityNotesController.register(resolver)
-    createSecurityNoteController.register(resolver)
-    deleteSecurityNoteController.register(resolver)
+  getMySecurityNotesController.register(resolver);
+  createSecurityNoteController.register(resolver);
+  deleteSecurityNoteController.register(resolver);
 }

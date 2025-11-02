@@ -16,7 +16,9 @@ export interface ViewMySecurityNotes extends ErrorResponse {
     expiration: Date;
     expiry: string;
     issueId?: string;
+    projectId?: string;
     issueKey?: string;
+    projectKey?: string;
     createdAt: Date;
     viewedAt?: Date;
     deletedAt?: Date;
