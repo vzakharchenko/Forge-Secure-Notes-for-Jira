@@ -11,7 +11,7 @@ import {
 } from "../../controllers/ApplicationContext";
 import { NewSecurityNote } from "../../../shared/dto/NewSecurityNote";
 import { SECURITY_STORAGE } from "../../storage/SecurityStorage";
-import { InferInsertModel } from "drizzle-orm";
+import { InferInsertModel, InferSelectModel } from "drizzle-orm";
 import { USER_FACTORY } from "../../user/UserServiceFactory";
 import { securityNotes } from "../../database/entities";
 import { calculateHash } from "../utils/cryptoUtils";
@@ -23,6 +23,8 @@ import {
 } from "../utils/sendIssueNotification";
 import { isIssueContext, IssueContext } from "./ContextTypes";
 import { SecurityNoteData } from "../../../shared/responses/SecurityNoteData";
+import { ProjectInfo, ProjectIssue } from "../../../shared/responses/ProjectIssue";
+import { BOOTSTRAP_SERVICE } from "./BootstrapService";
 
 export interface SecurityNoteService {
   getMySecurityNoteIssue(): Promise<ViewMySecurityNotes[]>;
@@ -39,42 +41,119 @@ export interface SecurityNoteService {
 
   getSecurityNoteUsers(): Promise<UserViewInfoType[]>;
 
-  getSecurityNoteByAccountId(accountId: string): Promise<ViewMySecurityNotes[]>;
+  getSecurityNoteByAccountId(
+    accountId: string,
+    limit: number,
+    offset: number,
+  ): Promise<ViewMySecurityNotes[]>;
+  getIssuesAndProjects(): Promise<ProjectIssue>;
+  getSecurityNoteByIssue(
+    issueIdOrKey: string,
+    limit: number,
+    offset: number,
+  ): Promise<ViewMySecurityNotes[]>;
+  getSecurityNoteByProject(
+    projectIdOrKey: string,
+    limit: number,
+    offset: number,
+  ): Promise<ViewMySecurityNotes[]>;
 }
 
 class SecurityNoteServiceImpl implements SecurityNoteService {
-  async getSecurityNoteByAccountId(accountId: string): Promise<ViewMySecurityNotes[]> {
-    const securityDbNotes =
-      await SECURITY_NOTE_REPOSITORY.getAllSecurityNotesByAccountId(accountId);
-    if (securityDbNotes) {
-      return securityDbNotes.map((sn) => {
-        return {
-          id: sn.id,
-          createdBy: {
-            displayName: sn.createdUserName,
-            accountId: sn.createdBy,
-            avatarUrl: sn.createdAvatarUrl,
-          },
-          targetUser: {
-            displayName: sn.targetUserName,
-            accountId: sn.targetUserId,
-            avatarUrl: sn.targetAvatarUrl,
-          },
-          viewTimeOut: "5mins",
-          status: sn.status as SecurityNoteStatus,
-          expiration: sn.expiryDate,
-          issueId: sn.issueId ?? undefined,
-          issueKey: sn.issueKey ?? undefined,
-          projectId: sn.projectId ?? undefined,
-          projectKey: sn.projectKey ?? undefined,
-          createdAt: sn.createdAt,
-          viewedAt: sn.viewedAt ?? undefined,
-          deletedAt: sn.deletedAt ?? undefined,
-          expiry: sn.expiry,
-        };
-      });
+  private mapSecurityNotesToView(
+    securityDbNotes: (InferSelectModel<typeof securityNotes> & {
+      count: number;
+    })[],
+    defaults?: {
+      issueId?: string;
+      issueKey?: string;
+      projectId?: string;
+      projectKey?: string;
+    },
+  ): ViewMySecurityNotes[] {
+    if (!securityDbNotes || securityDbNotes.length === 0) {
+      return [];
     }
-    return [];
+    return securityDbNotes.map((sn) => ({
+      id: sn.id,
+      createdBy: {
+        displayName: sn.createdUserName,
+        accountId: sn.createdBy,
+        avatarUrl: sn.createdAvatarUrl,
+      },
+      targetUser: {
+        displayName: sn.targetUserName,
+        accountId: sn.targetUserId,
+        avatarUrl: sn.targetAvatarUrl,
+      },
+      viewTimeOut: "5mins",
+      status: sn.status as SecurityNoteStatus,
+      expiration: sn.expiryDate,
+      issueId: sn.issueId ?? defaults?.issueId ?? undefined,
+      issueKey: sn.issueKey ?? defaults?.issueKey ?? undefined,
+      projectId: sn.projectId ?? defaults?.projectId ?? undefined,
+      projectKey: sn.projectKey ?? defaults?.projectKey ?? undefined,
+      createdAt: sn.createdAt,
+      viewedAt: sn.viewedAt ?? undefined,
+      deletedAt: sn.deletedAt ?? undefined,
+      expiry: sn.expiry,
+      count: sn.count,
+    }));
+  }
+  @withAppContext()
+  async getSecurityNoteByIssue(
+    issueIdOrKey: string,
+    limit: number,
+    offset: number,
+  ): Promise<ViewMySecurityNotes[]> {
+    const context = getAppContext()!;
+    let isAdmin = await BOOTSTRAP_SERVICE.isAdmin();
+    const securityDbNotes = await SECURITY_NOTE_REPOSITORY.getAllSecurityNotesByIssue(
+      issueIdOrKey,
+      limit,
+      offset,
+      isAdmin ? null : context.accountId,
+    );
+    return this.mapSecurityNotesToView(securityDbNotes);
+  }
+  @withAppContext()
+  async getSecurityNoteByProject(
+    projectIdOrKey: string,
+    limit: number,
+    offset: number,
+  ): Promise<ViewMySecurityNotes[]> {
+    const context = getAppContext()!;
+    let isAdmin = await BOOTSTRAP_SERVICE.isAdmin();
+    const securityDbNotes = await SECURITY_NOTE_REPOSITORY.getAllSecurityNotesByProject(
+      projectIdOrKey,
+      limit,
+      offset,
+      isAdmin ? null : context.accountId,
+    );
+    return this.mapSecurityNotesToView(securityDbNotes);
+  }
+
+  async getIssuesAndProjects(): Promise<ProjectIssue> {
+    return {
+      result: (await SECURITY_NOTE_REPOSITORY.getIssuesAndProjects()) as ProjectInfo[],
+    };
+  }
+  @withAppContext()
+  async getSecurityNoteByAccountId(
+    accountId: string,
+    limit: number,
+    offset: number,
+  ): Promise<ViewMySecurityNotes[]> {
+    const context = getAppContext()!;
+    if (!(await BOOTSTRAP_SERVICE.isAdmin()) && context.accountId !== accountId) {
+      return [];
+    }
+    const securityDbNotes = await SECURITY_NOTE_REPOSITORY.getAllSecurityNotesByAccountId(
+      accountId,
+      limit,
+      offset,
+    );
+    return this.mapSecurityNotesToView(securityDbNotes);
   }
 
   async getSecurityNoteUsers(): Promise<UserViewInfoType[]> {
@@ -170,39 +249,16 @@ class SecurityNoteServiceImpl implements SecurityNoteService {
     if (!isIssueContext(context)) {
       throw new Error("expected Issue context");
     }
-    await this.getSecurityNoteUsers();
+
     const issueContext = context as IssueContext;
     const { key, id } = issueContext.extension.issue;
     const securityDbNotes = await SECURITY_NOTE_REPOSITORY.getAllMySecurityNotes(key, accountId);
-    if (securityDbNotes) {
-      return securityDbNotes.map((sn) => {
-        return {
-          id: sn.id,
-          createdBy: {
-            displayName: sn.createdUserName,
-            accountId: sn.createdBy,
-            avatarUrl: sn.createdAvatarUrl,
-          },
-          targetUser: {
-            displayName: sn.targetUserName,
-            accountId: sn.targetUserId,
-            avatarUrl: sn.targetAvatarUrl,
-          },
-          viewTimeOut: "5mins",
-          status: sn.status as SecurityNoteStatus,
-          expiration: sn.expiryDate,
-          issueId: sn.issueId ?? id,
-          issueKey: sn.issueKey ?? key,
-          projectId: sn.projectId ?? issueContext.extension.project.id,
-          projectKey: sn.projectKey ?? issueContext.extension.project.key,
-          createdAt: sn.createdAt,
-          viewedAt: sn.viewedAt ?? undefined,
-          deletedAt: sn.deletedAt ?? undefined,
-          expiry: sn.expiry,
-        };
-      });
-    }
-    return [];
+    return this.mapSecurityNotesToView(securityDbNotes, {
+      issueId: id,
+      issueKey: key,
+      projectId: issueContext.extension.project.id,
+      projectKey: issueContext.extension.project.key,
+    });
   }
 
   @withAppContext()

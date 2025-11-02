@@ -18,7 +18,13 @@ class AuditUsersController extends ActualResolver<AuditUser> {
   @validBodyHandler(SecurityAccountId)
   async response(req: Request<SecurityAccountId>): Promise<AuditUser> {
     const payload: SecurityAccountId = req.payload;
-    return { result: await SECURITY_NOTE_SERVICE.getSecurityNoteByAccountId(payload.accountId) };
+    return {
+      result: await SECURITY_NOTE_SERVICE.getSecurityNoteByAccountId(
+        payload.accountId,
+        payload.limit ?? 10,
+        payload.offset ?? 0,
+      ),
+    };
   }
 }
 

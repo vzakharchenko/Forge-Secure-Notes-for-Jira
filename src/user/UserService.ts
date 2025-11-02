@@ -26,6 +26,8 @@ export interface UserService {
   getCurrentUser(): Promise<CurrentUser | undefined>;
 
   getUserById(userId: string): Promise<CurrentUser | undefined>;
+
+  isJiraAdmin(): Promise<boolean>;
 }
 
 export interface UserFactory {

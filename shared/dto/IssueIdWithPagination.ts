@@ -1,9 +1,9 @@
 import { IsNotEmpty, Length } from "class-validator";
 
-export class SecurityAccountId {
+export class IssueIdWithPagination {
   @Length(3, 255)
   @IsNotEmpty()
-  accountId!: string;
+  issueId!: string;
 
   limit!: number;
   offset!: number;
