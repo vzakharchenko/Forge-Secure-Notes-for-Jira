@@ -1,6 +1,7 @@
 import * as api from "@forge/api";
 
 import { CurrentUser, ServiceType, UserService } from "../UserService";
+import { GetPermissionsResponse } from "./GetPermissionsResponse";
 
 export class JiraUserService implements UserService {
   getServiceType(): ServiceType {
@@ -29,5 +30,24 @@ export class JiraUserService implements UserService {
       console.error(e);
       return undefined;
     }
+  }
+
+  async getMyPermissions(permissions: string[]): Promise<GetPermissionsResponse> {
+    return await api
+      .asUser()
+      .requestJira(api.route`/rest/api/3/mypermissions?permissions=${permissions.join(",")}`, {
+        headers: {
+          Accept: "application/json",
+        },
+      })
+      .then((res) => res.json());
+  }
+
+  async isJiraAdmin(): Promise<boolean> {
+    const jiraPermissions = await this.getMyPermissions(["ADMINISTER", "SYSTEM_ADMIN"]);
+    return (
+      jiraPermissions.permissions.ADMINISTER?.havePermission ||
+      jiraPermissions.permissions.SYSTEM_ADMIN?.havePermission
+    );
   }
 }

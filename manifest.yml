@@ -77,5 +77,6 @@ permissions:
       - "unsafe-inline"
   scopes:
     - "read:jira-user"
+    - "read:permission:jira"
     - "send:notification:jira"
     - "storage:app"

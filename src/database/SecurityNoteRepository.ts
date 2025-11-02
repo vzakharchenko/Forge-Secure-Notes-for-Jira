@@ -5,10 +5,12 @@ import {
   asc,
   desc,
   eq,
+  getTableColumns,
   gte,
   inArray,
   InferInsertModel,
   InferSelectModel,
+  isNotNull,
   lt,
   or,
   sql,
@@ -18,29 +20,183 @@ import { withAppContext } from "../controllers/ApplicationContext";
 import { UserViewInfoType } from "../../shared/responses/ViewMySecurityNotes";
 
 export interface SecurityNoteRepository {
+  getIssuesAndProjects(): Promise<
+    {
+      issueId: string | null;
+      issueKey: string | null;
+      projectId: string | null;
+      projectKey: string | null;
+    }[]
+  >;
+
+  getAllSecurityNotesByIssue(
+    issueIdOrKey: string,
+    limit: number,
+    offset: number,
+    accountId: string | null,
+  ): Promise<
+    (InferSelectModel<typeof securityNotes> & {
+      count: number;
+    })[]
+  >;
+
+  getAllSecurityNotesByProject(
+    projectIdOrKey: string,
+    limit: number,
+    offset: number,
+    accountId: string | null,
+  ): Promise<
+    (InferSelectModel<typeof securityNotes> & {
+      count: number;
+    })[]
+  >;
+
   getAllSecurityNotesByAccountId(
     accountId: string,
-  ): Promise<InferSelectModel<typeof securityNotes>[]>;
+    limit: number,
+    offset: number,
+  ): Promise<
+    (InferSelectModel<typeof securityNotes> & {
+      count: number;
+    })[]
+  >;
   getAllMySecurityNotes(
     issueKey: string,
     accountId: string,
-  ): Promise<InferSelectModel<typeof securityNotes>[]>;
+  ): Promise<
+    (InferSelectModel<typeof securityNotes> & {
+      count: number;
+    })[]
+  >;
   createSecurityNote(data: InferInsertModel<typeof securityNotes>): Promise<void>;
   deleteSecurityNote(id: string): Promise<void>;
   viewSecurityNote(id: string): Promise<void>;
   getSecurityNode(id: string): Promise<InferSelectModel<typeof securityNotes> | undefined>;
-  getAllExpiredNotes(): Promise<InferSelectModel<typeof securityNotes>[]>;
+  getAllExpiredNotes(): Promise<
+    (InferSelectModel<typeof securityNotes> & {
+      count: number;
+    })[]
+  >;
   expireSecurityNote(ids: string[]): Promise<void>;
   getSecurityNoteUsers(): Promise<UserViewInfoType[]>;
 }
 
 class SecurityNoteRepositoryImpl implements SecurityNoteRepository {
+  async getAllSecurityNotesByIssue(
+    issueIdOrKey: string,
+    limit: number,
+    offset: number,
+    accountId: string | null,
+  ): Promise<
+    (InferSelectModel<typeof securityNotes> & {
+      count: number;
+    })[]
+  > {
+    let accountIdCondition;
+    if (accountId) {
+      accountIdCondition = or(
+        eq(securityNotes.createdBy, accountId),
+        eq(securityNotes.targetUserId, accountId),
+      );
+    }
+
+    const baseCondition = or(
+      eq(securityNotes.issueId, issueIdOrKey),
+      eq(securityNotes.issueKey, issueIdOrKey),
+    );
+
+    const whereCondition = accountIdCondition
+      ? and(baseCondition, accountIdCondition)
+      : baseCondition;
+    return FORGE_SQL_ORM.selectCacheable({
+      ...getTableColumns(securityNotes),
+      count: sql<number>`COUNT(*) OVER()`,
+    })
+      .from(securityNotes)
+      .where(whereCondition)
+      .orderBy(desc(securityNotes.issueKey), desc(securityNotes.createdAt))
+      .offset(formatLimitOffset(offset))
+      .limit(formatLimitOffset(limit));
+  }
+
+  async getAllSecurityNotesByProject(
+    projectIdOrKey: string,
+    limit: number,
+    offset: number,
+    accountId: string | null,
+  ): Promise<
+    (InferSelectModel<typeof securityNotes> & {
+      count: number;
+    })[]
+  > {
+    let accountIdCondition;
+    if (accountId) {
+      accountIdCondition = or(
+        eq(securityNotes.createdBy, accountId),
+        eq(securityNotes.targetUserId, accountId),
+      );
+    }
+
+    const baseCondition = or(
+      eq(securityNotes.projectKey, projectIdOrKey),
+      eq(securityNotes.projectId, projectIdOrKey),
+    );
+
+    const whereCondition = accountIdCondition
+      ? and(baseCondition, accountIdCondition)
+      : baseCondition;
+
+    return FORGE_SQL_ORM.selectCacheable({
+      ...getTableColumns(securityNotes),
+      count: sql<number>`COUNT(*) OVER()`,
+    })
+      .from(securityNotes)
+      .where(whereCondition)
+      .orderBy(desc(securityNotes.issueKey), desc(securityNotes.createdAt))
+      .offset(formatLimitOffset(offset))
+      .limit(formatLimitOffset(limit));
+  }
+  async getIssuesAndProjects(): Promise<
+    {
+      issueId: string | null;
+      issueKey: string | null;
+      projectId: string | null;
+      projectKey: string | null;
+    }[]
+  > {
+    return FORGE_SQL_ORM.selectCacheable({
+      issueId: securityNotes.issueId,
+      issueKey: securityNotes.issueKey,
+      projectId: securityNotes.projectId,
+      projectKey: securityNotes.projectKey,
+    })
+      .from(securityNotes)
+      .where(isNotNull(securityNotes.issueId))
+      .groupBy(
+        securityNotes.issueId,
+        securityNotes.issueKey,
+        securityNotes.projectId,
+        securityNotes.projectKey,
+      );
+  }
   async getAllSecurityNotesByAccountId(
     accountId: string,
-  ): Promise<InferSelectModel<typeof securityNotes>[]> {
-    return FORGE_SQL_ORM.selectFrom(securityNotes).where(
-      or(eq(securityNotes.createdBy, accountId), eq(securityNotes.targetUserId, accountId)),
-    );
+    limit: number,
+    offset: number,
+  ): Promise<
+    (InferSelectModel<typeof securityNotes> & {
+      count: number;
+    })[]
+  > {
+    return FORGE_SQL_ORM.selectCacheable({
+      ...getTableColumns(securityNotes),
+      count: sql<number>`COUNT(*) OVER()`,
+    })
+      .from(securityNotes)
+      .where(or(eq(securityNotes.createdBy, accountId), eq(securityNotes.targetUserId, accountId)))
+      .orderBy(desc(securityNotes.issueKey), desc(securityNotes.createdAt))
+      .offset(formatLimitOffset(offset))
+      .limit(formatLimitOffset(limit));
   }
 
   async viewSecurityNote(id: string): Promise<void> {
@@ -61,8 +217,16 @@ class SecurityNoteRepositoryImpl implements SecurityNoteRepository {
   async getAllMySecurityNotes(
     issueKey: string,
     accountId: string,
-  ): Promise<InferSelectModel<typeof securityNotes>[]> {
-    return FORGE_SQL_ORM.selectFrom(securityNotes)
+  ): Promise<
+    (InferSelectModel<typeof securityNotes> & {
+      count: number;
+    })[]
+  > {
+    return FORGE_SQL_ORM.selectCacheable({
+      ...getTableColumns(securityNotes),
+      count: sql<number>`COUNT(*) OVER()`,
+    })
+      .from(securityNotes)
       .where(
         and(
           eq(securityNotes.issueKey, issueKey),
@@ -74,8 +238,16 @@ class SecurityNoteRepositoryImpl implements SecurityNoteRepository {
       .orderBy(desc(securityNotes.expiryDate));
   }
 
-  async getAllExpiredNotes(): Promise<InferSelectModel<typeof securityNotes>[]> {
-    return FORGE_SQL_ORM.selectFrom(securityNotes)
+  async getAllExpiredNotes(): Promise<
+    (InferSelectModel<typeof securityNotes> & {
+      count: number;
+    })[]
+  > {
+    return FORGE_SQL_ORM.selectCacheable({
+      ...getTableColumns(securityNotes),
+      count: sql<number>`COUNT(*) OVER()`,
+    })
+      .from(securityNotes)
       .where(and(lt(securityNotes.expiryDate, new Date()), inArray(securityNotes.status, ["NEW"])))
       .orderBy(asc(securityNotes.expiryDate))
       .limit(formatLimitOffset(50));
