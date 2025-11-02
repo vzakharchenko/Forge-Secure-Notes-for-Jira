@@ -3,7 +3,6 @@ import { ActualResolver } from "../../core/resolver/ActualResolver";
 import { ResolverNames } from "../../../shared/ResolverNames";
 import { exceptionHandler } from "../../core/decorators/ExceptionHandlerDecorator";
 import { SECURITY_NOTE_SERVICE } from "../../core/services/SecurityNoteService";
-import { AuditUsers } from "../../../shared/responses/AuditUsers";
 import { ProjectIssue } from "../../../shared/responses/ProjectIssue";
 
 @resolver

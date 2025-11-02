@@ -12,7 +12,8 @@ class BootstrapServiceImpl implements BootstrapService {
       const appContext = getAppContext()!;
       return USER_FACTORY.getUserService(appContext.forgeType).isJiraAdmin();
     } catch (e: any) {
-      console.error(e.message, e);
+      // eslint-disable-next-line no-console
+      console.error("Permission Error " + e.message, e);
       return false;
     }
   }
