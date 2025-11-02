@@ -35,11 +35,18 @@ jobs:
       - name: Backend install & build
         run: |
           npm ci
+          npm knip
+          npm run lint
+          npm run format:check
           npm run build:ci
 
       - name: Frontend install & build
         run: |
-          cd static && npm ci && npm run build
+          cd static
+          npm ci
+          npm knip
+          npm run lint
+          npm run build
 
       - name: Forge CLI setup
         run: npm install -g @forge/cli && forge settings set usage-analytics true
@@ -76,11 +83,18 @@ jobs:
       - name: Backend install & build
         run: |
           npm ci
+          npm knip
+          npm run lint
+          npm run format:check
           npm run build:ci
 
       - name: Frontend install & build
         run: |
-          cd static && npm ci && npm run build
+          cd static
+          npm ci
+          npm knip
+          npm run lint
+          npm run build
 
       - name: Forge CLI setup
         run: npm install -g @forge/cli && forge settings set usage-analytics true
@@ -117,11 +131,18 @@ jobs:
       - name: Backend install & build
         run: |
           npm ci
+          npm knip
+          npm run lint
+          npm run format:check
           npm run build:ci
 
       - name: Frontend install & build
         run: |
-          cd static && npm ci && npm run build
+          cd static
+          npm ci
+          npm knip
+          npm run lint
+          npm run build
 
       - name: Forge CLI setup
         run: npm install -g @forge/cli && forge settings set usage-analytics true

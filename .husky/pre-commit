@@ -1,0 +1,27 @@
+#!/bin/sh
+set -e
+echo '🔍 Running resolver checks...'
+
+echo '➡️ lint-staged (resolver)'
+npx lint-staged || { echo '❌ lint-staged failed for resolver'; exit 1; }
+
+echo '➡️ typecheck'
+npm run build:ci || { echo '❌ build:ci failed'; exit 1; }
+
+echo '➡️ dependencies check'
+npm run knip || { echo '❌ Dependency check failed.'; exit 1; }
+
+echo '🔍 Running static resources checks...'
+pushd static > /dev/null
+
+echo '➡️ lint-staged (static resources)'
+npx lint-staged || { echo '❌ lint-staged failed for static resources'; popd > /dev/null; exit 1; }
+
+
+echo '➡️ dependencies check'
+npm run knip || { echo '❌ Dependency check for static resources failed.'; exit 1; }
+
+echo '➡️ build'
+npm run build || { echo '❌ Build failed'; popd > /dev/null; exit 1; }
+
+popd > /dev/null

@@ -1,10 +1,10 @@
-import ForgeSQL, {ForgeSqlOperation} from "forge-sql-orm";
-import {additionalMetadata} from "./entities";
-import {MySqlRemoteDatabase} from "drizzle-orm/mysql-proxy";
+import ForgeSQL from "forge-sql-orm";
+import { additionalMetadata } from "./entities";
 
-
-export const FORGE_SQL_ORM = new ForgeSQL({additionalMetadata: additionalMetadata,
-    logRawSqlQuery: true,
-    cacheEntityName: 'cache',
-    cacheTTL: 900,
+export const FORGE_SQL_ORM = new ForgeSQL({
+  additionalMetadata: additionalMetadata,
+  logRawSqlQuery: true,
+  cacheEntityName: "cache",
+  cacheTTL: 900,
+  logCache: true,
 });

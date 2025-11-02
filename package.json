@@ -5,13 +5,15 @@
   "license": "MIT",
   "private": true,
   "dependencies": {
-    "@forge/events": "^2.0.9",
+    "@forge/api": "^6.1.5",
     "@forge/kvs": "^1.1.0",
     "@forge/resolver": "1.7.1",
     "@forge/sql": "^3.0.9",
     "class-validator": "^0.14.2",
-    "forge-sql-orm": "2.1.11",
+    "drizzle-orm": "^0.44.7",
+    "forge-sql-orm": "^2.1.12",
     "luxon": "^3.7.2",
+    "reflect-metadata": "^0.2.2",
     "uuid": "^13.0.0"
   },
   "scripts": {
@@ -20,12 +22,31 @@
     "migration:update": "forge-sql-orm-cli migrations:update",
     "migration:drop": "forge-sql-orm-cli migrations:drop",
     "build:ci": "tsc --target esnext --project tsconfig.json  --outDir dist && rm -rf dist",
-    "forge:debug": "forge tunnel -d -f index.handler"
+    "forge:debug": "forge tunnel -d -f index.handler",
+    "lint": "eslint src  --ext .ts,.tsx",
+    "lint:fix": "eslint src --ext .ts,.tsx --fix",
+    "format": "prettier --write src static/src ",
+    "format:check": "prettier src static/src --check",
+    "prepare": "husky",
+    "knip": "knip"
   },
   "devDependencies": {
     "@types/luxon": "^3.7.1",
     "@types/node": "^24.9.2",
-    "forge-sql-orm-cli": "^2.1.11",
+    "@typescript-eslint/eslint-plugin": "^8.46.2",
+    "eslint": "^9.39.0",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-import": "^2.32.0",
+    "eslint-plugin-vitest": "^0.5.4",
+    "forge-sql-orm-cli": "^2.1.12",
+    "husky": "^9.1.7",
+    "knip": "^5.66.4",
+    "prettier": "^3.6.2",
     "typescript": "^5.9.3"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "cd .husky && ./pre-commit"
+    }
   }
 }

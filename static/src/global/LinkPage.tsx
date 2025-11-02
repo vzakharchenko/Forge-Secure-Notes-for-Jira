@@ -1,28 +1,28 @@
-import React, {useEffect, useState} from "react";
-import {useNavigate, useParams} from "react-router";
-import {Box, Inline, Stack, Text} from "@atlaskit/primitives";
+import React, { useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router";
+import { Box, Inline, Stack, Text } from "@atlaskit/primitives";
 import Button from "@atlaskit/button";
 import Countdown from "react-countdown";
 import EmptyState from "@atlaskit/empty-state";
 import TextField from "@atlaskit/textfield";
-import {token} from "@atlaskit/tokens";
-import {invoke, showFlag} from "@forge/bridge";
+import { token } from "@atlaskit/tokens";
+import { invoke, showFlag } from "@forge/bridge";
 import {
   calculateHash,
   decryptMessage,
   DERIVE_PURPOSE_ENCRYPTION,
-  DERIVE_PURPOSE_VERIFICATION
+  DERIVE_PURPOSE_VERIFICATION,
 } from "../utils/encodeUtils";
 import NotFoundClosedImage from "../img/404.png";
-import {Renderer} from "../utils/CountDownUtils";
-import {SecurityNoteData} from "../../../shared/responses/SecurityNoteData";
-import {ResolverNames} from "../../../shared/ResolverNames";
+import { Renderer } from "../utils/CountDownUtils";
+import { SecurityNoteData } from "../../../shared/responses/SecurityNoteData";
+import { ResolverNames } from "../../../shared/ResolverNames";
 
 const GLOBAL_ROUTES = {
-  all: { route: "/" }
+  all: { route: "/" },
 };
 
-export default function LinkPage(props:Readonly<{accountId:string}>) {
+export default function LinkPage(props: Readonly<{ accountId: string }>) {
   const params = useParams();
   const navigate = useNavigate();
   const [isValid, setIsValid] = useState<boolean | null>(null);
@@ -36,7 +36,7 @@ export default function LinkPage(props:Readonly<{accountId:string}>) {
     const validateNote = async () => {
       try {
         const response = await invoke<{ valid: boolean }>(ResolverNames.OPEN_LINK_SECURITY_NOTE, {
-          id: params.recordId
+          id: params.recordId,
         });
         setIsValid(response.valid);
       } catch (error) {
@@ -64,23 +64,23 @@ export default function LinkPage(props:Readonly<{accountId:string}>) {
     try {
       const response = await invoke<SecurityNoteData>(ResolverNames.FETCH_SECURITY_NOTE, {
         id: params.recordId,
-        keyHash:keyForServer
+        keyHash: keyForServer,
       });
 
       if (response.isError) {
-        if (response.errorType === 'NO_PERMISSION') {
+        if (response.errorType === "NO_PERMISSION") {
           setIsValid(false);
           return;
         } else {
-          setError(response.message ?? 'Error during fetching Security Note');
+          setError(response.message ?? "Error during fetching Security Note");
         }
       }
       const decrypted = await decryptMessage(
-        {encrypted: response.encryptedData, iv: response.iv, salt: response.salt},
-          keyForEncryption,
+        { encrypted: response.encryptedData, iv: response.iv, salt: response.salt },
+        keyForEncryption,
       );
       setTimeout(() => {
-        setIsClosed(true)
+        setIsClosed(true);
       }, 300_500);
       setDecryptedContent(decrypted);
     } catch (error) {
@@ -95,13 +95,13 @@ export default function LinkPage(props:Readonly<{accountId:string}>) {
     if (decryptedContent) {
       await navigator.clipboard.writeText(decryptedContent);
       showFlag({
-        id: 'copy',
-        title: 'Security Note successfully copied',
-        description: 'Security Note successfully copied',
-        type: 'success',
-        appearance: 'success',
-        isAutoDismiss: true
-      })
+        id: "copy",
+        title: "Security Note successfully copied",
+        description: "Security Note successfully copied",
+        type: "success",
+        appearance: "success",
+        isAutoDismiss: true,
+      });
       setIsClosed(true);
     }
   };
@@ -123,7 +123,9 @@ export default function LinkPage(props:Readonly<{accountId:string}>) {
           >
             <Stack space="space.400">
               <Box>
-                <Text size="large" weight="bold">🔐 Secure Note</Text>
+                <Text size="large" weight="bold">
+                  🔐 Secure Note
+                </Text>
               </Box>
 
               <Box>
@@ -138,7 +140,8 @@ export default function LinkPage(props:Readonly<{accountId:string}>) {
 
               <Box>
                 <Text>
-                  If you need to view it again, please contact the sender and ask them to resend the message.
+                  If you need to view it again, please contact the sender and ask them to resend the
+                  message.
                 </Text>
               </Box>
 
@@ -150,7 +153,8 @@ export default function LinkPage(props:Readonly<{accountId:string}>) {
                 }}
               >
                 <Text>
-                  🛑 For security reasons, this app does not store the message contents or the decryption key.
+                  🛑 For security reasons, this app does not store the message contents or the
+                  decryption key.
                 </Text>
               </Box>
             </Stack>
@@ -199,7 +203,9 @@ export default function LinkPage(props:Readonly<{accountId:string}>) {
           >
             <Stack space="space.400">
               <Box>
-                <Text size="large" weight="bold">🔐 Secure Note</Text>
+                <Text size="large" weight="bold">
+                  🔐 Secure Note
+                </Text>
               </Box>
 
               <Box>
@@ -208,7 +214,10 @@ export default function LinkPage(props:Readonly<{accountId:string}>) {
               </Box>
 
               <Box>
-                <Text>⏳ Time remaining: [ <Countdown date={Date.now() + 300_000} renderer={Renderer}/> ]</Text>
+                <Text>
+                  ⏳ Time remaining: [ <Countdown date={Date.now() + 300_000} renderer={Renderer} />{" "}
+                  ]
+                </Text>
               </Box>
 
               <Box
@@ -217,23 +226,17 @@ export default function LinkPage(props:Readonly<{accountId:string}>) {
                   background: token("elevation.surface", "#FFFFFF"),
                   borderRadius: token("border.radius.200", "3px"),
                   border: `1px solid ${token("color.border", "#DFE1E6")}`,
-                  whiteSpace: "pre-wrap"
+                  whiteSpace: "pre-wrap",
                 }}
               >
                 <Text>{decryptedContent}</Text>
               </Box>
 
               <Inline space="space.100" spread="space-between">
-                <Button
-                  appearance="primary"
-                  onClick={handleCopyAndClose}
-                >
+                <Button appearance="primary" onClick={handleCopyAndClose}>
                   📋 Copy and Close
                 </Button>
-                <Button
-                  appearance="subtle"
-                  onClick={handleClose}
-                >
+                <Button appearance="subtle" onClick={handleClose}>
                   ❌ Close
                 </Button>
               </Inline>
@@ -256,7 +259,9 @@ export default function LinkPage(props:Readonly<{accountId:string}>) {
         >
           <Stack space="space.400">
             <Box>
-              <Text size="large" weight="bold">🔐 Secure Note Decryption</Text>
+              <Text size="large" weight="bold">
+                🔐 Secure Note Decryption
+              </Text>
             </Box>
 
             <Box>
@@ -265,8 +270,8 @@ export default function LinkPage(props:Readonly<{accountId:string}>) {
 
             <Box>
               <Text>
-                Please enter the decryption key you received from the sender.
-                Without the correct key, the message cannot be unlocked.
+                Please enter the decryption key you received from the sender. Without the correct
+                key, the message cannot be unlocked.
               </Text>
             </Box>
 
@@ -275,7 +280,9 @@ export default function LinkPage(props:Readonly<{accountId:string}>) {
               <Box style={{ marginTop: token("space.100", "8px") }}>
                 <TextField
                   value={encryptionKey}
-                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => setEncryptionKey(e.target.value)}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                    setEncryptionKey(e.target.value)
+                  }
                   placeholder="Enter decryption key"
                   isInvalid={!!error}
                   style={{ width: "100%" }}
@@ -284,15 +291,15 @@ export default function LinkPage(props:Readonly<{accountId:string}>) {
             </Box>
 
             {error && (
-                <Box
-                    padding="space.200"
-                    style={{
-                      background: token("color.background.danger", "#FFEBE6"),
-                      borderRadius: token("border.radius.200", "3px"),
-                    }}
-                >
-                  <Text>❌ {error}</Text>
-                </Box>
+              <Box
+                padding="space.200"
+                style={{
+                  background: token("color.background.danger", "#FFEBE6"),
+                  borderRadius: token("border.radius.200", "3px"),
+                }}
+              >
+                <Text>❌ {error}</Text>
+              </Box>
             )}
 
             <Box style={{ textAlign: "center" }}>
@@ -305,7 +312,6 @@ export default function LinkPage(props:Readonly<{accountId:string}>) {
               </Button>
             </Box>
 
-
             <Box
               padding="space.200"
               style={{
@@ -313,13 +319,11 @@ export default function LinkPage(props:Readonly<{accountId:string}>) {
                 borderRadius: token("border.radius.200", "3px"),
               }}
             >
-
               <Text>
-                ⚠️ Tip: The key should have been shared with you securely via Slack, email, or other channel. This app does not have access to it.
+                ⚠️ Tip: The key should have been shared with you securely via Slack, email, or other
+                channel. This app does not have access to it.
               </Text>
             </Box>
-
-
           </Stack>
         </Box>
       </Stack>

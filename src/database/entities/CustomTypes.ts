@@ -1,6 +1,6 @@
-import {customType} from "drizzle-orm/mysql-core";
-import {stringify as uuidStringify} from "uuid";
-import {sql} from "drizzle-orm";
+import { customType } from "drizzle-orm/mysql-core";
+import { stringify as uuidStringify } from "uuid";
+import { sql } from "drizzle-orm";
 
 export const uuidBinary = customType<{
   data: string;

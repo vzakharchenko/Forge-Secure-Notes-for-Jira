@@ -5,21 +5,21 @@ import { exceptionHandler } from "../../core/decorators/ExceptionHandlerDecorato
 import { SECURITY_NOTE_SERVICE } from "../../core/services/SecurityNoteService";
 import { validBodyHandler } from "../../core/decorators/ValidBodyHandlerDecorator";
 import { Request } from "@forge/resolver";
-import { SecurityNoteId } from "../../../shared/dto/SecurityNoteId";
-import { OpenSecurityNote } from "../../../shared/responses/OpenSecurityNote";
+import { AuditUser } from "../../../shared/responses/AuditUser";
+import { SecurityAccountId } from "../../../shared/dto/SecurityAccountId";
 
 @resolver
-class OpenSecurityNoteController extends ActualResolver<OpenSecurityNote> {
+class AuditUsersController extends ActualResolver<AuditUser> {
   functionName(): string {
-    return ResolverNames.OPEN_LINK_SECURITY_NOTE;
+    return ResolverNames.AUDIT_DATA_PER_USER;
   }
 
   @exceptionHandler()
-  @validBodyHandler(SecurityNoteId)
-  async response(req: Request): Promise<OpenSecurityNote> {
-    const payload: SecurityNoteId = req.payload as SecurityNoteId;
-    return { valid: await SECURITY_NOTE_SERVICE.isValidLink(payload.id) };
+  @validBodyHandler(SecurityAccountId)
+  async response(req: Request<SecurityAccountId>): Promise<AuditUser> {
+    const payload: SecurityAccountId = req.payload;
+    return { result: await SECURITY_NOTE_SERVICE.getSecurityNoteByAccountId(payload.accountId) };
   }
 }
 
-export default new OpenSecurityNoteController();
+export default new AuditUsersController();
