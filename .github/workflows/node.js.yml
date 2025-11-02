@@ -35,7 +35,7 @@ jobs:
       - name: Backend install & build
         run: |
           npm ci
-          npm knip
+          npm run knip
           npm run lint
           npm run format:check
           npm run build:ci
@@ -44,7 +44,7 @@ jobs:
         run: |
           cd static
           npm ci
-          npm knip
+          npm run knip
           npm run lint
           npm run build
 
@@ -83,7 +83,7 @@ jobs:
       - name: Backend install & build
         run: |
           npm ci
-          npm knip
+          npm run knip
           npm run lint
           npm run format:check
           npm run build:ci
@@ -92,7 +92,7 @@ jobs:
         run: |
           cd static
           npm ci
-          npm knip
+          npm run knip
           npm run lint
           npm run build
 
@@ -131,7 +131,7 @@ jobs:
       - name: Backend install & build
         run: |
           npm ci
-          npm knip
+          npm run knip
           npm run lint
           npm run format:check
           npm run build:ci
@@ -140,7 +140,7 @@ jobs:
         run: |
           cd static
           npm ci
-          npm knip
+          npm run knip
           npm run lint
           npm run build
 
