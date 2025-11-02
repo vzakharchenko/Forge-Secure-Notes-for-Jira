@@ -5,7 +5,7 @@ echo '🔍 Running resolver checks...'
 echo '➡️ lint-staged (resolver)'
 npx lint-staged || { echo '❌ lint-staged failed for resolver'; exit 1; }
 
-echo '➡️ typecheck'
+echo '➡️ typecheck (resolver)'
 npm run build:ci || { echo '❌ build:ci failed'; exit 1; }
 
 echo '➡️ dependencies check'

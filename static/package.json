@@ -55,6 +55,12 @@
     "lint:fix": "eslint src --ext .ts,.tsx --fix",
     "knip": "knip"
   },
+  "lint-staged": {
+    "*.{ts,tsx,css,scss,md}": [
+      "prettier --write",
+      "eslint --fix"
+    ]
+  },
   "browserslist": {
     "production": [
       ">0.2%",

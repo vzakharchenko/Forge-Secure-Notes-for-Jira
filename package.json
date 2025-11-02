@@ -31,9 +31,11 @@
     "knip": "knip"
   },
   "devDependencies": {
+    "@eslint/js": "^9.39.0",
     "@types/luxon": "^3.7.1",
     "@types/node": "^24.9.2",
     "@typescript-eslint/eslint-plugin": "^8.46.2",
+    "@typescript-eslint/parser": "^8.46.2",
     "eslint": "^9.39.0",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-import": "^2.32.0",
@@ -43,6 +45,12 @@
     "knip": "^5.66.4",
     "prettier": "^3.6.2",
     "typescript": "^5.9.3"
+  },
+  "lint-staged": {
+    "*.{ts,tsx,css,scss,md}": [
+      "prettier --write",
+      "eslint --fix"
+    ]
   },
   "husky": {
     "hooks": {
