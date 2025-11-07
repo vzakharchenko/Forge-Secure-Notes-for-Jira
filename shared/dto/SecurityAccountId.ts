@@ -1,10 +1,10 @@
-import { IsNotEmpty, Length } from "class-validator";
+import { IsNotEmpty, Length, IsOptional } from "class-validator";
 
 export class SecurityAccountId {
+  @IsOptional()
   @Length(3, 255)
-  @IsNotEmpty()
-  accountId!: string;
+  accountId?: string;
 
-  limit!: number;
-  offset!: number;
+  limit?: number;
+  offset?: number;
 }

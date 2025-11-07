@@ -20,7 +20,7 @@ class AuditUsersController extends ActualResolver<AuditUser> {
     const payload: SecurityAccountId = req.payload;
     return {
       result: await SECURITY_NOTE_SERVICE.getSecurityNoteByAccountId(
-        payload.accountId,
+        payload.accountId ?? req.context.accountId,
         payload.limit ?? 10,
         payload.offset ?? 0,
       ),

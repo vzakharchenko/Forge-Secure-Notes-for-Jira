@@ -11,9 +11,9 @@ import { showNewIssueModal } from "./utils/ModalUtils";
 import { NoteDataType } from "./Types";
 import Spinner from "@atlaskit/spinner";
 import { invoke, router, showFlag } from "@forge/bridge";
-import { ViewMySecurityNotesList } from "../../shared/responses/ViewMySecurityNotesList";
 import { ViewMySecurityNotes } from "../../shared/responses/ViewMySecurityNotes";
 import { ResolverNames } from "../../shared/ResolverNames";
+import { AuditUser } from "../../shared/responses/AuditUser";
 
 function Issue(props: Readonly<{ accountId: string; appUrl: string }>) {
   const [notes, setNotes] = useState<ViewMySecurityNotes[]>([]);
@@ -23,11 +23,11 @@ function Issue(props: Readonly<{ accountId: string; appUrl: string }>) {
   useEffect(() => {
     const fetchNotes = async () => {
       try {
-        let response = await invoke<ViewMySecurityNotesList>(ResolverNames.GET_MY_SECURED_NOTES);
+        let response = await invoke<AuditUser>(ResolverNames.GET_MY_SECURED_NOTES);
 
         while (response.isError && response.errorType === "INSTALLATION") {
           await new Promise((resolve) => setTimeout(resolve, 10000));
-          response = await invoke<ViewMySecurityNotesList>("getMySecuredNotes");
+          response = await invoke<AuditUser>("getMySecuredNotes");
         }
 
         setNotes(response?.result ?? []);
@@ -61,10 +61,7 @@ function Issue(props: Readonly<{ accountId: string; appUrl: string }>) {
       }
       setIsLoading(true);
       try {
-        const response = await invoke<{ result: ViewMySecurityNotes[] }>(
-          ResolverNames.CREATE_SECURITY_NOTE,
-          noteDate,
-        );
+        const response = await invoke<AuditUser>(ResolverNames.CREATE_SECURITY_NOTE, noteDate);
         setNotes(response?.result ?? []);
         showFlag({
           id: "newNote",
@@ -98,10 +95,7 @@ function Issue(props: Readonly<{ accountId: string; appUrl: string }>) {
   const handleDeleteNote = async (noteId: string) => {
     setIsLoading(true);
     try {
-      const response = await invoke<{ result: ViewMySecurityNotes[] }>(
-        ResolverNames.DELETE_SECURITY_NOTE,
-        { id: noteId },
-      );
+      const response = await invoke<AuditUser>(ResolverNames.DELETE_SECURITY_NOTE, { id: noteId });
       setNotes(response?.result ?? []);
       showFlag({
         id: "deleteNote",

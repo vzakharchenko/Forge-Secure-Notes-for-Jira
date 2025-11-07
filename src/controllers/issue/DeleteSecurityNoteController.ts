@@ -5,18 +5,18 @@ import { exceptionHandler } from "../../core/decorators/ExceptionHandlerDecorato
 import { SECURITY_NOTE_SERVICE } from "../../core/services/SecurityNoteService";
 import { validBodyHandler } from "../../core/decorators/ValidBodyHandlerDecorator";
 import { Request } from "@forge/resolver";
-import { ViewMySecurityNotesList } from "../../../shared/responses/ViewMySecurityNotesList";
 import { SecurityNoteId } from "../../../shared/dto/SecurityNoteId";
+import { AuditUser } from "../../../shared/responses/AuditUser";
 
 @resolver
-class DeleteSecurityNoteController extends ActualResolver<ViewMySecurityNotesList> {
+class DeleteSecurityNoteController extends ActualResolver<AuditUser> {
   functionName(): string {
     return ResolverNames.DELETE_SECURITY_NOTE;
   }
 
   @exceptionHandler()
   @validBodyHandler(SecurityNoteId)
-  async response(req: Request): Promise<ViewMySecurityNotesList> {
+  async response(req: Request): Promise<AuditUser> {
     const payload: SecurityNoteId = req.payload as SecurityNoteId;
     await SECURITY_NOTE_SERVICE.deleteSecurityNote(payload.id);
     return { result: await SECURITY_NOTE_SERVICE.getMySecurityNoteIssue() };

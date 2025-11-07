@@ -17,6 +17,7 @@ import NotFoundClosedImage from "../img/404.png";
 import { Renderer } from "../utils/CountDownUtils";
 import { SecurityNoteData } from "../../../shared/responses/SecurityNoteData";
 import { ResolverNames } from "../../../shared/ResolverNames";
+import { OpenSecurityNote } from "../../../shared/responses/OpenSecurityNote";
 
 const GLOBAL_ROUTES = {
   all: { route: "/" },
@@ -35,7 +36,7 @@ export default function LinkPage(props: Readonly<{ accountId: string }>) {
   useEffect(() => {
     const validateNote = async () => {
       try {
-        const response = await invoke<{ valid: boolean }>(ResolverNames.OPEN_LINK_SECURITY_NOTE, {
+        const response = await invoke<OpenSecurityNote>(ResolverNames.OPEN_LINK_SECURITY_NOTE, {
           id: params.recordId,
         });
         setIsValid(response.valid);

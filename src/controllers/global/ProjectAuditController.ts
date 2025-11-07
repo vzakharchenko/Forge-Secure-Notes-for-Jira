@@ -5,18 +5,18 @@ import { exceptionHandler } from "../../core/decorators/ExceptionHandlerDecorato
 import { SECURITY_NOTE_SERVICE } from "../../core/services/SecurityNoteService";
 import { validBodyHandler } from "../../core/decorators/ValidBodyHandlerDecorator";
 import { Request } from "@forge/resolver";
-import { ViewMySecurityNotesList } from "../../../shared/responses/ViewMySecurityNotesList";
 import { ProjectWithPagination } from "../../../shared/dto/ProjectWithPagination";
+import { AuditUser } from "../../../shared/responses/AuditUser";
 
 @resolver
-class ProjectAuditController extends ActualResolver<ViewMySecurityNotesList> {
+class ProjectAuditController extends ActualResolver<AuditUser> {
   functionName(): string {
     return ResolverNames.AUDIT_DATA_PER_PROJECT;
   }
 
   @exceptionHandler()
   @validBodyHandler(ProjectWithPagination)
-  async response(req: Request<ProjectWithPagination>): Promise<ViewMySecurityNotesList> {
+  async response(req: Request<ProjectWithPagination>): Promise<AuditUser> {
     const payload: ProjectWithPagination = req.payload;
     return {
       result: await SECURITY_NOTE_SERVICE.getSecurityNoteByProject(
