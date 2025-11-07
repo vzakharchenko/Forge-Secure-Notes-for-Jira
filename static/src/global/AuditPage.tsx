@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Box, Stack, Text, Inline } from "@atlaskit/primitives";
+import { Box, Stack, Inline } from "@atlaskit/primitives";
 import Button from "@atlaskit/button";
 import Spinner from "@atlaskit/spinner";
 import { invoke } from "@forge/bridge";
