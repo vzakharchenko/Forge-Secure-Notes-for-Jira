@@ -6,14 +6,18 @@ import Button from "@atlaskit/button";
 import NotFoundClosedImage from "../img/404.png";
 
 import { GLOBAL_ROUTES } from "./Routes";
-import SecureNotesInfoPage from "./SecureNotesInfoPage";
+import AuditPage from "./AuditPage";
 import LinkPage from "./LinkPage";
 
 const GlobalRoute = (props: Readonly<{ accountId: string }>) => {
   const navigate = useNavigate();
   return (
     <Routes>
-      <Route path={GLOBAL_ROUTES.all.route} element={<SecureNotesInfoPage />} />
+      <Route path={GLOBAL_ROUTES.all.route} element={<AuditPage />} />
+      <Route path={GLOBAL_ROUTES.myHistory.route} element={<AuditPage />} />
+      <Route path={GLOBAL_ROUTES.myIssue.route + "/*"} element={<AuditPage />} />
+      <Route path={GLOBAL_ROUTES.myProject.route + "/*"} element={<AuditPage />} />
+      <Route path="/userHistory" element={<AuditPage />} />
       <Route path={GLOBAL_ROUTES.record.route} element={<LinkPage accountId={props.accountId} />} />
       <Route
         path="*"

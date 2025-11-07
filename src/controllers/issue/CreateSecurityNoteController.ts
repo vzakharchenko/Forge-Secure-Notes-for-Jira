@@ -6,17 +6,17 @@ import { SECURITY_NOTE_SERVICE } from "../../core/services/SecurityNoteService";
 import { validBodyHandler } from "../../core/decorators/ValidBodyHandlerDecorator";
 import { NewSecurityNote } from "../../../shared/dto/NewSecurityNote";
 import { Request } from "@forge/resolver";
-import { ViewMySecurityNotesList } from "../../../shared/responses/ViewMySecurityNotesList";
+import { AuditUser } from "../../../shared/responses/AuditUser";
 
 @resolver
-class CreateSecurityNoteController extends ActualResolver<ViewMySecurityNotesList> {
+class CreateSecurityNoteController extends ActualResolver<AuditUser> {
   functionName(): string {
     return ResolverNames.CREATE_SECURITY_NOTE;
   }
 
   @exceptionHandler()
   @validBodyHandler(NewSecurityNote)
-  async response(req: Request): Promise<ViewMySecurityNotesList> {
+  async response(req: Request): Promise<AuditUser> {
     const payload: NewSecurityNote = req.payload as NewSecurityNote;
     await SECURITY_NOTE_SERVICE.createSecurityNote(payload);
     return { result: await SECURITY_NOTE_SERVICE.getMySecurityNoteIssue() };
