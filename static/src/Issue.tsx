@@ -21,13 +21,19 @@ function Issue(props: Readonly<{ accountId: string; appUrl: string }>) {
   const currentUserId = props.accountId;
 
   useEffect(() => {
-    const fetchNotes = async () => {
+    let intervalId: any | null = null;
+
+    const fetchNotes = async (showSpinner: boolean = false) => {
       try {
+        if (showSpinner) {
+          setIsLoading(true);
+        }
+
         let response = await invoke<AuditUser>(ResolverNames.GET_MY_SECURED_NOTES);
 
         while (response.isError && response.errorType === "INSTALLATION") {
           await new Promise((resolve) => setTimeout(resolve, 10000));
-          response = await invoke<AuditUser>("getMySecuredNotes");
+          response = await invoke<AuditUser>(ResolverNames.GET_MY_SECURED_NOTES);
         }
 
         setNotes(response?.result ?? []);
@@ -43,11 +49,26 @@ function Issue(props: Readonly<{ accountId: string; appUrl: string }>) {
           isAutoDismiss: true,
         });
       } finally {
-        setIsLoading(false);
+        if (showSpinner) {
+          setIsLoading(false);
+        }
       }
     };
 
-    fetchNotes().catch(console.error);
+    // First load with spinner
+    fetchNotes(true).catch(console.error);
+
+    // Setup polling every 10 seconds without spinner
+    intervalId = setInterval(() => {
+      fetchNotes(false).catch(console.error);
+    }, 10000);
+
+    // Cleanup interval on unmount
+    return () => {
+      if (intervalId) {
+        clearInterval(intervalId);
+      }
+    };
   }, []);
 
   const incomingNotes = notes.filter((note) => note.targetUser.accountId === currentUserId);

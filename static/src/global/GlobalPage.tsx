@@ -3,10 +3,10 @@ import React from "react";
 import AppForge from "./AppForge";
 import GlobalRoute from "./GlobalRoute";
 
-const GlobalPage = (props: Readonly<{ accountId: string }>) => {
+const GlobalPage = () => {
   return (
     <AppForge>
-      <GlobalRoute accountId={props.accountId} />
+      <GlobalRoute />
     </AppForge>
   );
 };

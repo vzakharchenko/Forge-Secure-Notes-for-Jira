@@ -6,12 +6,12 @@ import { token } from "@atlaskit/tokens";
 import { DatePicker } from "@atlaskit/datetime-picker";
 import Form from "@atlaskit/form";
 import TextArea from "@atlaskit/textarea";
+import TextField from "@atlaskit/textfield";
 import { RadioGroup } from "@atlaskit/radio";
 import SectionMessage from "@atlaskit/section-message";
 import Heading from "@atlaskit/heading";
 import CopyIcon from "@atlaskit/icon/glyph/copy";
 import RefreshIcon from "@atlaskit/icon/glyph/refresh";
-import { SingleValue } from "@atlaskit/react-select/types";
 import JiraUserSelect from "./components/JiraUserSelect";
 import {
   calculateHash,
@@ -40,14 +40,16 @@ const generateNewKey = async (accountId: string) => {
 };
 
 const NewSecureNote = (props: { accountId: string }) => {
-  const [selectedUser, setSelectedUser] = useState<SingleValue<UserOption>>(null);
+  const [selectedUsers, setSelectedUsers] = useState<UserOption[]>([]);
+  const [description, setDescription] = useState("");
   const [noteText, setNoteText] = useState("");
   const [expiryOption, setExpiryOption] = useState("1h");
   const [customDate, setCustomDate] = useState<string>("");
   const [encryptionKey, setEncryptionKey] = useState<string>("");
 
   const isFormValid = () => {
-    if (!selectedUser) return false;
+    if (!selectedUsers || selectedUsers.length === 0) return false;
+    if (!description.trim()) return false;
     if (!noteText.trim()) return false;
     if (!encryptionKey) return false;
     if (expiryOption === "custom" && !customDate) return false;
@@ -80,11 +82,23 @@ const NewSecureNote = (props: { accountId: string }) => {
   };
 
   const handleCreateNote = async () => {
-    if (!selectedUser) {
+    if (!selectedUsers || selectedUsers.length === 0) {
       showFlag({
         id: "selectedUser",
-        title: "Target user",
-        description: "Please select target user",
+        title: "Target users",
+        description: "Please select at least one target user",
+        type: "error",
+        appearance: "error",
+        isAutoDismiss: true,
+      });
+      return;
+    }
+
+    if (!description.trim()) {
+      showFlag({
+        id: "description",
+        title: "Description",
+        description: "Please enter description",
         type: "error",
         appearance: "error",
         isAutoDismiss: true,
@@ -116,19 +130,22 @@ const NewSecureNote = (props: { accountId: string }) => {
       return;
     }
     const expiry = expiryOption === "custom" ? customDate : expiryOption;
-    const baseKey = await calculateHash(encryptionKey, selectedUser.id, 200_000);
+    const baseKey = await calculateHash(encryptionKey, props.accountId, 200_000);
     const keyForEncryption = await calculateHash(baseKey, DERIVE_PURPOSE_ENCRYPTION, 1000);
     const keyForServer = await calculateHash(baseKey, DERIVE_PURPOSE_VERIFICATION, 1000);
     const encryptedPayload = await encryptMessage(noteText.trim(), keyForEncryption);
     const noteData: NoteDataType = {
-      targetUser: selectedUser.id,
-      targetUserName: selectedUser.name,
+      targetUsers: selectedUsers.map((user) => ({
+        accountId: user.id,
+        userName: user.name,
+      })),
       expiry,
       isCustomExpiry: expiryOption === "custom",
       encryptionKeyHash: keyForServer,
       encryptedPayload: encryptedPayload.encrypted,
       iv: encryptedPayload.iv,
       salt: encryptedPayload.salt,
+      description: description.trim(),
     };
     await view.close(noteData);
   };
@@ -144,7 +161,7 @@ const NewSecureNote = (props: { accountId: string }) => {
     >
       <Box
         style={{
-          margin: "16px auto",
+          margin: "8px auto",
           flex: 1,
           overflow: "auto",
         }}
@@ -152,52 +169,70 @@ const NewSecureNote = (props: { accountId: string }) => {
         <Stack>
           <Box
             style={{
-              paddingLeft: token("space.200", "16px"),
+              paddingLeft: token("space.100", "8px"),
+              paddingTop: token("space.050", "4px"),
+              paddingBottom: token("space.050", "4px"),
               background: token("elevation.surface.sunken", "#DFE1E6"),
               borderRadius: token("border.radius.200", "3px"),
               textAlign: "center",
             }}
           >
-            <Heading size={"large"}>✨ Create New Secure Note</Heading>
+            <Heading size={"medium"}>✨ Create New Secure Note</Heading>
           </Box>
-          <Box padding={"space.200"}>
-            <Stack space="space.200">
+          <Box padding={"space.100"}>
+            <Stack space="space.100">
               {/* eslint-disable-next-line @typescript-eslint/no-unused-vars */}
               <Form onSubmit={(formState) => {}}>
                 {({ formProps }) => (
                   <form {...formProps}>
-                    <Stack space="space.200">
+                    <Stack space="space.100">
                       <Box>
-                        <Text>To (Recipient):</Text>
+                        <Text>To (Recipients):</Text>
                         <JiraUserSelect
+                          isMulti={true}
                           name="targetUser"
                           onChange={(value: any) => {
                             console.log("JiraUserSelect onChange value:", value);
-                            if (value) {
-                              const newUser: UserOption = value;
-                              console.log("Setting selectedUser to:", newUser);
-                              setSelectedUser(newUser);
+                            if (value && Array.isArray(value)) {
+                              const users: UserOption[] = value;
+                              console.log("Setting selectedUsers to:", users);
+                              setSelectedUsers(users);
                             } else {
-                              console.log("Setting selectedUser to null");
-                              setSelectedUser(null);
+                              console.log("Setting selectedUsers to empty array");
+                              setSelectedUsers([]);
                             }
                           }}
                           label="Start typing Jira username or display name"
                           selectProps={{
                             menuPosition: "fixed",
                             appearance: "default",
-                            placeholder: "Search for a user by name or email",
+                            placeholder: "Search for users by name or email",
                             isClearable: true,
                           }}
                           defaultValue={
-                            selectedUser
-                              ? {
-                                  accountId: selectedUser.id,
-                                  displayName: selectedUser.name,
-                                }
+                            selectedUsers.length > 0
+                              ? selectedUsers.map((user) => ({
+                                  accountId: user.id,
+                                  displayName: user.name,
+                                  avatarUrl: user.avatarUrl,
+                                }))
                               : null
                           }
                         />
+                      </Box>
+
+                      <Box>
+                        <Text>Description:</Text>
+                        <Box style={{ marginTop: token("space.100", "8px") }}>
+                          <TextField
+                            value={description}
+                            onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                              setDescription(e.target.value)
+                            }
+                            placeholder="Enter description of what you are sharing..."
+                            style={{ width: "100%" }}
+                          />
+                        </Box>
                       </Box>
 
                       <Box>
@@ -210,7 +245,7 @@ const NewSecureNote = (props: { accountId: string }) => {
                           placeholder="Enter your secret message here..."
                           style={{
                             marginTop: token("space.100", "8px"),
-                            minHeight: "150px",
+                            minHeight: "100px",
                           }}
                         />
                       </Box>
@@ -243,13 +278,22 @@ const NewSecureNote = (props: { accountId: string }) => {
                           <Inline space="space.100" alignBlock="center">
                             <Box
                               style={{
-                                padding: token("space.200", "16px"),
+                                padding: token("space.100", "8px"),
+                                minHeight: "40px",
                                 background: token("elevation.surface.sunken", "#DFE1E6"),
                                 borderRadius: token("border.radius.200", "3px"),
                                 flex: 1,
+                                display: "flex",
+                                alignItems: "center",
                               }}
                             >
-                              <Text>{encryptionKey}</Text>
+                              <Text>
+                                {encryptionKey || (
+                                  <span style={{ color: token("color.text.subtle", "#6B778C") }}>
+                                    Click "Generate New Key" to create an encryption key
+                                  </span>
+                                )}
+                              </Text>
                             </Box>
                             <Button
                               appearance="default"
@@ -287,7 +331,7 @@ const NewSecureNote = (props: { accountId: string }) => {
 
       <Box
         style={{
-          padding: token("space.200", "16px"),
+          padding: token("space.100", "8px"),
           background: token("elevation.surface.sunken", "#DFE1E6"),
           borderRadius: token("border.radius.200", "3px"),
           marginTop: "auto",

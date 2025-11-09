@@ -325,6 +325,7 @@ export default function UserHistoryPage() {
                   <THead>
                     <HeadCell></HeadCell>
                     <HeadCell>ID</HeadCell>
+                    <HeadCell>Description</HeadCell>
                     <HeadCell>Created By</HeadCell>
                     <HeadCell>Target User</HeadCell>
                     <HeadCell>Status</HeadCell>
@@ -358,6 +359,17 @@ export default function UserHistoryPage() {
                             )}
                           </Cell>
                           <Cell>{note.id.substring(0, 8)}...</Cell>
+                          <Cell>
+                            <Box
+                              style={{
+                                minWidth: "150px",
+                                maxWidth: "300px",
+                                wordBreak: "break-word",
+                              }}
+                            >
+                              <Text>{note.description ?? "-"}</Text>
+                            </Box>
+                          </Cell>
                           <Cell>{note.createdBy.displayName}</Cell>
                           <Cell>{note.targetUser.displayName}</Cell>
                           <Cell>
@@ -376,6 +388,7 @@ export default function UserHistoryPage() {
                         history.forEach((historyItem, index) => {
                           rows.push(
                             <Row key={`${note.id}-history-${index}`}>
+                              <Cell></Cell>
                               <Cell></Cell>
                               <Cell></Cell>
                               <Cell></Cell>

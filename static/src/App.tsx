@@ -52,7 +52,7 @@ const App = () => {
       );
     }
     case "global-page": {
-      return <GlobalPage accountId={context!.accountId ?? ""} />;
+      return <GlobalPage />;
     }
     default: {
       return (
