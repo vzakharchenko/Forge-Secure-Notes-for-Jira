@@ -18,7 +18,7 @@ class OpenSecurityNoteController extends ActualResolver<OpenSecurityNote> {
   @validBodyHandler(SecurityNoteId)
   async response(req: Request): Promise<OpenSecurityNote> {
     const payload: SecurityNoteId = req.payload as SecurityNoteId;
-    return { valid: await SECURITY_NOTE_SERVICE.isValidLink(payload.id) };
+    return await SECURITY_NOTE_SERVICE.isValidLink(payload.id);
   }
 }
 

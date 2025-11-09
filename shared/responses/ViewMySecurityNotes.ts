@@ -21,11 +21,6 @@ export interface ViewMySecurityNotes extends ErrorResponse {
   createdAt: Date;
   viewedAt?: Date;
   deletedAt?: Date;
+  description?: string;
   count?: number;
 }
-
-let EMPTY_USER = {
-  accountId: "",
-  displayName: "",
-  avatarUrl: "",
-};

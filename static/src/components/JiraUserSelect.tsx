@@ -28,14 +28,27 @@ interface JiraUserPicker {
 }
 
 interface JiraUserFieldProps {
-  selectProps?: SelectProps<OptionType, boolean>;
+  selectProps?: SelectProps<OptionType, any>;
   name: string;
   label?: string;
-  defaultValue?: JiraUserPicker | null;
+  /**
+   * When false (default) component works as single-select.
+   * When true — as multi-select.
+   */
+  isMulti?: boolean;
+  /**
+   * Single or multiple default values depending on isMulti
+   */
+  defaultValue?: JiraUserPicker | JiraUserPicker[] | null;
   isRequired?: boolean;
   helperMessage?: string;
   errorMessage?: string;
   validMessage?: string;
+  /**
+   * onChange will receive:
+   *  - JiraUser | null for single select
+   *  - JiraUser[] for multi select
+   */
   onChange: (value: FormEvent | any) => void;
 }
 
@@ -65,6 +78,7 @@ const JiraUserSelect = ({
   selectProps,
   name,
   label,
+  isMulti = false,
   defaultValue = null,
   isRequired = false,
   helperMessage,
@@ -72,11 +86,27 @@ const JiraUserSelect = ({
   validMessage,
   onChange,
 }: JiraUserFieldProps) => {
+  const defaultFieldValue = isMulti
+    ? Array.isArray(defaultValue)
+      ? defaultValue.map(mapUserPickerToUser).filter(Boolean)
+      : []
+    : defaultValue
+      ? mapUserPickerToUser(defaultValue)
+      : null;
+
+  const defaultSelectValue = isMulti
+    ? Array.isArray(defaultValue)
+      ? defaultValue.map(createSelectOption)
+      : []
+    : defaultValue
+      ? createSelectOption(defaultValue)
+      : null;
+
   return (
     <Field
       name={name}
       label={label}
-      defaultValue={defaultValue ? mapUserPickerToUser(defaultValue) : null}
+      defaultValue={defaultFieldValue as any}
       isRequired={isRequired}
     >
       {/* eslint-disable-next-line @typescript-eslint/no-unused-vars */}
@@ -86,9 +116,20 @@ const JiraUserSelect = ({
             {...selectProps}
             loadOptions={loadOptions}
             formatOptionLabel={({ label, formattedLabel }: OptionType) => formattedLabel ?? label}
-            defaultValue={defaultValue ? createSelectOption(defaultValue) : null}
+            isMulti={isMulti}
+            defaultValue={defaultSelectValue as any}
             // @ts-ignore
-            onChange={(value) => onChange(value?.fieldValue)}
+            onChange={(value) => {
+              if (isMulti) {
+                const arr = Array.isArray(value) ? value : [];
+                // pass JiraUser[] to parent
+                onChange(arr.map((v) => v.fieldValue).filter(Boolean));
+              } else {
+                // pass JiraUser | null to parent
+                onChange(value?.fieldValue ?? null);
+              }
+            }}
+            closeMenuOnSelect={!isMulti}
             styles={{
               control: (baseStyles) => ({
                 ...baseStyles,

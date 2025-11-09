@@ -1,6 +1,6 @@
 import { forgeDateTimeString } from "forge-sql-orm";
 
-import { mysqlTable, primaryKey, tinyint, varchar } from "drizzle-orm/mysql-core";
+import { mysqlTable, primaryKey, varchar, tinyint } from "drizzle-orm/mysql-core";
 import { sql } from "drizzle-orm";
 import { uuidBinary } from "./CustomTypes";
 
@@ -33,6 +33,7 @@ export const securityNotes = mysqlTable(
     issueKey: varchar("issue_key", { length: 255 }),
     projectId: varchar("project_id", { length: 255 }),
     projectKey: varchar("project_key", { length: 255 }),
+    description: varchar({ length: 255 }),
   },
   (table) => [primaryKey({ columns: [table.id], name: "security_notes_id" })],
 );

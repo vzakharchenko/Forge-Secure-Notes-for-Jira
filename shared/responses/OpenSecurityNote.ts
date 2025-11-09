@@ -1,6 +1,6 @@
-import {ErrorResponse} from "../Types";
-
+import { ErrorResponse } from "../Types";
 
 export interface OpenSecurityNote extends ErrorResponse {
-    valid: boolean;
+  valid: boolean;
+  sourceAccountId?: string;
 }

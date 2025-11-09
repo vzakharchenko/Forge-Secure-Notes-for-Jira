@@ -16,8 +16,8 @@ class CreateSecurityNoteController extends ActualResolver<AuditUser> {
 
   @exceptionHandler()
   @validBodyHandler(NewSecurityNote)
-  async response(req: Request): Promise<AuditUser> {
-    const payload: NewSecurityNote = req.payload as NewSecurityNote;
+  async response(req: Request<NewSecurityNote>): Promise<AuditUser> {
+    const payload: NewSecurityNote = req.payload;
     await SECURITY_NOTE_SERVICE.createSecurityNote(payload);
     return { result: await SECURITY_NOTE_SERVICE.getMySecurityNoteIssue() };
   }

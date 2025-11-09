@@ -9,7 +9,7 @@ import { GLOBAL_ROUTES } from "./Routes";
 import AuditPage from "./AuditPage";
 import LinkPage from "./LinkPage";
 
-const GlobalRoute = (props: Readonly<{ accountId: string }>) => {
+const GlobalRoute = () => {
   const navigate = useNavigate();
   return (
     <Routes>
@@ -18,7 +18,7 @@ const GlobalRoute = (props: Readonly<{ accountId: string }>) => {
       <Route path={GLOBAL_ROUTES.myIssue.route + "/*"} element={<AuditPage />} />
       <Route path={GLOBAL_ROUTES.myProject.route + "/*"} element={<AuditPage />} />
       <Route path="/userHistory" element={<AuditPage />} />
-      <Route path={GLOBAL_ROUTES.record.route} element={<LinkPage accountId={props.accountId} />} />
+      <Route path={GLOBAL_ROUTES.record.route} element={<LinkPage />} />
       <Route
         path="*"
         element={

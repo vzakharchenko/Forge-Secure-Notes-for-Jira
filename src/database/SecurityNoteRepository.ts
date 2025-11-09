@@ -68,7 +68,7 @@ export interface SecurityNoteRepository {
       count: number;
     })[]
   >;
-  createSecurityNote(data: InferInsertModel<typeof securityNotes>): Promise<void>;
+  createSecurityNote(datas: Partial<InferInsertModel<typeof securityNotes>>[]): Promise<void>;
   deleteSecurityNote(id: string): Promise<void>;
   viewSecurityNote(id: string): Promise<void>;
   getSecurityNode(id: string): Promise<InferSelectModel<typeof securityNotes> | undefined>;
@@ -207,10 +207,13 @@ class SecurityNoteRepositoryImpl implements SecurityNoteRepository {
   }
 
   @withAppContext()
-  async createSecurityNote(data: Partial<InferInsertModel<typeof securityNotes>>): Promise<void> {
-    await FORGE_SQL_ORM.modifyWithVersioningAndEvictCache().insert(securityNotes, [
-      data as InferInsertModel<typeof securityNotes>,
-    ]);
+  async createSecurityNote(
+    datas: Partial<InferInsertModel<typeof securityNotes>>[],
+  ): Promise<void> {
+    await FORGE_SQL_ORM.modifyWithVersioningAndEvictCache().insert(
+      securityNotes,
+      datas as InferInsertModel<typeof securityNotes>[],
+    );
   }
 
   @withAppContext()

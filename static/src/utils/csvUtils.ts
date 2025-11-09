@@ -22,6 +22,7 @@ function escapeCsvField(value: string | null | undefined): string {
 export function convertNotesToCSV(notes: ViewMySecurityNotes[]): string {
   const headers = [
     "ID",
+    "Description",
     "Created By (Display Name)",
     "Created By (Account ID)",
     "Target User (Display Name)",
@@ -41,6 +42,7 @@ export function convertNotesToCSV(notes: ViewMySecurityNotes[]): string {
   const rows = notes.map((note) => {
     return [
       escapeCsvField(note.id),
+      escapeCsvField(note.description),
       escapeCsvField(note.createdBy?.displayName),
       escapeCsvField(note.createdBy?.accountId),
       escapeCsvField(note.targetUser?.displayName),

@@ -23,10 +23,11 @@ const GLOBAL_ROUTES = {
   all: { route: "/" },
 };
 
-export default function LinkPage(props: Readonly<{ accountId: string }>) {
+export default function LinkPage() {
   const params = useParams();
   const navigate = useNavigate();
   const [isValid, setIsValid] = useState<boolean | null>(null);
+  const [sourceAccountId, setSourceAccountId] = useState<string>();
   const [isLoading, setIsLoading] = useState(true);
   const [encryptionKey, setEncryptionKey] = useState("");
   const [decryptedContent, setDecryptedContent] = useState<string | null>(null);
@@ -40,6 +41,7 @@ export default function LinkPage(props: Readonly<{ accountId: string }>) {
           id: params.recordId,
         });
         setIsValid(response.valid);
+        setSourceAccountId(response.sourceAccountId);
       } catch (error) {
         console.error("Error validating note:", error);
         setIsValid(false);
@@ -59,7 +61,7 @@ export default function LinkPage(props: Readonly<{ accountId: string }>) {
 
     setIsLoading(true);
     setError(null);
-    const baseKey = await calculateHash(encryptionKey, props.accountId, 200_000);
+    const baseKey = await calculateHash(encryptionKey, sourceAccountId ?? "", 200_000);
     const keyForEncryption = await calculateHash(baseKey, DERIVE_PURPOSE_ENCRYPTION, 1000);
     const keyForServer = await calculateHash(baseKey, DERIVE_PURPOSE_VERIFICATION, 1000);
     try {
