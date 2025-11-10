@@ -3,7 +3,7 @@ import {
   ViewMySecurityNotes,
 } from "../../../shared/responses/ViewMySecurityNotes";
 import { SECURITY_NOTE_REPOSITORY } from "../../database/SecurityNoteRepository";
-import { SecurityNoteStatus } from "../../../shared/Types";
+import { SecurityNoteStatus, SHARED_EVENT_NAME } from "../../../shared/Types";
 import {
   applicationContext,
   getAppContext,
@@ -26,6 +26,7 @@ import { SecurityNoteData } from "../../../shared/responses/SecurityNoteData";
 import { ProjectInfo, ProjectIssue } from "../../../shared/responses/ProjectIssue";
 import { BOOTSTRAP_SERVICE } from "./BootstrapService";
 import { OpenSecurityNote } from "../../../shared/responses/OpenSecurityNote";
+import { publishGlobal } from "@forge/realtime";
 
 export interface SecurityNoteService {
   getMySecurityNoteIssue(): Promise<ViewMySecurityNotes[]>;
@@ -204,6 +205,7 @@ class SecurityNoteServiceImpl implements SecurityNoteService {
     }
     await SECURITY_STORAGE.deletePayload(securityNoteId);
     await SECURITY_NOTE_REPOSITORY.viewSecurityNote(securityNoteId);
+    await publishGlobal(SHARED_EVENT_NAME, sn.issueId ?? "");
     return {
       id: sn.id,
       iv: sn.iv,
