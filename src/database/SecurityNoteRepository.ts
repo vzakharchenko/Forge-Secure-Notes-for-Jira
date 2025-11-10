@@ -225,7 +225,7 @@ class SecurityNoteRepositoryImpl implements SecurityNoteRepository {
       count: number;
     })[]
   > {
-    return FORGE_SQL_ORM.selectCacheable({
+    return FORGE_SQL_ORM.select({
       ...getTableColumns(securityNotes),
       count: sql<number>`COUNT(*) OVER()`,
     })
@@ -246,7 +246,7 @@ class SecurityNoteRepositoryImpl implements SecurityNoteRepository {
       count: number;
     })[]
   > {
-    return FORGE_SQL_ORM.selectCacheable({
+    return FORGE_SQL_ORM.select({
       ...getTableColumns(securityNotes),
       count: sql<number>`COUNT(*) OVER()`,
     })
