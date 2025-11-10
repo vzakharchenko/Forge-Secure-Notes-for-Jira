@@ -80,3 +80,4 @@ permissions:
     - "read:permission:jira"
     - "send:notification:jira"
     - "storage:app"
+    - "read:app-global-channel:realtime"

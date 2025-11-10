@@ -10,19 +10,18 @@ import { formatDateTime } from "./utils/dateUtils";
 import { showNewIssueModal } from "./utils/ModalUtils";
 import { NoteDataType } from "./Types";
 import Spinner from "@atlaskit/spinner";
-import { invoke, router, showFlag } from "@forge/bridge";
+import { invoke, realtime, router, showFlag } from "@forge/bridge";
 import { ViewMySecurityNotes } from "../../shared/responses/ViewMySecurityNotes";
 import { ResolverNames } from "../../shared/ResolverNames";
 import { AuditUser } from "../../shared/responses/AuditUser";
+import { SHARED_EVENT_NAME } from "../../shared/Types";
 
-function Issue(props: Readonly<{ accountId: string; appUrl: string }>) {
+function Issue(props: Readonly<{ accountId: string; appUrl: string; issueId: string }>) {
   const [notes, setNotes] = useState<ViewMySecurityNotes[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const currentUserId = props.accountId;
 
   useEffect(() => {
-    let intervalId: any | null = null;
-
     const fetchNotes = async (showSpinner: boolean = false) => {
       try {
         if (showSpinner) {
@@ -57,18 +56,13 @@ function Issue(props: Readonly<{ accountId: string; appUrl: string }>) {
 
     // First load with spinner
     fetchNotes(true).catch(console.error);
-
-    // Setup polling every 10 seconds without spinner
-    intervalId = setInterval(() => {
-      fetchNotes(false).catch(console.error);
-    }, 10000);
-
-    // Cleanup interval on unmount
-    return () => {
-      if (intervalId) {
-        clearInterval(intervalId);
-      }
-    };
+    realtime
+      .subscribeGlobal(SHARED_EVENT_NAME, async (payload) => {
+        if (payload === props.issueId) {
+          await fetchNotes(false);
+        }
+      })
+      .catch(console.error);
   }, []);
 
   const incomingNotes = notes.filter((note) => note.targetUser.accountId === currentUserId);

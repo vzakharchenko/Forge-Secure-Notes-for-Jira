@@ -47,7 +47,11 @@ const App = () => {
       const appUrl = `${appUrlParts[1]}/${appUrlParts[2]}/view/`;
       return (
         <div>
-          <Issue accountId={context?.accountId ?? ""} appUrl={appUrl} />
+          <Issue
+            accountId={context?.accountId ?? ""}
+            appUrl={appUrl}
+            issueId={context?.extension.issue.id}
+          />
         </div>
       );
     }
