@@ -1,6 +1,6 @@
-import {ErrorResponse} from "../Types";
-import {ViewMySecurityNotes} from "./ViewMySecurityNotes";
+import { ErrorResponse } from "../Types";
+import { ViewMySecurityNotes } from "./ViewMySecurityNotes";
 
-export interface AuditUser extends ErrorResponse{
-    result: ViewMySecurityNotes[];
+export interface AuditUser extends ErrorResponse {
+  result: ViewMySecurityNotes[];
 }

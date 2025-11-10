@@ -22,7 +22,13 @@ export default function AuditPage() {
   useEffect(() => {
     const fetchBootstrap = async () => {
       try {
-        const response = await invoke<Bootstrap>(ResolverNames.BOOTSTRAP);
+        let response = await invoke<Bootstrap>(ResolverNames.BOOTSTRAP);
+
+        while (response.isError && response.errorType === "INSTALLATION") {
+          await new Promise((resolve) => setTimeout(resolve, 10000));
+          response = await invoke<Bootstrap>(ResolverNames.BOOTSTRAP);
+        }
+
         setIsAdmin(response.isAdmin ?? false);
       } catch (error: any) {
         console.error("Error fetching bootstrap:", error);

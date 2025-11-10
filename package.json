@@ -26,8 +26,8 @@
     "forge:debug": "forge tunnel -d -f index.handler",
     "lint": "eslint src  --ext .ts,.tsx",
     "lint:fix": "eslint src --ext .ts,.tsx --fix",
-    "format": "prettier --write src static/src ",
-    "format:check": "prettier src static/src --check",
+    "format": "prettier --write src static/src shared ",
+    "format:check": "prettier src static/src shared --check",
     "prepare": "husky",
     "knip": "knip"
   },
