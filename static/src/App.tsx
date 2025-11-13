@@ -1,79 +1,19 @@
-import React, { useEffect, useState } from "react";
-import Button from "@atlaskit/button";
-import { view } from "@forge/bridge";
-import { FullContext } from "@forge/bridge/out/types";
-import Loading from "./components/Loading";
-import Issue from "./Issue";
-import CenterDiv from "./components/CenterDiv";
-import NewSecureNote from "./NewSecureNote";
-import GlobalPage from "./global/GlobalPage";
+// libs
+import React from "react";
+import { QueryClientProvider } from "@tanstack/react-query";
+
+// helpers
+import { queryClient } from "@src/shared/utils/queryClient";
+
+// components
+import ForgeModule from "@src/ForgeModule";
 
 const App = () => {
-  const [context, setContext] = useState<FullContext>();
-  const [loading, setLoading] = useState(true);
-  useEffect(() => {
-    setLoading(true);
-    const contextFetch = async () => {
-      setContext(await view.getContext());
-    };
-    contextFetch()
-      .then(() => {
-        setLoading(false);
-      })
-      .catch((e: any) => {
-        console.error(e);
-        setLoading(false);
-      });
-  }, []);
-  if (loading) {
-    return (
-      <div style={{ height: "100%" }}>
-        <Loading />
-      </div>
-    );
-  }
-  if (context?.extension?.modal) {
-    if (context?.extension?.modal.modalType === "newSecureNote") {
-      return (
-        <div>
-          <NewSecureNote accountId={context?.accountId ?? ""} />
-        </div>
-      );
-    }
-  }
-  switch (context!.moduleKey) {
-    case "forge-secure-notes-for-jira": {
-      const appUrlParts = context!.localId.split("/");
-      const appUrl = `${appUrlParts[1]}/${appUrlParts[2]}/view/`;
-      return (
-        <div>
-          <Issue
-            accountId={context?.accountId ?? ""}
-            appUrl={appUrl}
-            issueId={context?.extension.issue.id}
-          />
-        </div>
-      );
-    }
-    case "global-page": {
-      return <GlobalPage />;
-    }
-    default: {
-      return (
-        <CenterDiv>
-          <Button
-            height={200}
-            appearance={"primary"}
-            onClick={() => {
-              window.location.reload();
-            }}
-          >
-            RELOAD APPLICATION ${context?.moduleKey}
-          </Button>
-        </CenterDiv>
-      );
-    }
-  }
+  return (
+    <QueryClientProvider client={queryClient}>
+      <ForgeModule />
+    </QueryClientProvider>
+  );
 };
 
 export default App;

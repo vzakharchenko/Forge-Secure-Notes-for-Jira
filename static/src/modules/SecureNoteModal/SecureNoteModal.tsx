@@ -12,15 +12,15 @@ import SectionMessage from "@atlaskit/section-message";
 import Heading from "@atlaskit/heading";
 import CopyIcon from "@atlaskit/icon/glyph/copy";
 import RefreshIcon from "@atlaskit/icon/glyph/refresh";
-import JiraUserSelect from "./components/JiraUserSelect";
+import JiraUserSelect from "@src/components/JiraUserSelect";
 import {
   calculateHash,
   calculateHashBase64,
   DERIVE_PURPOSE_ENCRYPTION,
   DERIVE_PURPOSE_VERIFICATION,
   encryptMessage,
-} from "./utils/encodeUtils";
-import { NoteDataType } from "./Types";
+} from "@src/utils/encodeUtils";
+import { NoteDataType } from "@src/Types";
 
 interface UserOption {
   avatarUrl: string;
@@ -39,7 +39,7 @@ const generateNewKey = async (accountId: string) => {
   return await calculateHashBase64(Math.random().toString(8).substring(7), accountId, 80000);
 };
 
-const NewSecureNote = (props: { accountId: string }) => {
+const SecureNoteModal = (props: { accountId: string }) => {
   const [selectedUsers, setSelectedUsers] = useState<UserOption[]>([]);
   const [description, setDescription] = useState("");
   const [noteText, setNoteText] = useState("");
@@ -360,4 +360,4 @@ const NewSecureNote = (props: { accountId: string }) => {
   );
 };
 
-export default NewSecureNote;
+export default SecureNoteModal;
