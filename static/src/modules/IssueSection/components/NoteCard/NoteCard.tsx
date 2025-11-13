@@ -1,0 +1,88 @@
+// libs
+import React from "react";
+
+// helpers
+import { formatDateTime } from "@src/utils/dateUtils";
+
+// models
+import { NoteCardProps } from "./models";
+
+// constants
+// components
+import { Box, Flex, Text, xcss } from "@atlaskit/primitives";
+import { IconButton } from "@atlaskit/button/new";
+import Lozenge from "@atlaskit/lozenge";
+import DeleteIcon from "@atlaskit/icon/core/delete";
+import ArrowUpRightIcon from "@atlaskit/icon/core/arrow-up-right";
+
+const containerStyles = xcss({
+  backgroundColor: "elevation.surface.raised",
+  padding: "space.150",
+  borderRadius: "radius.small",
+  boxShadow: "elevation.shadow.raised",
+  transition: "200ms",
+  display: "flex",
+  flexDirection: "column",
+  gap: "space.200",
+  ":hover": {
+    backgroundColor: "elevation.surface.hovered",
+  },
+});
+
+const NoteCard = ({ note, variant, onOpen, onDelete }: NoteCardProps) => {
+  const isNew = note.status === "NEW";
+  const displayDate = isNew ? note.expiration : note.viewedAt;
+  const dateLabel = isNew ? "Expires" : "Viewed";
+  const displayUser = variant === "incoming" ? note.createdBy : note.targetUser;
+  const userLabel = variant === "incoming" ? "From" : "To";
+
+  return (
+    <Flex xcss={containerStyles}>
+      <Flex alignItems="start" justifyContent="space-between">
+        <Text as="p" size="large">
+          {userLabel}: <Text weight="semibold">{displayUser.displayName}</Text>
+        </Text>
+        {isNew ? (
+          <Lozenge appearance="new">New</Lozenge>
+        ) : (
+          <Lozenge appearance="success">Viewed</Lozenge>
+        )}
+      </Flex>
+      <Flex alignItems="end" justifyContent="space-between">
+        <Box>
+          <Text as="p" size="small">
+            Created: {formatDateTime(note.createdAt)}
+          </Text>
+          <Text as="p" size="small">
+            {dateLabel}: {formatDateTime(displayDate as Date)}
+          </Text>
+        </Box>
+        {!isNew && <Box paddingBlock="space.200" />}
+        {isNew && (
+          <>
+            {variant === "incoming" && onOpen && (
+              <IconButton
+                label="Open"
+                icon={ArrowUpRightIcon}
+                appearance="subtle"
+                isTooltipDisabled={false}
+                onClick={() => onOpen(note.id)}
+              />
+            )}
+            {variant === "sent" && onDelete && (
+              <IconButton
+                label="Delete"
+                icon={DeleteIcon}
+                appearance="subtle"
+                isTooltipDisabled={false}
+                onClick={() => onDelete(note.id)}
+              />
+            )}
+          </>
+        )}
+      </Flex>
+    </Flex>
+  );
+};
+
+export default NoteCard;

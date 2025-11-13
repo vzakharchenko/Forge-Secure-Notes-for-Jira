@@ -1,8 +1,8 @@
-import {ConfigEnv, defineConfig, UserConfig} from "vite";
+import { ConfigEnv, defineConfig, UserConfig } from "vite";
 import react from "@vitejs/plugin-react";
-import {config} from "dotenv";
-import {resolve} from "path";
-import {visualizer} from "rollup-plugin-visualizer";
+import { config } from "dotenv";
+import { resolve } from "path";
+import { visualizer } from "rollup-plugin-visualizer";
 
 const manualChunks = (id: string) => {
   if (id.includes("node_modules")) {
@@ -44,6 +44,12 @@ export default defineConfig(async (env: ConfigEnv): Promise<UserConfig> => {
         filename: `dependency-chunks.html`,
       }),
     ],
+    resolve: {
+      alias: {
+        "@shared": resolve(__dirname, "../shared"),
+        "@src": resolve(__dirname, "src"),
+      },
+    },
     server: {
       port: 3099,
     },
