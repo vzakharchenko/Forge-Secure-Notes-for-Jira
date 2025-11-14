@@ -35,7 +35,6 @@ const NoteCard = ({ note, variant, onOpen, onDelete }: NoteCardProps) => {
   const dateLabel = isNew ? "Expires" : "Viewed";
   const displayUser = variant === "incoming" ? note.createdBy : note.targetUser;
   const userLabel = variant === "incoming" ? "From" : "To";
-
   return (
     <Flex xcss={containerStyles}>
       <Flex alignItems="start" justifyContent="space-between">
@@ -47,6 +46,11 @@ const NoteCard = ({ note, variant, onOpen, onDelete }: NoteCardProps) => {
         ) : (
           <Lozenge appearance="success">Viewed</Lozenge>
         )}
+      </Flex>
+      <Flex alignItems="start" justifyContent="space-between">
+        <Box>
+          Description: <Text weight="semibold">{note.description}</Text>
+        </Box>
       </Flex>
       <Flex alignItems="end" justifyContent="space-between">
         <Box>

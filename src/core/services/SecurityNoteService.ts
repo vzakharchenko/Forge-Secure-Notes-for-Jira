@@ -191,7 +191,7 @@ class SecurityNoteServiceImpl implements SecurityNoteService {
     if (!sn) {
       return undefined;
     }
-    if (sn.encryptionKeyHash !== (await calculateHash(key, sn.createdBy))) {
+    if (sn.encryptionKeyHash !== (await calculateHash(key, sn.targetUserId))) {
       throw new Error(
         `SecurityKey is not valid, please ask ${sn.createdUserName} to sent you it. `,
       );
@@ -218,11 +218,19 @@ class SecurityNoteServiceImpl implements SecurityNoteService {
 
   @withAppContext()
   async isValidLink(securityNoteId: string): Promise<OpenSecurityNote> {
-    const { accountId } = getAppContext()!;
+    const accountId = getAppContext()?.accountId;
+    if (!accountId) return { valid: false };
+
     const sn = await SECURITY_NOTE_REPOSITORY.getSecurityNode(securityNoteId);
+    if (!sn) return { valid: false };
+
+    const isValid = sn.targetUserId === accountId;
+
     return {
-      valid: Boolean(accountId) && accountId === sn?.targetUserId,
-      sourceAccountId: sn?.createdBy,
+      valid: isValid,
+      sourceAccountId: isValid
+        ? await calculateHash(sn.description ?? sn.createdBy, sn.createdBy)
+        : undefined,
     };
   }
 

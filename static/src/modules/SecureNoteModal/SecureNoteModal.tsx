@@ -52,8 +52,7 @@ const SecureNoteModal = (props: { accountId: string }) => {
     if (!description.trim()) return false;
     if (!noteText.trim()) return false;
     if (!encryptionKey) return false;
-    if (expiryOption === "custom" && !customDate) return false;
-    return true;
+    return !(expiryOption === "custom" && !customDate);
   };
 
   const createNewKey = async () => {
@@ -94,7 +93,9 @@ const SecureNoteModal = (props: { accountId: string }) => {
       return;
     }
 
-    if (!description.trim()) {
+    const descriptionText = description.trim();
+
+    if (!descriptionText) {
       showFlag({
         id: "description",
         title: "Description",
@@ -130,7 +131,11 @@ const SecureNoteModal = (props: { accountId: string }) => {
       return;
     }
     const expiry = expiryOption === "custom" ? customDate : expiryOption;
-    const baseKey = await calculateHash(encryptionKey, props.accountId, 200_000);
+    const baseKey = await calculateHash(
+      encryptionKey,
+      await calculateHash(descriptionText ?? props.accountId, props.accountId, 1000),
+      200_000,
+    );
     const keyForEncryption = await calculateHash(baseKey, DERIVE_PURPOSE_ENCRYPTION, 1000);
     const keyForServer = await calculateHash(baseKey, DERIVE_PURPOSE_VERIFICATION, 1000);
     const encryptedPayload = await encryptMessage(noteText.trim(), keyForEncryption);
@@ -145,7 +150,7 @@ const SecureNoteModal = (props: { accountId: string }) => {
       encryptedPayload: encryptedPayload.encrypted,
       iv: encryptedPayload.iv,
       salt: encryptedPayload.salt,
-      description: description.trim(),
+      description: descriptionText,
     };
     await view.close(noteData);
   };
