@@ -14,7 +14,15 @@ export interface RovoService {
 
 class RovoServiceImpl implements RovoService {
   async runSecurityNotesQuery(
-    event: { sql: string },
+    event: {
+      sql: string;
+      context: {
+        jira: {
+          issueKey: string;
+          projectKey: string;
+        };
+      };
+    },
     context: { principal: { accountId: string } },
   ): Promise<Result<unknown>> {
     const query: string = event.sql;
@@ -30,8 +38,16 @@ class RovoServiceImpl implements RovoService {
       const idx = id.lastIndexOf("/");
       return idx !== -1 ? id.substring(idx + 1) : id;
     };
+
+    const normalizeSqlString = (sql: string): string => {
+      return sql
+        .replace(/[\n\r\t]+/g, " ")
+        .replace(/\s+/g, " ")
+        .replace(/\s*;\s*$/, "")
+        .trim();
+    };
     const currentUserId = normalizeAccountId(rawAccountId);
-    let normalized = query.trim();
+    let normalized = normalizeSqlString(query.trim());
     const upper = normalized.toUpperCase();
 
     if (!upper.startsWith("SELECT")) {
@@ -42,7 +58,13 @@ class RovoServiceImpl implements RovoService {
       throw new Error("Only queries against the security_notes table are allowed");
     }
     const isAdmin = await USER_FACTORY.getUserService(ForgeTypes.globalJira).isJiraAdmin();
-    normalized = query.replaceAll("ari:cloud:identity::user/", "");
+    normalized = normalized.replaceAll("ari:cloud:identity::user/", "");
+    normalized = normalized.replaceAll(":currentUserId", `'${currentUserId}'`);
+    normalized = normalized.replaceAll(
+      ":currentProjectKey",
+      `'${event.context?.jira?.projectKey}'`,
+    );
+    normalized = normalized.replaceAll(":currentIssueKey", `'${event.context?.jira?.issueKey}'`);
     if (!isAdmin) {
       if (normalized.endsWith(";")) {
         normalized = normalized.slice(0, -1);
