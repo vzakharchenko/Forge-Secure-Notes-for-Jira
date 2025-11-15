@@ -26,6 +26,10 @@ While Jira excels at task tracking and collaboration, it lacks a secure, ephemer
 - 🧨 Note self-destructs after reading or upon expiry
 - ⏳ Expiration is enforced automatically using a Forge `scheduledTrigger`
 - 👤 Only the designated Atlassian account can decrypt the Secure Note
+- 📧 **Email Notifications**: Automatic email notifications are sent:
+  - When a secure note is created and shared with you
+  - When a secure note expires and is automatically deleted
+  - When a secure note is manually deleted by the creator
 
 ### 🖥 UI Features
 
@@ -44,6 +48,7 @@ While Jira excels at task tracking and collaboration, it lacks a secure, ephemer
 - 📥 CSV Export functionality on all audit pages for data analysis
 - 🔄 Automatic background polling (every 10 seconds) for real-time updates
 - 📋 Modern table UI using Atlassian Design System components
+- 🤖 **Rovo AI Agent** - Natural language analytics for Security Notes data
 
 ## 🛠 Technical Implementation
 
@@ -52,6 +57,7 @@ While Jira excels at task tracking and collaboration, it lacks a secure, ephemer
 - **Frontend:** React + Vite (Forge Custom UI)
 - **Backend:** Forge Functions using `@forge/api`, `@forge/sql`, `@forge/kvs`
 - **ORM:** [forge-sql-orm](https://github.com/vassio/forge-sql-orm)
+- **AI Analytics:** Atlassian Rovo AI agent for natural language queries
 - **Storage:**
   - Encrypted content in `@forge/kvs` (via `setSecret`)
   - Metadata in `@forge/sql`
@@ -153,15 +159,41 @@ forge tunnel
 5. Click "Generate New Key" to create an encryption key
 6. Copy the encryption key and share it securely (via Slack, email, etc.)
 7. Click "Create & Encrypt Note"
-8. The note will be automatically updated in the panel every 10 seconds via background polling
+8. **Email Notification**: The recipient(s) will automatically receive an email notification with:
+   - A direct link to access the secure note
+   - The expiration date and time
+   - Instructions on how to obtain the decryption key
+9. The note will be automatically updated in the panel every 10 seconds via background polling
 
 ### Viewing a Secure Note
 
-1. Open the secure note link
+1. Open the secure note link (from email notification or issue panel)
 2. Enter the decryption key
 3. View the message content
 4. Use "Copy and Close" to save the content and destroy the note
 5. The note will be automatically destroyed after viewing or when expired
+
+### Email Notifications
+
+The application automatically sends email notifications for important events:
+
+1. **When a Secure Note is Created**:
+   - Recipients receive an email with subject "🔐 A security note has been shared with you"
+   - The email includes a direct link to access the note
+   - The expiration date and time are clearly displayed
+   - Instructions on how to obtain the decryption key are provided
+
+2. **When a Secure Note Expires**:
+   - Recipients receive an email with subject "⚠️ A Secure Note has expired and was deleted"
+   - The email notifies that the note has been automatically deleted
+   - Instructions to contact the sender if access is still needed
+
+3. **When a Secure Note is Deleted**:
+   - Recipients receive an email with subject "🗑️ A Secure Note has been deleted"
+   - The email notifies that the creator has manually deleted the note
+   - Instructions to contact the sender if access is still needed
+
+**Note**: Email notifications are sent via Jira's notification system and will appear in the recipient's email inbox associated with their Jira account.
 
 ### Audit and History Pages
 
@@ -194,6 +226,40 @@ All audit pages feature:
 - Expandable status history rows
 - CSV export functionality
 - Real-time data updates
+
+### Rovo AI Analytics
+
+The application includes a **Rovo AI agent** that enables natural language queries about Security Notes data. Users can ask questions in plain English, and the agent will generate and execute SQL queries to provide insights.
+
+**Features:**
+
+- Ask questions like:
+  - "Show all users which I shared security notes with for this issue"
+  - "Show my notes for this issue from last week"
+  - "Prepare a report of all descriptions and who shared for this issue last month"
+  - "Show top 10 users who created the most security notes"
+
+**Security:**
+
+- Only read-only SELECT queries are allowed
+- Non-admin users can only see notes they created or received
+- Admin users have full access to all notes
+- Sensitive fields (encryption keys, IV, salt) are never exposed
+- Row-level security is enforced automatically
+
+**How to use:**
+
+1. Open the Rovo AI assistant in Jira
+2. Ask questions about Security Notes using natural language
+3. The agent will generate SQL queries and return results
+4. Results are explained in natural language with summaries and highlights
+
+**Example queries:**
+
+- "Can you show all users which I shared security notes with for this issue?"
+- "Show all users which I shared security notes with for this project."
+- "Report security notes for this issue last month."
+- "Show me top 10 users who created the most security notes."
 
 ## 🤝 Contributing
 
