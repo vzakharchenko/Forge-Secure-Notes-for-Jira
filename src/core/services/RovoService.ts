@@ -90,15 +90,10 @@ class RovoServiceImpl implements RovoService {
       `'${event.context?.jira?.issueKey || ""}'`,
     );
 
-    // Check for JOIN operations using EXPLAIN ANALYZE
-    const explainAnalyzeRows = await FORGE_SQL_ORM.analyze().explain({
-      toSQL: () => ({
-        sql: normalized,
-        params: [],
-      }),
-    });
+    // Check for JOIN operations using EXPLAIN
+    const explainRows = await FORGE_SQL_ORM.analyze().explainRaw(normalized, []);
 
-    const hasJoin = explainAnalyzeRows.some((row) => {
+    const hasJoin = explainRows.some((row) => {
       const info = (row.operatorInfo || "").toUpperCase();
       return (
         info.includes("JOIN") ||
