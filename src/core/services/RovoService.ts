@@ -2,6 +2,7 @@ import { ForgeTypes } from "../../../shared/Types";
 import { USER_FACTORY } from "../../user/UserServiceFactory";
 import sql from "@forge/sql";
 import { Result } from "@forge/sql/out/utils/types";
+import { FORGE_SQL_ORM } from "../../database/DbUtils";
 
 export interface RovoService {
   runSecurityNotesQuery(
@@ -89,6 +90,31 @@ class RovoServiceImpl implements RovoService {
       `'${event.context?.jira?.issueKey || ""}'`,
     );
 
+    // Check for JOIN operations using EXPLAIN ANALYZE
+    const explainAnalyzeRows = await FORGE_SQL_ORM.analyze().explain({
+      toSQL: () => ({
+        sql: normalized,
+        params: [],
+      }),
+    });
+
+    const hasJoin = explainAnalyzeRows.some((row) => {
+      const info = (row.operatorInfo || "").toUpperCase();
+      return (
+        info.includes("JOIN") ||
+        info.includes("CARTESIAN") ||
+        info.includes("NESTED LOOP") ||
+        info.includes("HASH JOIN")
+      );
+    });
+
+    if (hasJoin) {
+      throw new Error(
+        "Security violation: JOIN operations are not allowed. " +
+          "For security reasons, Rovo analytics only supports queries over the security_notes table without joins, subqueries, or references to other tables. " +
+          "Please rewrite your query to use only the security_notes table.",
+      );
+    }
     // Apply row-level security for non-admin users
     if (!isAdmin) {
       if (normalized.endsWith(";")) {
@@ -106,7 +132,6 @@ class RovoServiceImpl implements RovoService {
 
     // eslint-disable-next-line no-console
     console.debug("Executing Rovo query:", normalized);
-
     const result = await sql.executeRaw(normalized);
 
     // Post-execution validation for non-admin users
