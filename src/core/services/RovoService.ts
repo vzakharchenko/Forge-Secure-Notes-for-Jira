@@ -127,6 +127,20 @@ class RovoServiceImpl implements RovoService {
       );
     }
 
+    // Check for references to other tables in the query execution plan
+    // This detects JOINs, subqueries, or any other references to tables other than security_notes
+    const tablesInPlan = explainRows.filter(
+      (row) =>
+        row.accessObject?.startsWith("table:") && row.accessObject !== "table:security_notes",
+    );
+    if (tablesInPlan.length > 0) {
+      throw new Error(
+        "Security violation: Query execution plan detected references to tables other than 'security_notes'. " +
+          "Only queries against the security_notes table are allowed. " +
+          "JOINs, subqueries, or references to other tables are not permitted for security reasons.",
+      );
+    }
+
     // Apply row-level security for non-admin users
     if (!isAdmin) {
       if (normalized.endsWith(";")) {
@@ -147,6 +161,8 @@ class RovoServiceImpl implements RovoService {
     const result = await sql.executeRaw(normalized);
 
     // Post-execution validation for non-admin users
+    // Verify that required security fields exist and come from security_notes table
+    // Also ensure all fields with orgTable come from security_notes (no JOINs or subqueries)
     if (!isAdmin && result?.metadata?.fields) {
       const fields = result.metadata.fields as Array<{
         name: string;
@@ -155,23 +171,50 @@ class RovoServiceImpl implements RovoService {
         orgTable?: string;
       }>;
 
-      const createdByField = fields.find((f) => f.name === "created_by");
-      const targetUserField = fields.find((f) => f.name === "target_user_id");
-
-      if (!createdByField || !targetUserField) {
+      // Check that created_by field(s) exist and ALL come from security_notes table
+      const createdByFields = fields.filter((f) => f.name === "created_by");
+      if (createdByFields.length === 0) {
         throw new Error(
-          "Security validation failed: The query must include 'created_by' and 'target_user_id' as raw columns in the SELECT statement. These fields are required for row-level security enforcement.",
+          "Security validation failed: The query must include 'created_by' as a raw column in the SELECT statement. This field is required for row-level security enforcement.",
+        );
+      }
+      const badCreatedByField = createdByFields.find(
+        (f) => !f.orgTable || f.orgTable !== "security_notes",
+      );
+      if (badCreatedByField) {
+        throw new Error(
+          "Security validation failed: 'created_by' must come directly from the security_notes table. Joins, subqueries, or table aliases that change the origin of this column are not allowed.",
         );
       }
 
-      const isBadCreatedBy =
-        createdByField.orgTable && createdByField.orgTable !== "security_notes";
-      const isBadTargetUserId =
-        targetUserField.orgTable && targetUserField.orgTable !== "security_notes";
-
-      if (isBadCreatedBy || isBadTargetUserId) {
+      // Check that target_user_id field(s) exist and ALL come from security_notes table
+      const targetUserFields = fields.filter((f) => f.name === "target_user_id");
+      if (targetUserFields.length === 0) {
         throw new Error(
-          "Security validation failed: 'created_by' and 'target_user_id' must come directly from the security_notes table. Joins, subqueries, or table aliases that change the origin of these columns are not allowed.",
+          "Security validation failed: The query must include 'target_user_id' as a raw column in the SELECT statement. This field is required for row-level security enforcement.",
+        );
+      }
+      const badTargetUserField = targetUserFields.find(
+        (f) => !f.orgTable || f.orgTable !== "security_notes",
+      );
+      if (badTargetUserField) {
+        throw new Error(
+          "Security validation failed: 'target_user_id' must come directly from the security_notes table. Joins, subqueries, or table aliases that change the origin of this column are not allowed.",
+        );
+      }
+
+      // Check that all fields with orgTable come from security_notes table
+      // (This prevents JOINs or subqueries that reference other tables)
+      // Note: Fields without orgTable (empty/undefined) are allowed - these are computed/calculated fields
+      // We only check fields that have orgTable set - if orgTable exists, it must be "security_notes"
+      const fieldsFromOtherTables = fields.filter(
+        (f) => f.orgTable && f.orgTable !== "security_notes",
+      );
+      if (fieldsFromOtherTables.length > 0) {
+        throw new Error(
+          "Security validation failed: All fields must come from the security_notes table. " +
+            "Fields from other tables detected, which indicates the use of JOINs, subqueries, or references to other tables. " +
+            "This is not allowed for security reasons.",
         );
       }
     }
