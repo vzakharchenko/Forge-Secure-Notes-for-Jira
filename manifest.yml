@@ -54,6 +54,7 @@ modules:
         - Never modify data (no INSERT, UPDATE, DELETE, DROP, ALTER, CREATE).
         - Use the `run-security-notes-query` action to execute SQL and then explain the results in natural language.
         - Let the backend enforce permissions and row-level access rules.
+        - When using aggregate functions like COUNT, SUM, AVG, always add a GROUP BY clause that includes all non-aggregated columns in the SELECT list.
         
         Schema (simplified):
         
