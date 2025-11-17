@@ -94,7 +94,7 @@ class RovoServiceImpl implements RovoService {
     const explainRows = await FORGE_SQL_ORM.analyze().explainRaw(normalized, []);
 
     const hasJoin = explainRows.some((row) => {
-      const info = (row.operatorInfo || "").toUpperCase();
+      const info = (row.operatorInfo ?? "").toUpperCase();
       return (
         info.includes("JOIN") ||
         info.includes("CARTESIAN") ||
@@ -110,6 +110,23 @@ class RovoServiceImpl implements RovoService {
           "Please rewrite your query to use only the security_notes table.",
       );
     }
+
+    // Detect window functions (e.g., COUNT(*) OVER(...), ROW_NUMBER() OVER(...))
+    // Window functions are not allowed for security
+    // Users should use regular aggregate functions with GROUP BY instead
+    const hasWindow = explainRows.some((row) => {
+      const id = row.id.toUpperCase();
+      const info = (row.operatorInfo ?? "").toUpperCase();
+      return id.includes("WINDOW") || info.includes(" OVER(") || info.includes(" OVER()");
+    });
+
+    if (hasWindow) {
+      throw new Error(
+        "Window functions (for example COUNT(*) OVER(...)) are not allowed in Rovo SQL for this app. " +
+          "Please rephrase your question so that it uses regular aggregates instead of window functions.",
+      );
+    }
+
     // Apply row-level security for non-admin users
     if (!isAdmin) {
       if (normalized.endsWith(";")) {

@@ -253,6 +253,7 @@ The application includes a **Rovo AI agent** that enables natural language queri
 - Only read-only SELECT queries are allowed
 - Queries must target only the `security_notes` table (no JOINs, subqueries, or references to other tables)
 - JOIN operations are automatically detected and blocked using EXPLAIN query plan analysis
+- Window functions (e.g., `COUNT(*) OVER(...)`) are not allowed and are automatically detected and blocked
 - Non-admin users can only see notes they created or received
 - Admin users have full access to all notes
 - Sensitive fields are protected:

@@ -51,6 +51,7 @@ modules:
         - Query ONLY the `security_notes` table.
         - NEVER use any JOIN clause (INNER, LEFT, RIGHT, FULL, CROSS, etc.).
         - NEVER reference any other tables anywhere in the query (including in FROM, JOIN, subqueries, or CTEs).
+        - NEVER use window functions (e.g., COUNT(*) OVER(...), ROW_NUMBER() OVER(...), etc.). Use regular aggregate functions with GROUP BY instead.
         - Never modify data (no INSERT, UPDATE, DELETE, DROP, ALTER, CREATE).
         - Use the `run-security-notes-query` action to execute SQL and then explain the results in natural language.
         - Let the backend enforce permissions and row-level access rules.
@@ -158,6 +159,7 @@ modules:
         - NEVER select: encryption_key_hash, iv, salt.
         - Do NOT invent non-existent columns.
         - Do NOT use any JOINs or references to other tables.
+        - Do NOT use window functions (OVER clause). Use regular aggregates with GROUP BY instead.
         - Recommended fields: BIN_TO_UUID(id) AS id, description, created_at, created_by,
           created_user_name, target_user_id, target_user_name, status, viewed_at,
           expiry_date, issue_key, project_key.
@@ -347,6 +349,7 @@ modules:
         - Only read-only SELECT queries are allowed
         - Queries must target only the security_notes table (no JOINs, subqueries, or references to other tables)
         - JOIN operations are automatically detected and blocked using EXPLAIN query plan analysis
+        - Window functions (e.g., COUNT(*) OVER(...)) are not allowed and are automatically detected and blocked
         - Non-admin users can only see notes they created or received
         - Admin users have full access to all notes
         - Sensitive fields are protected:
