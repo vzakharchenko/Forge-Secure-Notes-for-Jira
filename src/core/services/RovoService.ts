@@ -3,6 +3,7 @@ import { USER_FACTORY } from "../../user/UserServiceFactory";
 import sql from "@forge/sql";
 import { Result } from "@forge/sql/out/utils/types";
 import { FORGE_SQL_ORM } from "../../database/DbUtils";
+import { Parser, Select } from "node-sql-parser";
 
 export interface RovoService {
   runSecurityNotesQuery(
@@ -14,6 +15,102 @@ export interface RovoService {
 }
 
 class RovoServiceImpl implements RovoService {
+  /**
+   * Parses SQL query into AST and validates it's a single SELECT statement
+   * @param sqlQuery - Normalized SQL query string
+   * @returns Parsed AST of the SELECT statement
+   * @throws Error if parsing fails or query is not a single SELECT statement
+   */
+  private parseSqlQuery(sqlQuery: string): Select {
+    const parser = new Parser();
+    let ast;
+    try {
+      ast = parser.astify(sqlQuery);
+    } catch (parseError: any) {
+      throw new Error(
+        `SQL parsing error: ${parseError.message || "Invalid SQL syntax"}. Please check your query syntax.`,
+      );
+    }
+
+    // Validate that query is a SELECT statement
+    // Parser can return either an object (single statement) or an array (multiple statements)
+    if (Array.isArray(ast)) {
+      if (ast.length !== 1 || ast[0].type !== "select") {
+        throw new Error(
+          "Only a single SELECT query is allowed. Multiple statements or non-SELECT statements are not permitted.",
+        );
+      }
+      return ast[0];
+    } else if (ast && ast.type === "select") {
+      return ast;
+    } else {
+      throw new Error("Only SELECT queries are allowed.");
+    }
+  }
+
+  /**
+   * Recursively extracts all table names from SQL AST node
+   * @param node - AST node to extract tables from
+   * @returns Array of table names (uppercase)
+   */
+  private extractTables(node: any): string[] {
+    const tables: string[] = [];
+
+    if (node.type === "table" || node.type === "dual") {
+      if (node.table) {
+        const tableName = node.table === "dual" ? "dual" : node.table.name || node.table;
+        if (tableName && tableName !== "dual") {
+          tables.push(tableName.toUpperCase());
+        }
+      }
+    }
+
+    if (node.from) {
+      if (Array.isArray(node.from)) {
+        node.from.forEach((fromItem: any) => {
+          tables.push(...this.extractTables(fromItem));
+        });
+      } else {
+        tables.push(...this.extractTables(node.from));
+      }
+    }
+
+    if (node.join) {
+      if (Array.isArray(node.join)) {
+        node.join.forEach((joinItem: any) => {
+          tables.push(...this.extractTables(joinItem));
+        });
+      } else {
+        tables.push(...this.extractTables(node.join));
+      }
+    }
+
+    return tables;
+  }
+
+  /**
+   * Recursively checks if AST node contains scalar subqueries
+   * @param node - AST node to check
+   * @returns true if node contains scalar subquery, false otherwise
+   */
+  private hasScalarSubquery(node: any): boolean {
+    if (!node) return false;
+
+    if (node.type === "subquery" || (node.ast && node.ast.type === "select")) {
+      return true;
+    }
+
+    if (Array.isArray(node)) {
+      return node.some((item) => this.hasScalarSubquery(item));
+    }
+
+    if (typeof node === "object") {
+      return Object.values(node).some((value) => this.hasScalarSubquery(value));
+    }
+
+    return false;
+  }
+
   async runSecurityNotesQuery(
     event: {
       sql: string;
@@ -89,6 +186,41 @@ class RovoServiceImpl implements RovoService {
       ":currentIssueKey",
       `'${event.context?.jira?.issueKey || ""}'`,
     );
+
+    // Parse SQL query to validate structure before execution
+    const selectAst = this.parseSqlQuery(normalized);
+
+    // Extract all tables from the query
+    const tablesInQuery = this.extractTables(selectAst);
+    const uniqueTables = [...new Set(tablesInQuery)];
+
+    // Check that only security_notes table is used
+    const invalidTables = uniqueTables.filter((table) => table !== "SECURITY_NOTES");
+    if (invalidTables.length > 0) {
+      throw new Error(
+        `Security violation: Query references table(s) other than 'security_notes': ${invalidTables.join(", ")}. ` +
+          "Only queries against the security_notes table are allowed. " +
+          "JOINs, subqueries, or references to other tables are not permitted for security reasons.",
+      );
+    }
+
+    // Check for scalar subqueries in SELECT columns
+    if (selectAst.columns && Array.isArray(selectAst.columns)) {
+      const hasSubqueryInColumns = selectAst.columns.some((col: any) => {
+        if (col.expr) {
+          return this.hasScalarSubquery(col.expr);
+        }
+        return this.hasScalarSubquery(col);
+      });
+
+      if (hasSubqueryInColumns) {
+        throw new Error(
+          "Security violation: Scalar subqueries in SELECT columns are not allowed. " +
+            "Subqueries can be used to access data from other tables or bypass security restrictions. " +
+            "Please rewrite your query without using subqueries in the SELECT clause.",
+        );
+      }
+    }
 
     // Check for JOIN operations using EXPLAIN
     const explainRows = await FORGE_SQL_ORM.analyze().explainRaw(normalized, []);

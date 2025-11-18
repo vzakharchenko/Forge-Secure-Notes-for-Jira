@@ -29,4 +29,6 @@ export const fetchMigrations = async () => {
   return fetchSchemaWebTrigger();
 };
 
-export const runSecurityNotesQuery = ROVO_SERVICE.runSecurityNotesQuery;
+export const runSecurityNotesQuery = (event: any, context: any) => {
+  return ROVO_SERVICE.runSecurityNotesQuery(event, context);
+};
