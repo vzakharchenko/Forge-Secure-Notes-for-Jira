@@ -1,6 +1,6 @@
 // libs
 import React, { ChangeEvent, useEffect, useMemo, useState } from "react";
-import debounce from "lodash.debounce";
+import { debounce } from "lodash";
 
 // api
 import { formatOptionLabelJiraUser, loadUsers } from "@src/shared/utils/users";
