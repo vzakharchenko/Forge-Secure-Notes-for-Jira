@@ -6,6 +6,7 @@
   "dependencies": {
     "@atlaskit/avatar": "^25.5.1",
     "@atlaskit/button": "^23.5.4",
+    "@atlaskit/css-reset": "^7.3.9",
     "@atlaskit/datetime-picker": "^17.1.7",
     "@atlaskit/empty-state": "^10.1.8",
     "@atlaskit/form": "^14.2.4",
@@ -38,7 +39,6 @@
   },
   "devDependencies": {
     "@types/jest": "^30.0.0",
-    "@types/lodash.debounce": "4.0.9",
     "@types/node": "^24.10.0",
     "@types/react": "^18.3.1",
     "@types/react-dom": "^18.3.1",
