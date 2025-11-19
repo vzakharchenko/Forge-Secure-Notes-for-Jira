@@ -1,10 +1,10 @@
-import { IsArray, ArrayNotEmpty, Length, IsNotEmpty } from "class-validator";
+import { ArrayNotEmpty, IsArray, IsNotEmpty, Length } from "class-validator";
 
 export class NewSecurityNote {
   @ArrayNotEmpty()
   @IsArray()
   targetUsers!: { accountId: string; userName: string }[];
-  @Length(2, 20)
+  @Length(2, 24)
   @IsNotEmpty()
   expiry!: string;
   isCustomExpiry?: boolean;

@@ -66,6 +66,7 @@ const ForgeModule = () => {
           accountId={context.accountId ?? ""}
           appUrl={getAppUrl(context)}
           issueId={context.extension.issue.id}
+          timezone={context.timezone}
         />
       );
     }

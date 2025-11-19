@@ -1,0 +1,1 @@
+export const DEFAULT_MAX_MENU_LIST_HEIGHT = "208px";

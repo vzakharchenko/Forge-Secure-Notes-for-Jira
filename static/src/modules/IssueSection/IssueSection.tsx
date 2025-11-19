@@ -23,12 +23,15 @@ import Button from "@atlaskit/button/new";
 import AddIcon from "@atlaskit/icon/core/add";
 import NoteList from "./components/NoteList/NoteList";
 import PageLoading from "@src/components/loaders/PageLoading/PageLoading";
+import EmptyState from "@atlaskit/empty-state";
+import Heading from "@atlaskit/heading";
 
 function IssueSection({
   accountId,
   appUrl,
   issueId,
-}: Readonly<{ accountId: string; appUrl: string; issueId: string }>) {
+  timezone,
+}: Readonly<{ accountId: string; appUrl: string; issueId: string; timezone: string }>) {
   const { data: notes = [], isFetching: areNotesFetching } = useFetchNotes();
   const { mutate: mutateCreateNote, isPending: isCreateNotePending } = useCreateNote();
   const { mutate: mutateDeleteNote } = useDeleteNote();
@@ -83,30 +86,37 @@ function IssueSection({
     <Box padding="space.400">
       <Stack space="space.400">
         <Inline alignBlock="center" spread="space-between">
-          <h2 style={{ margin: 0 }}>🔐 Secure Notes Panel</h2>
+          <Heading size="large" as="h2">
+            Secure notes panel
+          </Heading>
           <Button
             appearance="primary"
             iconBefore={AddIcon}
             onClick={handleNewNote}
             isDisabled={isCreateNotePending}
           >
-            Create Secure Note
+            Create secure note
           </Button>
         </Inline>
         {areNotesFetching && <PageLoading text="Loading secure notes" />}
+        {!areNotesFetching && !incomingNotes.length && !sentNotes.length && (
+          <EmptyState header="There are no secure notes" />
+        )}
         {!areNotesFetching && (
           <>
             <NoteList
-              title="📬 Incoming Notes (to me)"
+              title="Incoming notes (to me)"
               notes={incomingNotes}
               variant="incoming"
               onOpen={handleOpenNote}
+              timezone={timezone}
             />
             <NoteList
-              title="📤 Sent Notes (from me)"
+              title="Sent notes (from me)"
               notes={sentNotes}
               variant="sent"
               onDelete={handleDeleteNote}
+              timezone={timezone}
             />
           </>
         )}

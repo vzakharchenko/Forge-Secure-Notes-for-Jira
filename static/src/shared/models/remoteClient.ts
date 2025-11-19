@@ -1,4 +1,12 @@
-export type ServerResponseTypeName = "common" | "pagination";
+// models
+import { ErrorResponse } from "@shared/Types";
+
+export type ServerResponseTypeName = "common" | "pagination" | "jiraUserPagination";
+
+export type JiraPromisedServerResponse<
+  DataT = null,
+  ResponseType extends ServerResponseTypeName = "common",
+> = Promise<ServerResponseType<DataT, ResponseType>>;
 
 export type PromisedServerResponse<
   DataT = null,
@@ -10,12 +18,8 @@ export type ServerResponse<
   ResponseType extends ServerResponseTypeName = "common",
 > = ServerResponseType<DataT, ResponseType>;
 
-export interface RemoteClientResponse<T = unknown> {
+export interface RemoteClientResponse<T = unknown> extends ErrorResponse {
   result: T;
-  // TODO: check additional info
-  // status: number;
-  // headers: Record<string, unknown>;
-  // config: unknown;
 }
 
 export type ServerResponseType<
@@ -25,7 +29,9 @@ export type ServerResponseType<
   ? DataT
   : ResponseType extends "pagination"
     ? PaginationServerResponse<DataT>
-    : never;
+    : ResponseType extends "jiraUserPagination"
+      ? JiraUsersPaginationServerResponse<DataT>
+      : never;
 
 export interface PaginationServerResponse<DataT> {
   content: DataT[];
@@ -38,26 +44,18 @@ export interface PaginationServerResponse<DataT> {
   totalPages: number;
 }
 
+export interface JiraUsersPaginationServerResponse<DataT> {
+  users: DataT[];
+  header: string;
+  total: number;
+}
+
 // Error response
-export type ServerError<DataT = BaseFormServerValidation> = {
+export type ServerError = {
   status: number;
-  data: DataT;
+  data: ErrorResponse;
   isGlobalError: boolean;
 };
-
-export type ServerFormValidationError = Record<string, string[]>;
-
-export type BaseFormServerValidation = {
-  errorMessage?: string;
-  formValidation?: ServerFormValidationError;
-  requestId?: string;
-};
-
-export interface GlobalError {
-  title: string;
-  description: string;
-  requestId?: string;
-}
 
 // Response statuses
 export enum ResponseStatuses {

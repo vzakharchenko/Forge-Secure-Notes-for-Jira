@@ -1,0 +1,7 @@
+export const DEFAULT_DEBOUNCE_TIME = 350;
+
+export const INCREASED_DEBOUNCE_TIME = 450;
+
+export const DEFAULT_DROPDOWN_Z_INDEX = 400;
+
+export const MAX_SAFE_INTEGER = 2147483647;

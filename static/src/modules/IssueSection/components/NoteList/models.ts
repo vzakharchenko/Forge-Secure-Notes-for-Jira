@@ -7,4 +7,5 @@ export interface NoteListProps {
   variant: "incoming" | "sent";
   onOpen?: (noteId: string) => void;
   onDelete?: (noteId: string) => void;
+  timezone: string;
 }

@@ -6,7 +6,8 @@ import { deleteSecureNote } from "@src/api/notes";
 
 // helpers
 import { queryClient } from "@src/shared/utils/queryClient";
-import { showErrorFlag, showSuccessFlag } from "@src/shared/utils/flag";
+import { showSuccessFlag } from "@src/shared/utils/flags";
+import { handleDefaultServerError } from "@src/shared/utils/errors";
 
 // models
 import { ServerError } from "@src/shared/models/remoteClient";
@@ -19,20 +20,12 @@ export const useDeleteNote = () => {
   return useMutation<ViewMySecurityNotes[], ServerError, string>({
     mutationFn: deleteSecureNote,
     onSuccess: (data) => {
-      console.log("!!!deleteSecureNote onSuccess", data);
       queryClient.setQueryData(NOTES_QUERY_KEYS.LIST, data);
       showSuccessFlag({
         title: "Security note successfully deleted",
         description: "Security note successfully deleted, audit logs are still available",
       });
     },
-    onError: (error: any) => {
-      console.log("!!!deleteSecureNote onError", error);
-      console.error("Error delete note:", error);
-      showErrorFlag({
-        title: "Failed to delete security note",
-        description: `Deleting security note is failed with error: ${error.message}`,
-      });
-    },
+    onError: (error) => handleDefaultServerError(error, "Failed to delete security note"),
   });
 };

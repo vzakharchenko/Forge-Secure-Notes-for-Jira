@@ -1,97 +1,62 @@
 //libs
 import { invoke } from "@forge/bridge";
 
-// stores
-// import InterfaceStore from "src/shared/store/InterfaceStore";
 // helpers
-// import ApiError from "@src/shared/services/ApiError";
+import { showErrorFlag, showWarningFlag } from "@src/shared/utils/flags";
+import ApiError from "@src/shared/services/ApiError";
+
 // models
 import { RemoteClientResponse } from "@src/shared/models/remoteClient";
 import { InvokePayload } from "@forge/bridge/out/types";
+import { ErrorResponse } from "@src/Types";
 
-// const handleForgeApiError = (
-//   data: BaseFormServerValidation,
-//   status: ResponseStatuses,
-// ): Promise<never> => {
-//   let isGlobalError = false;
+const handleForgeApiError = (errorResponse: ErrorResponse): Promise<never> => {
+  const { errorType, message } = errorResponse;
 
-// if (!status) {
-//     InterfaceStore.setGlobalError({
-//         title: "Unexpected error",
-//         description: "Please try again later.",
-//         requestId: data?.requestId ?? undefined,
-//     });
-//     throw new ApiError(data, status, true);
-// }
-//
-// switch (status) {
-//     case ResponseStatuses.UNAUTHORIZED:
-//         InterfaceStore.setGlobalError({
-//             title: "401 - Unauthorized",
-//             description: "You are not authorized.",
-//             requestId: data?.requestId ?? undefined,
-//         });
-//         isGlobalError = true;
-//         break;
-//
-//     case ResponseStatuses.NO_LICENCE:
-//         InterfaceStore.setGlobalError({
-//             title: "Your license has expired",
-//             description: "Please contact your Jira administrator.",
-//             requestId: data?.requestId ?? undefined,
-//         });
-//         isGlobalError = true;
-//         break;
-//
-//     case ResponseStatuses.MANY_REQUESTS:
-//         InterfaceStore.setGlobalError({
-//             title: "429 - Too many requests",
-//             description: "Jira has reported too many requests. Please try again later.",
-//             requestId: data?.requestId ?? undefined,
-//         });
-//         isGlobalError = true;
-//         break;
-//
-//     case ResponseStatuses.SERVER_ERROR:
-//         InterfaceStore.setGlobalError({
-//             title: "500 - Server error",
-//             description: "Something went wrong.",
-//             requestId: data?.requestId ?? undefined,
-//         });
-//         isGlobalError = true;
-//         break;
-//
-//     default:
-//         break;
-// }
+  let isGlobalError = false;
 
-//   throw new ApiError(data, status, isGlobalError);
-// };
+  switch (errorType) {
+    case "NOT_LICENSING":
+      showErrorFlag({
+        title: "Your license has expired",
+        description: message,
+      });
+      isGlobalError = true;
+      break;
+
+    case "GENERAL":
+      showErrorFlag({
+        title: "Server error",
+        description: message,
+      });
+      isGlobalError = true;
+      break;
+
+    default:
+      break;
+  }
+
+  throw new ApiError(errorResponse, isGlobalError);
+};
 
 export default {
   async request<T>(functionKey: string, payload?: InvokePayload | undefined): Promise<T> {
-    const response = await invoke<RemoteClientResponse<T>>(functionKey, payload);
+    let response = await invoke<RemoteClientResponse<T>>(functionKey, payload);
 
-    console.log("response", response);
+    if (response.isError && response.errorType === "INSTALLATION") {
+      showWarningFlag({
+        title: "App installation is in progress",
+        description: "Please wait",
+      });
+      await new Promise((resolve) => setTimeout(resolve, 20000));
+      response = await invoke<RemoteClientResponse<T>>(functionKey, payload);
+    }
 
-    // TODO: implement global error handling
-    return response.result;
-    // const { status, body, headers } = response as {
-    //     body: ServerResponseType<T, D>;
-    //     status: ResponseStatuses;
-    //     headers: Record<string, unknown>;
-    // };
-    //
-    // if (status === ResponseStatuses.OK) {
-    //     return {
-    //         data: body,
-    //         status,
-    //         headers,
-    //         config,
-    //     };
-    // }
-    //
-    // return handleForgeApiError(body as BaseFormServerValidation, status);
+    if (response.isError && response.errorType !== "INSTALLATION") {
+      return handleForgeApiError(response as ErrorResponse);
+    }
+
+    return response.result as T;
   },
 
   get<T>(functionKey: string): Promise<T> {

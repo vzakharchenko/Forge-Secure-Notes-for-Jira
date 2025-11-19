@@ -6,7 +6,8 @@ import { createSecureNote } from "@src/api/notes";
 
 // helpers
 import { queryClient } from "@src/shared/utils/queryClient";
-import { showErrorFlag, showSuccessFlag } from "@src/shared/utils/flag";
+import { showSuccessFlag } from "@src/shared/utils/flags";
+import { handleDefaultServerError } from "@src/shared/utils/errors";
 
 // models
 import { ServerError } from "@src/shared/models/remoteClient";
@@ -20,7 +21,6 @@ export const useCreateNote = () => {
   return useMutation<ViewMySecurityNotes[], ServerError, NoteDataType>({
     mutationFn: createSecureNote,
     onSuccess: (data) => {
-      console.log("!!!createSecureNote onSuccess", data);
       queryClient.setQueryData(NOTES_QUERY_KEYS.LIST, data);
       showSuccessFlag({
         title: "Security note successfully created",
@@ -28,13 +28,6 @@ export const useCreateNote = () => {
           "Security note successfully created, remember send key over slack, telegram, etc.",
       });
     },
-    onError: (error: any) => {
-      console.log("!!!createSecureNote onError", error);
-      console.error("Error creating note:", error);
-      showErrorFlag({
-        title: "Failed to create security note",
-        description: `Creating security note is failed with error: ${error.message}`,
-      });
-    },
+    onError: (error) => handleDefaultServerError(error, "Failed to create security note"),
   });
 };

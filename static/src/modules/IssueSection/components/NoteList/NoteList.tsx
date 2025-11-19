@@ -5,19 +5,20 @@ import React from "react";
 import { NoteListProps } from "./models";
 
 // components
-import { Stack, Text } from "@atlaskit/primitives";
+import { Stack } from "@atlaskit/primitives";
 import NoteCard from "../NoteCard/NoteCard";
+import Heading from "@atlaskit/heading";
 
-const NoteList = ({ title, notes, variant, onOpen, onDelete }: NoteListProps) => {
+const NoteList = ({ title, notes, variant, onOpen, onDelete, timezone }: NoteListProps) => {
   if (notes.length === 0) {
     return null;
   }
 
   return (
     <Stack space="space.100">
-      <Text as="p" size="large" weight="bold">
+      <Heading size="medium" as="h3">
         {title}
-      </Text>
+      </Heading>
       <Stack space="space.200">
         {notes.map((note) => (
           <NoteCard
@@ -26,6 +27,7 @@ const NoteList = ({ title, notes, variant, onOpen, onDelete }: NoteListProps) =>
             variant={variant}
             onOpen={onOpen}
             onDelete={onDelete}
+            timezone={timezone}
           />
         ))}
       </Stack>

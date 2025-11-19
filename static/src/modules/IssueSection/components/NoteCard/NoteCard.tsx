@@ -2,7 +2,7 @@
 import React from "react";
 
 // helpers
-import { formatDateTime } from "@src/utils/dateUtils";
+import { formatDateWithTimezoneAndFormat } from "@src/shared/utils/date";
 
 // models
 import { NoteCardProps } from "./models";
@@ -29,7 +29,7 @@ const containerStyles = xcss({
   },
 });
 
-const NoteCard = ({ note, variant, onOpen, onDelete }: NoteCardProps) => {
+const NoteCard = ({ note, variant, onOpen, onDelete, timezone }: NoteCardProps) => {
   const isNew = note.status === "NEW";
   const displayDate = isNew ? note.expiration : note.viewedAt;
   const dateLabel = isNew ? "Expires" : "Viewed";
@@ -51,10 +51,10 @@ const NoteCard = ({ note, variant, onOpen, onDelete }: NoteCardProps) => {
       <Flex alignItems="end" justifyContent="space-between">
         <Box>
           <Text as="p" size="small">
-            Created: {formatDateTime(note.createdAt)}
+            Created: {formatDateWithTimezoneAndFormat(note.createdAt, timezone)}
           </Text>
           <Text as="p" size="small">
-            {dateLabel}: {formatDateTime(displayDate as Date)}
+            {dateLabel}: {formatDateWithTimezoneAndFormat(displayDate as Date, timezone)}
           </Text>
         </Box>
         {!isNew && <Box paddingBlock="space.200" />}

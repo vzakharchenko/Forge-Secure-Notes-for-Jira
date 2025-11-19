@@ -4,10 +4,10 @@ import { createRoot } from "react-dom/client";
 
 // helpers
 import { initializeTheming } from "@src/shared/utils/theming";
+import "@src/shared/validation/yupMethods";
 
 // styles
-import "@atlaskit/css-reset/dist/bundle.css";
-import "@atlaskit/css-reset";
+import "@src/styles/index.scss";
 
 // components
 import App from "./App";

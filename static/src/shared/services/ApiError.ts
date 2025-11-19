@@ -1,16 +1,14 @@
 // models
-import { BaseFormServerValidation } from "src/shared/models/remoteClient";
+import { ErrorResponse } from "@src/Types";
 
 export default class ApiError extends Error {
-  public data: BaseFormServerValidation;
-  public status: number;
+  public data: ErrorResponse;
   public isGlobalError: boolean;
 
-  constructor(data: BaseFormServerValidation, status: number, isGlobalError: boolean) {
-    super(data?.errorMessage ?? "Request failed");
+  constructor(errorResponse: ErrorResponse, isGlobalError: boolean) {
+    super(errorResponse?.message ?? "Request failed");
     this.name = "ApiError";
-    this.data = data;
-    this.status = status;
+    this.data = errorResponse;
     this.isGlobalError = isGlobalError;
   }
 }

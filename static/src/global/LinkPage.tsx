@@ -12,7 +12,7 @@ import {
   decryptMessage,
   DERIVE_PURPOSE_ENCRYPTION,
   DERIVE_PURPOSE_VERIFICATION,
-} from "../utils/encodeUtils";
+} from "../shared/utils/encode";
 import NotFoundClosedImage from "../img/404.png";
 import { Renderer } from "../utils/CountDownUtils";
 import { SecurityNoteData } from "../../../shared/responses/SecurityNoteData";
