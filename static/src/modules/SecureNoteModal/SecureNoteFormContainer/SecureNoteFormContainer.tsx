@@ -22,7 +22,9 @@ const SecureNoteFormContainer = ({ accountId }: { accountId: string }) => {
   const handleSubmit = async (data: SecureNoteFormFields) => {
     const { targetUsers, description, note, expiryOption, expiryDate, encryptionKey } = data;
     const expiry = expiryOption === "custom" ? expiryDate : expiryOption;
-    const baseKey = await calculateHash(encryptionKey, accountId, 200_000);
+    const descriptionText = description.trim();
+    const salt = await calculateHash(descriptionText ?? accountId, accountId, 1000);
+    const baseKey = await calculateHash(encryptionKey, salt, 200_000);
     const keyForEncryption = await calculateHash(baseKey, DERIVE_PURPOSE_ENCRYPTION, 1000);
     const keyForServer = await calculateHash(baseKey, DERIVE_PURPOSE_VERIFICATION, 1000);
     const encryptedPayload = await encryptMessage(note.trim(), keyForEncryption);
@@ -37,7 +39,7 @@ const SecureNoteFormContainer = ({ accountId }: { accountId: string }) => {
       encryptedPayload: encryptedPayload.encrypted,
       iv: encryptedPayload.iv,
       salt: encryptedPayload.salt,
-      description: description.trim(),
+      description: descriptionText,
     };
     await view.close(noteData);
   };
