@@ -7,6 +7,7 @@ import FiveMinuteTrigger from "./controllers/triggers/FiveMinutesTrigger";
 import SlowQueryTriggerTrigger from "./controllers/triggers/SlowQueryTriggerTrigger";
 import DropSchemaMigrationTrigger from "./controllers/triggers/DropSchemaMigrationTrigger";
 import ApplySchemaMigrationTrigger from "./controllers/triggers/ApplySchemaMigrationTrigger";
+import { ROVO_SERVICE } from "./core/services/RovoService";
 
 const issueResolver = new Resolver();
 const globalResolver = new Resolver();
@@ -26,4 +27,8 @@ export const dropMigrations = DropSchemaMigrationTrigger.handler;
 
 export const fetchMigrations = async () => {
   return fetchSchemaWebTrigger();
+};
+
+export const runSecurityNotesQuery = (event: any, context: any) => {
+  return ROVO_SERVICE.runSecurityNotesQuery(event, context);
 };

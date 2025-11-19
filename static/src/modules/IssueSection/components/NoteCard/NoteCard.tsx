@@ -48,6 +48,11 @@ const NoteCard = ({ note, variant, onOpen, onDelete, timezone }: NoteCardProps) 
           <Lozenge appearance="success">Viewed</Lozenge>
         )}
       </Flex>
+      <Flex alignItems="start" justifyContent="space-between">
+        <Box>
+          Description: <Text weight="semibold">{note.description}</Text>
+        </Box>
+      </Flex>
       <Flex alignItems="end" justifyContent="space-between">
         <Box>
           <Text as="p" size="small">

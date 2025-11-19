@@ -65,8 +65,11 @@ CREATE TABLE IF NOT EXISTS security_notes (
   target_avatar_url varchar(255) NOT NULL,
   created_user_name varchar(255) NOT NULL,
   created_avatar_url varchar(255) NOT NULL,
+  description varchar(255) NOT NULL,
   issue_id varchar(255) DEFAULT NULL,
   issue_key varchar(255) DEFAULT NULL,
+  project_id varchar(255) DEFAULT NULL,
+  project_key varchar(255) DEFAULT NULL,
   PRIMARY KEY (id) /*T![clustered_index] CLUSTERED */
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
 SET foreign_key_checks = 1
