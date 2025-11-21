@@ -98,15 +98,15 @@ export async function decryptMessage(
   const dec = new TextDecoder();
 
   const keyMaterial = await getKeyMaterial(password);
-  const key = await deriveKey(keyMaterial, hexToBuffer(payload.salt));
+  const key = await deriveKey(keyMaterial, hexToBuffer(payload.salt) as BufferSource);
 
   const decrypted = await crypto.subtle.decrypt(
     {
       name: "AES-GCM",
-      iv: hexToBuffer(payload.iv),
+      iv: hexToBuffer(payload.iv) as BufferSource,
     },
     key,
-    hexToBuffer(payload.encrypted),
+    hexToBuffer(payload.encrypted) as BufferSource,
   );
 
   return dec.decode(decrypted);
@@ -119,7 +119,7 @@ async function getKeyMaterial(password: string) {
   return crypto.subtle.importKey("raw", enc.encode(password), "PBKDF2", false, ["deriveKey"]);
 }
 
-async function deriveKey(keyMaterial: CryptoKey, salt: Uint8Array) {
+async function deriveKey(keyMaterial: CryptoKey, salt: BufferSource) {
   return crypto.subtle.deriveKey(
     {
       name: "PBKDF2",
