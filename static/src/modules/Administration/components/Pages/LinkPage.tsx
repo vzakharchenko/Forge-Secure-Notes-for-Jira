@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router";
 import { Box, Inline, Stack, Text } from "@atlaskit/primitives";
-import Button from "@atlaskit/button";
+import Button from "@atlaskit/button/new";
 import Countdown from "react-countdown";
 import EmptyState from "@atlaskit/empty-state";
 import TextField from "@atlaskit/textfield";
@@ -12,16 +12,13 @@ import {
   decryptMessage,
   DERIVE_PURPOSE_ENCRYPTION,
   DERIVE_PURPOSE_VERIFICATION,
-} from "../shared/utils/encode";
-import NotFoundClosedImage from "../img/404.png";
-import { Renderer } from "../utils/CountDownUtils";
-import { SecurityNoteData } from "../../../shared/responses/SecurityNoteData";
-import { ResolverNames } from "../../../shared/ResolverNames";
-import { OpenSecurityNote } from "../../../shared/responses/OpenSecurityNote";
-
-const GLOBAL_ROUTES = {
-  all: { route: "/" },
-};
+} from "@src/shared/utils/encode";
+import NotFoundClosedImage from "@src/img/404.png";
+import { Renderer } from "@src/utils/CountDownUtils";
+import { SecurityNoteData } from "@shared/responses/SecurityNoteData";
+import { ResolverNames } from "@shared/ResolverNames";
+import { OpenSecurityNote } from "@shared/responses/OpenSecurityNote";
+import { GLOBAL_ROUTES } from "@src/modules/Administration/constants/Routes";
 
 export default function LinkPage() {
   const params = useParams();
@@ -185,7 +182,7 @@ export default function LinkPage() {
         headingLevel={2}
         primaryAction={
           <Button appearance="primary" onClick={() => navigate(GLOBAL_ROUTES.all.route)}>
-            Go to Main Page
+            Go to main page
           </Button>
         }
         imageUrl={NotFoundClosedImage}
@@ -237,10 +234,10 @@ export default function LinkPage() {
 
               <Inline space="space.100" spread="space-between">
                 <Button appearance="primary" onClick={handleCopyAndClose}>
-                  📋 Copy and Close
+                  Copy and close
                 </Button>
                 <Button appearance="subtle" onClick={handleClose}>
-                  ❌ Close
+                  Close
                 </Button>
               </Inline>
             </Stack>
@@ -306,12 +303,8 @@ export default function LinkPage() {
             )}
 
             <Box style={{ textAlign: "center" }}>
-              <Button
-                appearance="primary"
-                onClick={handleKeySubmit}
-                isDisabled={!encryptionKey.trim()}
-              >
-                🔓 Decrypt Note
+              <Button appearance="primary" onClick={handleKeySubmit}>
+                Decrypt note
               </Button>
             </Box>
 

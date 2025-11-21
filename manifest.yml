@@ -14,6 +14,16 @@ modules:
         function: globalResolver
       title: Forge Secure Notes For Jira
       icon: https://developer.atlassian.com/platform/forge/images/icons/issue-panel-icon.svg
+      pages:
+        - title: My History
+          route: myHistory
+          icon: https://developer.atlassian.com/platform/forge/images/icons/issue-panel-icon.svg
+        - title: My Issue History
+          route: myIssue
+          icon: https://developer.atlassian.com/platform/forge/images/icons/issue-panel-icon.svg
+        - title: My Project History
+          route: myProject
+          icon: https://developer.atlassian.com/platform/forge/images/icons/issue-panel-icon.svg
   scheduledTrigger:
     - key: scheduled-fiveMinute
       function: runFiveMinute
