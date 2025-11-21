@@ -2,7 +2,7 @@ import { ReactNode, useEffect, useState } from "react";
 import { view } from "@forge/bridge";
 import { Action, History, Location } from "history";
 import { Router } from "react-router";
-import Loading from "../components/Loading";
+import Loading from "@src/components/Loading";
 
 const AppForge = ({ children }: { children: ReactNode }) => {
   const [history, setHistory] = useState<History>();

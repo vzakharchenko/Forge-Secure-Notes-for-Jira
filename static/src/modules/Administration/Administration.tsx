@@ -1,7 +1,9 @@
+// libs
 import React from "react";
 
-import AppForge from "../../global/AppForge";
-import GlobalRoute from "../../global/GlobalRoute";
+// components
+import AppForge from "./components/AppForge";
+import GlobalRoute from "./components/GlobalRoute";
 
 const Administration = () => {
   return (
