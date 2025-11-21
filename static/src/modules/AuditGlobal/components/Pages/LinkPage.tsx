@@ -118,7 +118,7 @@ export default function LinkPage() {
             padding="space.400"
             style={{
               background: token("elevation.surface.sunken", "#DFE1E6"),
-              borderRadius: token("border.radius.200", "3px"),
+              borderRadius: "3px",
             }}
           >
             <Stack space="space.400">
@@ -149,7 +149,7 @@ export default function LinkPage() {
                 padding="space.200"
                 style={{
                   background: token("color.background.warning", "#FFEBE6"),
-                  borderRadius: token("border.radius.200", "3px"),
+                  borderRadius: "3px",
                 }}
               >
                 <Text>
@@ -198,7 +198,7 @@ export default function LinkPage() {
             padding="space.400"
             style={{
               background: token("elevation.surface.sunken", "#DFE1E6"),
-              borderRadius: token("border.radius.200", "3px"),
+              borderRadius: "3px",
             }}
           >
             <Stack space="space.400">
@@ -224,7 +224,7 @@ export default function LinkPage() {
                 padding="space.400"
                 style={{
                   background: token("elevation.surface", "#FFFFFF"),
-                  borderRadius: token("border.radius.200", "3px"),
+                  borderRadius: "3px",
                   border: `1px solid ${token("color.border", "#DFE1E6")}`,
                   whiteSpace: "pre-wrap",
                 }}
@@ -254,7 +254,7 @@ export default function LinkPage() {
           padding="space.400"
           style={{
             background: token("elevation.surface.sunken", "#DFE1E6"),
-            borderRadius: token("border.radius.200", "3px"),
+            borderRadius: "3px",
           }}
         >
           <Stack space="space.400">
@@ -295,7 +295,7 @@ export default function LinkPage() {
                 padding="space.200"
                 style={{
                   background: token("color.background.danger", "#FFEBE6"),
-                  borderRadius: token("border.radius.200", "3px"),
+                  borderRadius: "3px",
                 }}
               >
                 <Text>❌ {error}</Text>
@@ -312,7 +312,7 @@ export default function LinkPage() {
               padding="space.200"
               style={{
                 background: token("color.background.warning", "#FFEBE6"),
-                borderRadius: token("border.radius.200", "3px"),
+                borderRadius: "3px",
               }}
             >
               <Text>
