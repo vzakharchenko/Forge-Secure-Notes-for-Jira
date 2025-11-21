@@ -11,7 +11,7 @@ import { getAppUrl, getForgeContext } from "@src/shared/utils/context";
 import Loading from "@src/components/Loading";
 import SecureNoteModal from "@src/modules/SecureNoteModal/SecureNoteModal";
 import IssueSection from "@src/modules/IssueSection/IssueSection";
-import Administration from "@src/modules/Administration/Administration";
+import AuditGlobal from "@src/modules/AuditGlobal/AuditGlobal";
 
 const ForgeModule = () => {
   const [context, setContext] = useState<FullContext>();
@@ -71,7 +71,7 @@ const ForgeModule = () => {
       );
     }
     case "global-page": {
-      return <Administration />;
+      return <AuditGlobal />;
     }
     default: {
       return <div>{context.moduleKey} does not supported</div>;

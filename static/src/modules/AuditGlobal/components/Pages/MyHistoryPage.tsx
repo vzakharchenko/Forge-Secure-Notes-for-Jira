@@ -12,8 +12,8 @@ import { AuditUser } from "@shared/responses/AuditUser";
 // components
 import { Box, Stack } from "@atlaskit/primitives";
 import Button from "@atlaskit/button/new";
-import PageHeader from "@src/modules/Administration/components/PageHeader/PageHeader";
-import AuditTable from "@src/modules/Administration/components/AuditTable/AuditTable";
+import PageHeader from "@src/modules/AuditGlobal/components/PageHeader/PageHeader";
+import AuditTable from "@src/modules/AuditGlobal/components/AuditTable/AuditTable";
 
 export default function MyHistoryPage() {
   const timezone = useTimezone();

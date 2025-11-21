@@ -18,7 +18,7 @@ import { Renderer } from "@src/utils/CountDownUtils";
 import { SecurityNoteData } from "@shared/responses/SecurityNoteData";
 import { ResolverNames } from "@shared/ResolverNames";
 import { OpenSecurityNote } from "@shared/responses/OpenSecurityNote";
-import { GLOBAL_ROUTES } from "@src/modules/Administration/constants/Routes";
+import { GLOBAL_ROUTES } from "@src/modules/AuditGlobal/constants/Routes";
 
 export default function LinkPage() {
   const params = useParams();

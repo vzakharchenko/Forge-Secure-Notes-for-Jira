@@ -2,9 +2,9 @@
 import React from "react";
 
 // components
-import ProjectIssuesList from "@src/modules/Administration/components/ProjectIssuesList/ProjectIssuesList";
-import IssueAuditPage from "@src/modules/Administration/components/Pages/IssueAuditPage";
-import { GLOBAL_ROUTES } from "@src/modules/Administration/constants/Routes";
+import ProjectIssuesList from "@src/modules/AuditGlobal/components/ProjectIssuesList/ProjectIssuesList";
+import IssueAuditPage from "@src/modules/AuditGlobal/components/Pages/IssueAuditPage";
+import { GLOBAL_ROUTES } from "@src/modules/AuditGlobal/constants/Routes";
 
 export default function MyIssueHistoryPage() {
   return (

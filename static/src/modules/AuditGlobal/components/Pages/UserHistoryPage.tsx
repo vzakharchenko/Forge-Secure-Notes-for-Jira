@@ -17,9 +17,9 @@ import Button from "@atlaskit/button/new";
 import Spinner from "@atlaskit/spinner";
 import { token } from "@atlaskit/tokens";
 import { useLocation } from "react-router-dom";
-import PageHeader from "@src/modules/Administration/components/PageHeader/PageHeader";
+import PageHeader from "@src/modules/AuditGlobal/components/PageHeader/PageHeader";
 import Table, { THead, TBody, Row, Cell, HeadCell } from "@atlaskit/table";
-import AuditTable from "@src/modules/Administration/components/AuditTable/AuditTable";
+import AuditTable from "@src/modules/AuditGlobal/components/AuditTable/AuditTable";
 
 export default function UserHistoryPage() {
   const location = useLocation();

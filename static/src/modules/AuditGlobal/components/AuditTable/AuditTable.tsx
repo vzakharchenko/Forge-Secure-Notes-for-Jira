@@ -251,7 +251,7 @@ const AuditTable = ({
                                   },
                                   { key: "status", content: "Status", isSortable: false },
                                   { key: "action", content: "Action Name", isSortable: false },
-                                  { key: "when", content: "When", isSortable: false },
+                                  { key: "when", content: "Date", isSortable: false },
                                 ],
                               };
 
