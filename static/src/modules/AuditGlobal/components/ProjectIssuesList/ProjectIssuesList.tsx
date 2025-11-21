@@ -15,8 +15,8 @@ import Spinner from "@atlaskit/spinner";
 import { token } from "@atlaskit/tokens";
 import DynamicTable from "@atlaskit/dynamic-table";
 import type { HeadType, RowType } from "@atlaskit/dynamic-table/types";
-import PageHeader from "@src/modules/Administration/components/PageHeader/PageHeader";
-import { openIssueModal } from "@src/modules/Administration/components/AuditTable/helpers";
+import PageHeader from "@src/modules/AuditGlobal/components/PageHeader/PageHeader";
+import { openIssueModal } from "@src/modules/AuditGlobal/components/AuditTable/helpers";
 
 const ProjectIssuesList = ({
   type,

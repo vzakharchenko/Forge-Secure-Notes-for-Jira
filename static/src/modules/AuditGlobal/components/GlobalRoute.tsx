@@ -5,12 +5,12 @@ import Button from "@atlaskit/button/new";
 
 import NotFoundClosedImage from "@src/img/404.png";
 
-import { GLOBAL_ROUTES } from "@src/modules/Administration/constants/Routes";
-import MyHistoryPage from "@src/modules/Administration/components/Pages/MyHistoryPage";
-import MyIssueHistoryPage from "@src/modules/Administration/components/Pages/MyIssueHistoryPage";
-import MyProjectHistoryPage from "@src/modules/Administration/components/Pages/MyProjectHistoryPage";
-import UserHistoryPage from "@src/modules/Administration/components/Pages/UserHistoryPage";
-import LinkPage from "@src/modules/Administration/components/Pages/LinkPage";
+import { GLOBAL_ROUTES } from "@src/modules/AuditGlobal/constants/Routes";
+import MyHistoryPage from "@src/modules/AuditGlobal/components/Pages/MyHistoryPage";
+import MyIssueHistoryPage from "@src/modules/AuditGlobal/components/Pages/MyIssueHistoryPage";
+import MyProjectHistoryPage from "@src/modules/AuditGlobal/components/Pages/MyProjectHistoryPage";
+import UserHistoryPage from "@src/modules/AuditGlobal/components/Pages/UserHistoryPage";
+import LinkPage from "@src/modules/AuditGlobal/components/Pages/LinkPage";
 
 const GlobalRoute = () => {
   const navigate = useNavigate();

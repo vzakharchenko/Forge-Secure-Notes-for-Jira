@@ -5,7 +5,7 @@ import React from "react";
 import AppForge from "./components/AppForge";
 import GlobalRoute from "./components/GlobalRoute";
 
-const Administration = () => {
+const AuditGlobal = () => {
   return (
     <AppForge>
       <GlobalRoute />
@@ -13,4 +13,4 @@ const Administration = () => {
   );
 };
 
-export default Administration;
+export default AuditGlobal;
