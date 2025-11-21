@@ -17,5 +17,6 @@ export interface ProjectIssuesListProps {
   detailPathPrefix: string;
   detailPathSegment: string;
   onItemClick?: (key: string) => void;
-  DetailPageComponent: React.ComponentType<{ key?: string }>;
+  DetailPageComponent: React.ComponentType<{ key?: string; timezone: string }>;
+  timezone: string;
 }

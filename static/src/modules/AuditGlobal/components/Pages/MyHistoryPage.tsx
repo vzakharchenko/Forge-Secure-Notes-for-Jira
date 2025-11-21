@@ -3,7 +3,6 @@ import React, { useCallback, useState } from "react";
 
 // helpers
 import { invoke, showFlag } from "@forge/bridge";
-import { useTimezone } from "@src/shared/hooks/useTimezone";
 
 // models
 import { ResolverNames } from "@shared/ResolverNames";
@@ -15,8 +14,8 @@ import Button from "@atlaskit/button/new";
 import PageHeader from "@src/modules/AuditGlobal/components/PageHeader/PageHeader";
 import AuditTable from "@src/modules/AuditGlobal/components/AuditTable/AuditTable";
 
-export default function MyHistoryPage() {
-  const timezone = useTimezone();
+export default function MyHistoryPage(props: { timezone: string }) {
+  const { timezone } = props;
   const [exportFn, setExportFn] = useState<(() => void) | null>(null);
 
   const fetchData = useCallback(async (offset: number, limit: number) => {

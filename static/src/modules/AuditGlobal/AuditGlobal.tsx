@@ -5,10 +5,10 @@ import React from "react";
 import AppForge from "./components/AppForge";
 import GlobalRoute from "./components/GlobalRoute";
 
-const AuditGlobal = () => {
+const AuditGlobal = (props: { timezone: string }) => {
   return (
     <AppForge>
-      <GlobalRoute />
+      <GlobalRoute timezone={props.timezone} />
     </AppForge>
   );
 };

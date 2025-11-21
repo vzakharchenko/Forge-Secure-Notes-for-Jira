@@ -3,7 +3,6 @@ import React, { useEffect, useState, useCallback } from "react";
 
 // helpers
 import { invoke, showFlag } from "@forge/bridge";
-import { useTimezone } from "@src/shared/hooks/useTimezone";
 
 // models
 import { ResolverNames } from "@shared/ResolverNames";
@@ -21,9 +20,9 @@ import PageHeader from "@src/modules/AuditGlobal/components/PageHeader/PageHeade
 import Table, { THead, TBody, Row, Cell, HeadCell } from "@atlaskit/table";
 import AuditTable from "@src/modules/AuditGlobal/components/AuditTable/AuditTable";
 
-export default function UserHistoryPage() {
+export default function UserHistoryPage(props: { timezone: string }) {
+  const { timezone } = props;
   const location = useLocation();
-  const timezone = useTimezone();
   const [users, setUsers] = useState<UserViewInfoType[]>([]);
   const [selectedUser, setSelectedUser] = useState<UserViewInfoType | null>(null);
   const [isLoadingUsers, setIsLoadingUsers] = useState(true);

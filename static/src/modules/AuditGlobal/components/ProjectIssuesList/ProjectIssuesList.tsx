@@ -28,6 +28,7 @@ const ProjectIssuesList = ({
   detailPathSegment,
   onItemClick,
   DetailPageComponent,
+  timezone,
 }: ProjectIssuesListProps) => {
   const location = useLocation();
   const navigate = useNavigate();
@@ -125,7 +126,7 @@ const ProjectIssuesList = ({
 
   // If we are on the detail page, render DetailPageComponent immediately
   if (isDetailPage && currentKey) {
-    return <DetailPageComponent key={location.pathname} />;
+    return <DetailPageComponent key={location.pathname} timezone={timezone} />;
   }
 
   return (
