@@ -6,7 +6,8 @@ import ProjectIssuesList from "@src/modules/AuditGlobal/components/ProjectIssues
 import ProjectAuditPage from "@src/modules/AuditGlobal/components/Pages/ProjectAuditPage";
 import { GLOBAL_ROUTES } from "@src/modules/AuditGlobal/constants/Routes";
 
-export default function MyProjectHistoryPage() {
+export default function MyProjectHistoryPage(props: { timezone: string }) {
+  const { timezone } = props;
   return (
     <ProjectIssuesList
       type="project"
@@ -17,6 +18,7 @@ export default function MyProjectHistoryPage() {
       detailPathPrefix={GLOBAL_ROUTES.myProject.route}
       detailPathSegment="project"
       DetailPageComponent={ProjectAuditPage}
+      timezone={timezone}
     />
   );
 }

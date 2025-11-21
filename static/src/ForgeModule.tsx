@@ -71,7 +71,7 @@ const ForgeModule = () => {
       );
     }
     case "global-page": {
-      return <AuditGlobal />;
+      return <AuditGlobal timezone={context.timezone} />;
     }
     default: {
       return <div>{context.moduleKey} does not supported</div>;

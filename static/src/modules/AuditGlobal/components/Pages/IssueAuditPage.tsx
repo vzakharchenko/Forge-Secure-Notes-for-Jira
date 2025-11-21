@@ -3,7 +3,6 @@ import React, { useCallback, useState } from "react";
 
 // helpers
 import { invoke, showFlag } from "@forge/bridge";
-import { useTimezone } from "@src/shared/hooks/useTimezone";
 
 // models
 import { ResolverNames } from "@shared/ResolverNames";
@@ -17,11 +16,11 @@ import { useParams, useNavigate, useLocation } from "react-router-dom";
 import PageHeader from "@src/modules/AuditGlobal/components/PageHeader/PageHeader";
 import AuditTable from "@src/modules/AuditGlobal/components/AuditTable/AuditTable";
 
-export default function IssueAuditPage() {
+export default function IssueAuditPage(props: { timezone: string }) {
   const { issueKey: issueKeyFromParams } = useParams<{ issueKey: string }>();
   const location = useLocation();
   const navigate = useNavigate();
-  const timezone = useTimezone();
+  const { timezone } = props;
   const [exportFn, setExportFn] = useState<(() => void) | null>(null);
 
   // Extract issueKey from URL if useParams doesn't work

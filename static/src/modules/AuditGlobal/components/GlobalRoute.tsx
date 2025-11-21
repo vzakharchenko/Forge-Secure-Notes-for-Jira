@@ -12,15 +12,24 @@ import MyProjectHistoryPage from "@src/modules/AuditGlobal/components/Pages/MyPr
 import UserHistoryPage from "@src/modules/AuditGlobal/components/Pages/UserHistoryPage";
 import LinkPage from "@src/modules/AuditGlobal/components/Pages/LinkPage";
 
-const GlobalRoute = () => {
+const GlobalRoute = (props: { timezone: string }) => {
   const navigate = useNavigate();
   return (
     <Routes>
-      <Route path={GLOBAL_ROUTES.all.route} element={<MyHistoryPage />} />
-      <Route path={GLOBAL_ROUTES.myHistory.route} element={<MyHistoryPage />} />
-      <Route path={GLOBAL_ROUTES.myIssue.route + "/*"} element={<MyIssueHistoryPage />} />
-      <Route path={GLOBAL_ROUTES.myProject.route + "/*"} element={<MyProjectHistoryPage />} />
-      <Route path="/userHistory" element={<UserHistoryPage />} />
+      <Route path={GLOBAL_ROUTES.all.route} element={<MyHistoryPage timezone={props.timezone} />} />
+      <Route
+        path={GLOBAL_ROUTES.myHistory.route}
+        element={<MyHistoryPage timezone={props.timezone} />}
+      />
+      <Route
+        path={GLOBAL_ROUTES.myIssue.route + "/*"}
+        element={<MyIssueHistoryPage timezone={props.timezone} />}
+      />
+      <Route
+        path={GLOBAL_ROUTES.myProject.route + "/*"}
+        element={<MyProjectHistoryPage timezone={props.timezone} />}
+      />
+      <Route path="/userHistory" element={<UserHistoryPage timezone={props.timezone} />} />
       <Route path={GLOBAL_ROUTES.record.route} element={<LinkPage />} />
       <Route
         path="*"

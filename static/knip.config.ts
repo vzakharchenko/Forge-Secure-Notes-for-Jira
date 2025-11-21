@@ -4,7 +4,7 @@ import { defaultConfig } from "../knip.config";
 const config: KnipConfig = {
   ...defaultConfig,
   project: ["src/**"],
-  ignoreDependencies: ["@atlaskit/css-reset", "@types/react-router-dom", "history", "@src/shared"],
-};
+  ignoreDependencies: ["@atlaskit/css-reset", "@types/react-router-dom", "history"],
+} as KnipConfig;
 
 export default config;
