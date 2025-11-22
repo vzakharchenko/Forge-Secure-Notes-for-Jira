@@ -4,6 +4,8 @@
 [![Snyk Vulnerabilities](https://snyk.io/test/github/vzakharchenko/Forge-Secure-Notes-for-Jira/badge.svg)](https://snyk.io/test/github/vzakharchenko/Forge-Secure-Notes-for-Jira)
 [![DeepScan grade](https://deepscan.io/api/teams/26652/projects/30673/branches/987394/badge/grade.svg)](https://deepscan.io/dashboard#view=project&tid=26652&pid=30673&bid=987394)
 
+![GitHub License](https://img.shields.io/github/license/vzakharchenko/Forge-Secure-Notes-for-Jira)
+
 Share sensitive information securely within Jira issues. Create one-time, expiring encrypted notes with out-of-band key exchange. Built with Atlassian Forge, Custom UI &amp; @forge/sql, @forge/kvs.
 
 ## 🧠 About the Project
