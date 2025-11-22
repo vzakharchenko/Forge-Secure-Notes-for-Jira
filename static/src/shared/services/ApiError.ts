@@ -1,5 +1,5 @@
 // models
-import { ErrorResponse } from "@src/Types";
+import { ErrorResponse } from "@shared/Types";
 
 export default class ApiError extends Error {
   public data: ErrorResponse;

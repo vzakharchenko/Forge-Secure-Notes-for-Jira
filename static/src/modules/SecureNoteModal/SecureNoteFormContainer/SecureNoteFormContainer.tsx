@@ -11,7 +11,7 @@ import {
 } from "@src/shared/utils/encode";
 
 // models
-import { NoteDataType } from "@src/Types";
+import { NewSecurityNote } from "@shared/dto/NewSecurityNote";
 import { SecureNoteFormFields } from "./models";
 
 // components
@@ -28,7 +28,7 @@ const SecureNoteFormContainer = ({ accountId }: { accountId: string }) => {
     const keyForEncryption = await calculateHash(baseKey, DERIVE_PURPOSE_ENCRYPTION, 1000);
     const keyForServer = await calculateHash(baseKey, DERIVE_PURPOSE_VERIFICATION, 1000);
     const encryptedPayload = await encryptMessage(note.trim(), keyForEncryption);
-    const noteData: NoteDataType = {
+    const noteData: NewSecurityNote = {
       targetUsers: targetUsers.map((user) => ({
         accountId: user.accountId,
         userName: user.displayName,

@@ -25,6 +25,7 @@ export const exceptionHandler =
         }
         return {
           isError: true,
+          errorType: "GENERAL",
           message: error.message,
         };
       }
