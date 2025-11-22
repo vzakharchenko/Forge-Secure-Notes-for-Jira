@@ -6,6 +6,8 @@
 
 ![GitHub License](https://img.shields.io/github/license/vzakharchenko/Forge-Secure-Notes-for-Jira)
 
+![GitHub repo size](https://img.shields.io/github/repo-size/vzakharchenko/Forge-Secure-Notes-for-Jira)
+
 Share sensitive information securely within Jira issues. Create one-time, expiring encrypted notes with out-of-band key exchange. Built with Atlassian Forge, Custom UI &amp; @forge/sql, @forge/kvs.
 
 ## 🧠 About the Project
