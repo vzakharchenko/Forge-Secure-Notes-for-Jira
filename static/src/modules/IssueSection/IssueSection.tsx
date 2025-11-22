@@ -10,7 +10,7 @@ import { queryClient } from "@src/shared/utils/queryClient";
 import { showNewIssueModal } from "@src/utils/ModalUtils";
 
 // models
-import { NoteDataType } from "@src/Types";
+import { NewSecurityNote } from "@shared/dto/NewSecurityNote";
 import { ViewMySecurityNotes } from "@shared/responses/ViewMySecurityNotes";
 
 // constants
@@ -66,7 +66,7 @@ function IssueSection({
   );
 
   const handleNewNote = async () => {
-    await showNewIssueModal(async (noteData?: NoteDataType) => {
+    await showNewIssueModal(async (noteData?: NewSecurityNote) => {
       console.log("noteData", noteData);
       if (noteData) {
         mutateCreateNote(noteData);

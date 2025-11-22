@@ -16,8 +16,13 @@ export const validBodyHandler = <T extends object>(validateClass: new () => T) =
         throw new Error(`Error: @validBodyHandler can use only with @resolver.`);
       }
       const validationErrors = await getValidationErrors(args[0] as Request, validateClass);
-      if (validationErrors?.length) {
-        return { isError: true, message: "validation Error", validationErrors };
+      if (Object.keys(validationErrors).length > 0) {
+        return {
+          isError: true,
+          errorType: "VALIDATION",
+          message: "validation Error",
+          validationErrors,
+        };
       }
       return await originalMethod.apply(this, args);
     };
@@ -29,14 +34,22 @@ export const validBodyHandler = <T extends object>(validateClass: new () => T) =
 const getValidationErrors = async <T extends object>(
   req: Request,
   validateClass: new () => T,
-): Promise<string[]> => {
+): Promise<Record<string, string[]>> => {
   if (!req?.payload) {
-    return ["empty request"];
+    throw Error("empty request");
   }
+  const response: Record<string, string[]> = {};
   const entity = Object.assign(new validateClass(), req.payload);
   const validationErrors = await validate(entity);
   if (validationErrors && validationErrors.length > 0) {
-    return validationErrors.map((v) => v.toString());
+    validationErrors.forEach((error) => {
+      const values = response[error.property];
+      if (!values) {
+        response[error.property] = [error.toString(false, true, undefined, true)];
+      } else {
+        values.push(error.toString(false, true, undefined, true));
+      }
+    });
   }
-  return [];
+  return response;
 };

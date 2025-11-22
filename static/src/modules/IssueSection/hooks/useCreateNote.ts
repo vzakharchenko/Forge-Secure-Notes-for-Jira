@@ -11,14 +11,14 @@ import { handleDefaultServerError } from "@src/shared/utils/errors";
 
 // models
 import { ServerError } from "@src/shared/models/remoteClient";
-import { NoteDataType } from "@src/Types";
 import { ViewMySecurityNotes } from "@shared/responses/ViewMySecurityNotes";
 
 // constants
 import { NOTES_QUERY_KEYS } from "@src/shared/constants/queryKeys";
+import { NewSecurityNote } from "@shared/dto/NewSecurityNote";
 
 export const useCreateNote = () => {
-  return useMutation<ViewMySecurityNotes[], ServerError, NoteDataType>({
+  return useMutation<ViewMySecurityNotes[], ServerError, NewSecurityNote>({
     mutationFn: createSecureNote,
     onSuccess: (data) => {
       queryClient.setQueryData(NOTES_QUERY_KEYS.LIST, data);

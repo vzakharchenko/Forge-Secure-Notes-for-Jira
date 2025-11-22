@@ -8,7 +8,7 @@ import ApiError from "@src/shared/services/ApiError";
 // models
 import { RemoteClientResponse } from "@src/shared/models/remoteClient";
 import { InvokePayload } from "@forge/bridge/out/types";
-import { ErrorResponse } from "@src/Types";
+import { ErrorResponse } from "@shared/Types";
 
 const handleForgeApiError = (errorResponse: ErrorResponse): Promise<never> => {
   const { errorType, message } = errorResponse;
