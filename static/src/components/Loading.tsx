@@ -16,7 +16,7 @@ const Loading = ({ text }: { text?: string }) => {
         <Box padding={"space.075"}>
           <Stack alignBlock={"center"} alignInline={"center"}>
             <Spinner size={"xlarge"} />
-            {text ? <p style={{ textAlign: "center" }}>{text ?? "Loading..."}</p> : null}
+            аш {text ? <p style={{ textAlign: "center" }}>{text}</p> : null}
           </Stack>
         </Box>
       </CenterDiv>
