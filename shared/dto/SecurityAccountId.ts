@@ -1,4 +1,4 @@
-import { IsNotEmpty, Length, IsOptional } from "class-validator";
+import { Length, IsOptional } from "class-validator";
 
 export class SecurityAccountId {
   @IsOptional()
