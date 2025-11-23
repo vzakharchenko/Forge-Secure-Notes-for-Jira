@@ -437,6 +437,12 @@ app:
           - sql
           - expiration
 permissions:
+  external:
+    fetch:
+      backend:
+        - address: "*.posthog.com"
+          category: analytics
+          inScopeEUD: false
   content:
     styles:
       - "unsafe-inline"
@@ -446,3 +452,4 @@ permissions:
     - "send:notification:jira"
     - "storage:app"
     - "read:app-global-channel:realtime"
+

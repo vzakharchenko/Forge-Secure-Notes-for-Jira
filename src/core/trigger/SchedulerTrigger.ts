@@ -3,11 +3,25 @@ export interface SchedulerTriggerRequest {
     cloudId: string;
     moduleKey: string;
   };
+  userAccess: {
+    enabled: boolean;
+  };
   contextToken: string;
+}
+
+export interface InstallationContext {
+  ari: {
+    installationId: string;
+  };
+  contexts: Array<{
+    cloudId: string;
+    workspaceId: string;
+  }>;
 }
 
 export interface SchedulerTriggerContext {
   installContext: string;
+  installation?: InstallationContext;
 }
 
 export interface SchedulerTriggerResponse<BODY> {
@@ -21,7 +35,7 @@ export const getHttpResponse = <Body>(
   statusCode: number,
   body: Body,
 ): SchedulerTriggerResponse<Body> => {
-  let statusText = "";
+  let statusText: string;
   if (statusCode === 200) {
     statusText = "Ok";
   } else if (statusCode === 404) {
