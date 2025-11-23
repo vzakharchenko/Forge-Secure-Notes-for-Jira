@@ -53,8 +53,9 @@ jobs:
 
       - name: Forge Deploy (development)
         run: |
-          export FORGE_EMAIL=${{ secrets.FORGE_EMAIL }} && \
-          export FORGE_API_TOKEN=${{ secrets.FORGE_API_TOKEN }} && \
+          export FORGE_EMAIL=${{ secrets.FORGE_EMAIL }} && 
+          export FORGE_API_TOKEN=${{ secrets.FORGE_API_TOKEN }} && 
+          forge  variables set ANALYTICS_API_KEY ${{ secrets.ANALYTICS_API_KEY }} -e development && 
           forge deploy --non-interactive -e development
 
       - name: Forge Install (development)
@@ -101,8 +102,9 @@ jobs:
 
       - name: Forge Deploy (staging)
         run: |
-          export FORGE_EMAIL=${{ secrets.FORGE_EMAIL }} && \
-          export FORGE_API_TOKEN=${{ secrets.FORGE_API_TOKEN }} && \
+          export FORGE_EMAIL=${{ secrets.FORGE_EMAIL }} && 
+          export FORGE_API_TOKEN=${{ secrets.FORGE_API_TOKEN }} && 
+          forge  variables set ANALYTICS_API_KEY ${{ secrets.ANALYTICS_API_KEY }} -e staging && 
           forge deploy --non-interactive -e staging
 
       - name: Forge Install (staging)
@@ -149,8 +151,10 @@ jobs:
 
       - name: Forge Deploy (production)
         run: |
-          export FORGE_EMAIL=${{ secrets.FORGE_EMAIL }} && \
-          export FORGE_API_TOKEN=${{ secrets.FORGE_API_TOKEN }} && \
+          export FORGE_EMAIL=${{ secrets.FORGE_EMAIL }} && 
+          export FORGE_API_TOKEN=${{ secrets.FORGE_API_TOKEN }} && 
+          export FORGE_API_TOKEN=${{ secrets.FORGE_API_TOKEN }} && 
+          forge  variables set ANALYTICS_API_KEY ${{ secrets.ANALYTICS_API_KEY }} -e production && \
           forge deploy --non-interactive -e production
 
       - name: Forge Install (production)
