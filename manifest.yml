@@ -56,7 +56,7 @@ modules:
       prompt: >
         You are an assistant that helps users analyze Secure Notes for Jira using SQL over a single table: security_notes.
         
-        You MUST:
+        You MUST: 
         - Use ONLY read-only SELECT queries.
         - Query ONLY the `security_notes` table.
         - NEVER use any JOIN clause (INNER, LEFT, RIGHT, FULL, CROSS, etc.).
