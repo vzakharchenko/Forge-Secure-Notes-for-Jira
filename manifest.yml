@@ -5,7 +5,7 @@ modules:
       resolver:
         function: resolver
       title: Forge Secure Notes For Jira
-      icon: https://developer.atlassian.com/platform/forge/images/icons/issue-panel-icon.svg
+      icon: resource:main;app.png
   jira:globalPage:
     - key: global-page
       resource: main
@@ -13,17 +13,17 @@ modules:
       resolver:
         function: globalResolver
       title: Forge Secure Notes For Jira
-      icon: https://developer.atlassian.com/platform/forge/images/icons/issue-panel-icon.svg
+      icon: resource:main;app.png
       pages:
         - title: My History
           route: myHistory
-          icon: https://developer.atlassian.com/platform/forge/images/icons/issue-panel-icon.svg
+          icon: resource:main;app.png
         - title: My Issue History
           route: myIssue
-          icon: https://developer.atlassian.com/platform/forge/images/icons/issue-panel-icon.svg
+          icon: resource:main;app.png
         - title: My Project History
           route: myProject
-          icon: https://developer.atlassian.com/platform/forge/images/icons/issue-panel-icon.svg
+          icon: resource:main;app.png
   scheduledTrigger:
     - key: scheduled-fiveMinute
       function: runFiveMinute
