@@ -32,9 +32,26 @@ jobs:
           node-version: ${{ matrix.node-version }}
           cache: 'npm'
 
-      - name: Backend install & build
+      - name: Backend install
+        run: npm ci
+      - name: Install oxc binding (Linux)
+        if: runner.os == 'Linux'
+        run: npm i -D @oxc-resolver/binding-linux-x64-gnu@latest
+
+      - name: Install oxc binding (macOS arm64)
+        if: runner.os == 'macOS' && startsWith(runner.arch, 'ARM64')
+        run: npm i -D @oxc-resolver/binding-darwin-arm64@latest
+
+      - name: Install oxc binding (macOS x64)
+        if: runner.os == 'macOS' && startsWith(runner.arch, 'X64')
+        run: npm i -D @oxc-resolver/binding-darwin-x64@latest
+
+      - name: Install oxc binding (Windows x64)
+        if: runner.os == 'Windows'
+        run: npm i -D @oxc-resolver/binding-win32-x64-msvc@latest
+
+      - name: Backend build
         run: |
-          npm ci
           npm run knip
           npm run lint
           npm run format:check
