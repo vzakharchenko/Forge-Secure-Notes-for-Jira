@@ -48,8 +48,10 @@ export interface MultiAutocompleteProps<Option> {
   testId?: string;
 }
 
-export interface FormMultiAutocompleteProps<Option>
-  extends Omit<MultiAutocompleteProps<Option>, "name" | "errorMessage"> {
+export interface FormMultiAutocompleteProps<Option> extends Omit<
+  MultiAutocompleteProps<Option>,
+  "name" | "errorMessage"
+> {
   name: string;
   isRequired?: boolean;
 }

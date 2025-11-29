@@ -4,8 +4,10 @@ import { ReactNode } from "react";
 // models
 import { DatePickerProps as AtlasDatePickerProps } from "@atlaskit/datetime-picker";
 
-export interface DatePickerProps
-  extends Omit<AtlasDatePickerProps, "label" | "minDate" | "maxDate"> {
+export interface DatePickerProps extends Omit<
+  AtlasDatePickerProps,
+  "label" | "minDate" | "maxDate"
+> {
   label?: string | ReactNode;
   errorMessage?: string;
   helperMessage?: string;
