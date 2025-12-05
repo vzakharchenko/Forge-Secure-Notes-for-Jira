@@ -1,20 +1,18 @@
 import { Result } from "@forge/sql/out/utils/types";
-import { FORGE_SQL_ORM } from "../../database/DbUtils";
-import { securityNotes } from "../../database/entities";
+import { FORGE_SQL_ORM } from "../../database";
+import { securityNotes } from "../../database";
 import { getTableName } from "drizzle-orm";
-import { USER_FACTORY } from "../../user/UserServiceFactory";
-import { ForgeTypes } from "../../../shared/Types";
+import { inject, injectable } from "inversify";
+import { FORGE_INJECTION_TOKENS } from "../../constants";
+import { JiraUserService } from "../../user";
 
-export interface RovoService {
-  runSecurityNotesQuery(
-    event: { sql: string },
-    context: {
-      principal: { accountId: string };
-    },
-  ): Promise<Result<unknown>>;
-}
+@injectable()
+export class RovoService {
+  constructor(
+    @inject(FORGE_INJECTION_TOKENS.JiraUserService)
+    private readonly jiraUserService: JiraUserService,
+  ) {}
 
-class RovoServiceImpl implements RovoService {
   async runSecurityNotesQuery(
     event: {
       sql: string;
@@ -35,9 +33,7 @@ class RovoServiceImpl implements RovoService {
       .addContextParameter(":currentProjectKey", event.context?.jira?.projectKey ?? "")
       .addContextParameter(":currentIssueKey", event.context?.jira?.issueKey ?? "")
       .useRLS()
-      .addRlsCondition(
-        async () => await USER_FACTORY.getUserService(ForgeTypes.globalJira).isJiraAdmin(),
-      )
+      .addRlsCondition(async () => await this.jiraUserService.isJiraAdmin())
       .addRlsColumn(securityNotes.createdBy)
       .addRlsColumn(securityNotes.targetUserId)
       .addRlsWherePart(
@@ -55,5 +51,3 @@ class RovoServiceImpl implements RovoService {
     }
   }
 }
-
-export const ROVO_SERVICE: RovoService = new RovoServiceImpl();

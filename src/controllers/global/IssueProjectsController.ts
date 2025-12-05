@@ -1,20 +1,25 @@
-import { resolver } from "../../core/decorators/ResolverDecorator";
-import { ActualResolver } from "../../core/resolver/ActualResolver";
+import { resolver, exceptionHandler, ActualResolver, SecurityNoteService } from "../../core";
 import { ResolverNames } from "../../../shared/ResolverNames";
-import { exceptionHandler } from "../../core/decorators/ExceptionHandlerDecorator";
-import { SECURITY_NOTE_SERVICE } from "../../core/services/SecurityNoteService";
-import { ProjectIssue } from "../../../shared/responses/ProjectIssue";
+import { ProjectIssue } from "../../../shared/responses";
+import { inject, injectable } from "inversify";
+import { FORGE_INJECTION_TOKENS } from "../../constants";
 
+@injectable()
 @resolver
-class IssueProjectsController extends ActualResolver<ProjectIssue> {
+export class IssueProjectsController extends ActualResolver<ProjectIssue> {
+  constructor(
+    @inject(FORGE_INJECTION_TOKENS.SecurityNoteService)
+    private readonly securityNoteService: SecurityNoteService,
+  ) {
+    super();
+  }
+
   functionName(): string {
     return ResolverNames.AUDIT_ISSUES_AND_PROJECTS;
   }
 
   @exceptionHandler()
   async response(): Promise<ProjectIssue> {
-    return await SECURITY_NOTE_SERVICE.getIssuesAndProjects();
+    return await this.securityNoteService.getIssuesAndProjects();
   }
 }
-
-export default new IssueProjectsController();

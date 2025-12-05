@@ -1,13 +1,11 @@
 import * as api from "@forge/api";
 
-import { CurrentUser, ServiceType, UserService } from "../UserService";
+import { CurrentUser } from "./UserService";
 import { GetPermissionsResponse } from "./GetPermissionsResponse";
+import { injectable } from "inversify";
 
-export class JiraUserService implements UserService {
-  getServiceType(): ServiceType {
-    return ServiceType.JIRA;
-  }
-
+@injectable()
+export class JiraUserService {
   async getCurrentUser(): Promise<CurrentUser | undefined> {
     try {
       const response = await api.asUser().requestJira(api.route`/rest/api/3/myself`);

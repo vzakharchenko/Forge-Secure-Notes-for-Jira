@@ -1,10 +1,21 @@
 import Resolver from "@forge/resolver";
-import getMySecurityNotesController from "../../controllers/issue/GetMySecurityNotesController";
-import createSecurityNoteController from "../../controllers/issue/CreateSecurityNoteController";
-import deleteSecurityNoteController from "../../controllers/issue/DeleteSecurityNoteController";
+import {
+  GetMySecurityNotesController,
+  CreateSecurityNoteController,
+  DeleteSecurityNoteController,
+} from "../../controllers";
+import { setupContainer } from "./di";
+import { FORGE_INJECTION_TOKENS } from "../../constants";
 
-export default function (resolver: Resolver): void {
-  getMySecurityNotesController.register(resolver);
-  createSecurityNoteController.register(resolver);
-  deleteSecurityNoteController.register(resolver);
+export function issue(resolver: Resolver): void {
+  const container = setupContainer();
+  container
+    .get<GetMySecurityNotesController>(FORGE_INJECTION_TOKENS.GetMySecurityNotesController)
+    .register(resolver, container);
+  container
+    .get<CreateSecurityNoteController>(FORGE_INJECTION_TOKENS.CreateSecurityNoteController)
+    .register(resolver, container);
+  container
+    .get<DeleteSecurityNoteController>(FORGE_INJECTION_TOKENS.DeleteSecurityNoteController)
+    .register(resolver, container);
 }

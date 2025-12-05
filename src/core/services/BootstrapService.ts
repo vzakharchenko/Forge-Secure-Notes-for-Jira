@@ -1,16 +1,19 @@
-import { USER_FACTORY } from "../../user/UserServiceFactory";
-import { getAppContext, withAppContext } from "../../controllers/ApplicationContext";
+import { withAppContext } from "../../controllers";
+import { FORGE_INJECTION_TOKENS } from "../../constants";
+import { inject, injectable } from "inversify";
+import { JiraUserService } from "../../user";
 
-interface BootstrapService {
-  isAdmin(): Promise<boolean>;
-}
+@injectable()
+export class BootstrapService {
+  constructor(
+    @inject(FORGE_INJECTION_TOKENS.JiraUserService)
+    private readonly jiraUserService: JiraUserService,
+  ) {}
 
-class BootstrapServiceImpl implements BootstrapService {
   @withAppContext()
   async isAdmin(): Promise<boolean> {
     try {
-      const appContext = getAppContext()!;
-      return USER_FACTORY.getUserService(appContext.forgeType).isJiraAdmin();
+      return this.jiraUserService.isJiraAdmin();
     } catch (e: any) {
       // eslint-disable-next-line no-console
       console.error("Permission Error " + e.message, e);
@@ -18,5 +21,3 @@ class BootstrapServiceImpl implements BootstrapService {
     }
   }
 }
-
-export const BOOTSTRAP_SERVICE: BootstrapService = new BootstrapServiceImpl();

@@ -1,15 +1,8 @@
 import { fetch, getAppContext } from "@forge/api";
+import { injectable } from "inversify";
 
-export interface AnalyticService {
-  sendAnalytics(
-    eventName: string,
-    resolverName: string,
-    cloudId: string,
-    data: { totalDbExecutionTime: number; totalResponseSize: number },
-  ): Promise<void>;
-}
-
-class AnalyticServiceImpl implements AnalyticService {
+@injectable()
+export class AnalyticService {
   parseVersion(raw: string) {
     return raw.replace(/[^0-9]/g, "");
   }
@@ -47,5 +40,3 @@ class AnalyticServiceImpl implements AnalyticService {
     });
   }
 }
-
-export const ANALYTIC_SERVICE: AnalyticService = new AnalyticServiceImpl();

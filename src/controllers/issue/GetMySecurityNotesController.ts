@@ -1,20 +1,32 @@
-import { resolver } from "../../core/decorators/ResolverDecorator";
-import { ActualResolver } from "../../core/resolver/ActualResolver";
+import {
+  resolver,
+  exceptionHandler,
+  ActualResolver,
+  KVSSchemaMigrationService,
+  SecurityNoteService,
+} from "../../core";
 import { ResolverNames } from "../../../shared/ResolverNames";
-import { exceptionHandler } from "../../core/decorators/ExceptionHandlerDecorator";
-import { SECURITY_NOTE_SERVICE } from "../../core/services/SecurityNoteService";
-import { AuditUser } from "../../../shared/responses/AuditUser";
+import { AuditUser } from "../../../shared/responses";
+import { inject, injectable } from "inversify";
+import { FORGE_INJECTION_TOKENS } from "../../constants";
 
+@injectable()
 @resolver
-class GetMySecurityNotesController extends ActualResolver<AuditUser> {
+export class GetMySecurityNotesController extends ActualResolver<AuditUser> {
+  constructor(
+    @inject(FORGE_INJECTION_TOKENS.KVSSchemaMigrationService)
+    private readonly kvsSchemaMigrationService: KVSSchemaMigrationService,
+    @inject(FORGE_INJECTION_TOKENS.SecurityNoteService)
+    private readonly securityNoteService: SecurityNoteService,
+  ) {
+    super();
+  }
   functionName(): string {
     return ResolverNames.GET_MY_SECURED_NOTES;
   }
 
   @exceptionHandler()
   async response(): Promise<AuditUser> {
-    return { result: await SECURITY_NOTE_SERVICE.getMySecurityNoteIssue() };
+    return { result: await this.securityNoteService.getMySecurityNoteIssue() };
   }
 }
-
-export default new GetMySecurityNotesController();

@@ -1,12 +1,8 @@
 import { kvs } from "@forge/kvs";
+import { injectable } from "inversify";
 
-export interface SecurityStorage {
-  savePayload(id: string, payload: string): Promise<void>;
-  getPayload(id: string): Promise<string | undefined>;
-  deletePayload(id: string): Promise<void>;
-}
-
-class SecurityStorageImpl implements SecurityStorage {
+@injectable()
+export class SecurityStorage {
   async deletePayload(id: string): Promise<void> {
     await kvs.deleteSecret(id);
   }
@@ -19,5 +15,3 @@ class SecurityStorageImpl implements SecurityStorage {
     await kvs.setSecret<string>(id, payload);
   }
 }
-
-export const SECURITY_STORAGE = new SecurityStorageImpl();

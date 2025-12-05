@@ -1,10 +1,8 @@
 import { AsyncLocalStorage } from "async_hooks";
-import { ForgeTypes } from "../../shared/Types";
-import { BaseContext } from "../core/services/ContextTypes";
+import { BaseContext } from "../core";
 
 export interface AppContext {
   accountId: string;
-  forgeType: ForgeTypes;
   context: BaseContext;
 }
 

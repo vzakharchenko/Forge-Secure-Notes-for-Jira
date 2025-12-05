@@ -1,67 +1,44 @@
-import {
-  UserViewInfoType,
-  ViewMySecurityNotes,
-} from "../../../shared/responses/ViewMySecurityNotes";
-import { SECURITY_NOTE_REPOSITORY } from "../../database/SecurityNoteRepository";
+import { UserViewInfoType, ViewMySecurityNotes } from "../../../shared/responses";
 import { SecurityNoteStatus, SHARED_EVENT_NAME } from "../../../shared/Types";
-import {
-  applicationContext,
-  getAppContext,
-  withAppContext,
-} from "../../controllers/ApplicationContext";
-import { NewSecurityNote } from "../../../shared/dto/NewSecurityNote";
-import { SECURITY_STORAGE } from "../../storage/SecurityStorage";
+import { getAppContext, withAppContext } from "../../controllers";
+import { NewSecurityNote } from "../../../shared/dto";
 import { InferInsertModel, InferSelectModel } from "drizzle-orm";
-import { USER_FACTORY } from "../../user/UserServiceFactory";
-import { securityNotes } from "../../database/entities";
-import { calculateHash } from "../utils/cryptoUtils";
-import { v4 } from "uuid";
+import { securityNotes } from "../../database";
 import {
+  calculateHash,
   sendExpirationNotification,
   sendIssueNotification,
   sendNoteDeletedNotification,
-} from "../utils/sendIssueNotification";
+} from "../utils";
+import { v4 } from "uuid";
 import { isIssueContext, IssueContext } from "./ContextTypes";
-import { SecurityNoteData } from "../../../shared/responses/SecurityNoteData";
-import { ProjectInfo, ProjectIssue } from "../../../shared/responses/ProjectIssue";
-import { BOOTSTRAP_SERVICE } from "./BootstrapService";
-import { OpenSecurityNote } from "../../../shared/responses/OpenSecurityNote";
+import {
+  SecurityNoteData,
+  ProjectInfo,
+  ProjectIssue,
+  OpenSecurityNote,
+} from "../../../shared/responses";
 import { publishGlobal } from "@forge/realtime";
+import { inject, injectable } from "inversify";
+import { FORGE_INJECTION_TOKENS } from "../../constants";
+import { JiraUserService } from "../../user";
+import { SecurityNoteRepository } from "../../database";
+import { BootstrapService } from "./BootstrapService";
+import { SecurityStorage } from "../../storage";
 
-export interface SecurityNoteService {
-  getMySecurityNoteIssue(): Promise<ViewMySecurityNotes[]>;
+@injectable()
+export class SecurityNoteService {
+  constructor(
+    @inject(FORGE_INJECTION_TOKENS.JiraUserService)
+    private readonly jiraUserService: JiraUserService,
+    @inject(FORGE_INJECTION_TOKENS.SecurityNoteRepository)
+    private readonly securityNoteRepository: SecurityNoteRepository,
+    @inject(FORGE_INJECTION_TOKENS.SecurityNoteRepository)
+    private readonly bootstrapService: BootstrapService,
+    @inject(FORGE_INJECTION_TOKENS.SecurityStorage)
+    private readonly securityStorage: SecurityStorage,
+  ) {}
 
-  createSecurityNote(securityNote: NewSecurityNote): Promise<void>;
-
-  deleteSecurityNote(securityNoteId: string): Promise<void>;
-
-  isValidLink(securityNoteId: string): Promise<OpenSecurityNote>;
-
-  getSecuredData(securityNoteId: string, key: string): Promise<SecurityNoteData | undefined>;
-
-  expireSecurityNotes(): Promise<void>;
-
-  getSecurityNoteUsers(): Promise<UserViewInfoType[]>;
-
-  getSecurityNoteByAccountId(
-    accountId: string,
-    limit: number,
-    offset: number,
-  ): Promise<ViewMySecurityNotes[]>;
-  getIssuesAndProjects(): Promise<ProjectIssue>;
-  getSecurityNoteByIssue(
-    issueIdOrKey: string,
-    limit: number,
-    offset: number,
-  ): Promise<ViewMySecurityNotes[]>;
-  getSecurityNoteByProject(
-    projectIdOrKey: string,
-    limit: number,
-    offset: number,
-  ): Promise<ViewMySecurityNotes[]>;
-}
-
-class SecurityNoteServiceImpl implements SecurityNoteService {
   private mapSecurityNotesToView(
     securityDbNotes: (InferSelectModel<typeof securityNotes> & {
       count: number;
@@ -110,8 +87,8 @@ class SecurityNoteServiceImpl implements SecurityNoteService {
     offset: number,
   ): Promise<ViewMySecurityNotes[]> {
     const context = getAppContext()!;
-    let isAdmin = await BOOTSTRAP_SERVICE.isAdmin();
-    const securityDbNotes = await SECURITY_NOTE_REPOSITORY.getAllSecurityNotesByIssue(
+    let isAdmin = await this.bootstrapService.isAdmin();
+    const securityDbNotes = await this.securityNoteRepository.getAllSecurityNotesByIssue(
       issueIdOrKey,
       limit,
       offset,
@@ -126,8 +103,8 @@ class SecurityNoteServiceImpl implements SecurityNoteService {
     offset: number,
   ): Promise<ViewMySecurityNotes[]> {
     const context = getAppContext()!;
-    let isAdmin = await BOOTSTRAP_SERVICE.isAdmin();
-    const securityDbNotes = await SECURITY_NOTE_REPOSITORY.getAllSecurityNotesByProject(
+    let isAdmin = await this.bootstrapService.isAdmin();
+    const securityDbNotes = await this.securityNoteRepository.getAllSecurityNotesByProject(
       projectIdOrKey,
       limit,
       offset,
@@ -138,7 +115,7 @@ class SecurityNoteServiceImpl implements SecurityNoteService {
 
   async getIssuesAndProjects(): Promise<ProjectIssue> {
     return {
-      result: (await SECURITY_NOTE_REPOSITORY.getIssuesAndProjects()) as ProjectInfo[],
+      result: (await this.securityNoteRepository.getIssuesAndProjects()) as ProjectInfo[],
     };
   }
   @withAppContext()
@@ -148,10 +125,10 @@ class SecurityNoteServiceImpl implements SecurityNoteService {
     offset: number,
   ): Promise<ViewMySecurityNotes[]> {
     const context = getAppContext()!;
-    if (!(await BOOTSTRAP_SERVICE.isAdmin()) && context.accountId !== accountId) {
+    if (!(await this.bootstrapService.isAdmin()) && context.accountId !== accountId) {
       return [];
     }
-    const securityDbNotes = await SECURITY_NOTE_REPOSITORY.getAllSecurityNotesByAccountId(
+    const securityDbNotes = await this.securityNoteRepository.getAllSecurityNotesByAccountId(
       accountId,
       limit,
       offset,
@@ -160,14 +137,14 @@ class SecurityNoteServiceImpl implements SecurityNoteService {
   }
 
   async getSecurityNoteUsers(): Promise<UserViewInfoType[]> {
-    return SECURITY_NOTE_REPOSITORY.getSecurityNoteUsers();
+    return this.securityNoteRepository.getSecurityNoteUsers();
   }
 
   async expireSecurityNotes(): Promise<void> {
-    const notes = await SECURITY_NOTE_REPOSITORY.getAllExpiredNotes();
+    const notes = await this.securityNoteRepository.getAllExpiredNotes();
     if (notes?.length) {
       for (const note of notes) {
-        await SECURITY_STORAGE.deletePayload(note.id);
+        await this.securityStorage.deletePayload(note.id);
         try {
           if (note.issueKey) {
             await sendExpirationNotification({
@@ -181,13 +158,13 @@ class SecurityNoteServiceImpl implements SecurityNoteService {
           console.error(e);
         }
       }
-      await SECURITY_NOTE_REPOSITORY.expireSecurityNote(notes.map((n) => n.id));
+      await this.securityNoteRepository.expireSecurityNote(notes.map((n) => n.id));
     }
   }
 
   @withAppContext()
   async getSecuredData(securityNoteId: string, key: string): Promise<SecurityNoteData | undefined> {
-    const sn = await SECURITY_NOTE_REPOSITORY.getSecurityNode(securityNoteId);
+    const sn = await this.securityNoteRepository.getSecurityNode(securityNoteId);
     if (!sn) {
       return undefined;
     }
@@ -196,15 +173,15 @@ class SecurityNoteServiceImpl implements SecurityNoteService {
         `SecurityKey is not valid, please ask ${sn.createdUserName} to sent you it. `,
       );
     }
-    const encryptedData = await SECURITY_STORAGE.getPayload(securityNoteId);
+    const encryptedData = await this.securityStorage.getPayload(securityNoteId);
     if (!encryptedData) {
       // eslint-disable-next-line no-console
       console.error("data does not exists");
-      await SECURITY_NOTE_REPOSITORY.deleteSecurityNote(securityNoteId);
+      await this.securityNoteRepository.deleteSecurityNote(securityNoteId);
       return undefined;
     }
-    await SECURITY_STORAGE.deletePayload(securityNoteId);
-    await SECURITY_NOTE_REPOSITORY.viewSecurityNote(securityNoteId);
+    await this.securityStorage.deletePayload(securityNoteId);
+    await this.securityNoteRepository.viewSecurityNote(securityNoteId);
     await publishGlobal(SHARED_EVENT_NAME, sn.issueId ?? "");
     return {
       id: sn.id,
@@ -221,7 +198,7 @@ class SecurityNoteServiceImpl implements SecurityNoteService {
     const accountId = getAppContext()?.accountId;
     if (!accountId) return { valid: false };
 
-    const sn = await SECURITY_NOTE_REPOSITORY.getSecurityNode(securityNoteId);
+    const sn = await this.securityNoteRepository.getSecurityNode(securityNoteId);
     if (!sn) return { valid: false };
 
     const isValid = sn.targetUserId === accountId;
@@ -259,14 +236,14 @@ class SecurityNoteServiceImpl implements SecurityNoteService {
 
   @withAppContext()
   async getMySecurityNoteIssue(): Promise<ViewMySecurityNotes[]> {
-    const { accountId, context } = applicationContext.getStore()!;
+    const { accountId, context } = getAppContext()!;
     if (!isIssueContext(context)) {
       throw new Error("expected Issue context");
     }
 
     const issueContext = context as IssueContext;
     const { key, id } = issueContext.extension.issue;
-    const securityDbNotes = await SECURITY_NOTE_REPOSITORY.getAllMySecurityNotes(key, accountId);
+    const securityDbNotes = await this.securityNoteRepository.getAllMySecurityNotes(key, accountId);
     return this.mapSecurityNotesToView(securityDbNotes, {
       issueId: id,
       issueKey: key,
@@ -281,7 +258,7 @@ class SecurityNoteServiceImpl implements SecurityNoteService {
     const accountId = appContext.accountId;
     const context = appContext.context as IssueContext;
     const datas: Partial<InferInsertModel<typeof securityNotes>>[] = [];
-    const currentUser = await USER_FACTORY.getUserService(appContext.forgeType).getCurrentUser();
+    const currentUser = await this.jiraUserService.getCurrentUser();
     for (const targetUser of securityNote.targetUsers) {
       const data: Partial<InferInsertModel<typeof securityNotes>> = {
         issueKey: context.extension.issue.key,
@@ -308,9 +285,7 @@ class SecurityNoteServiceImpl implements SecurityNoteService {
         data.createdUserName = accountId;
         data.createdAvatarUrl = "";
       }
-      const targetUserInfo = await USER_FACTORY.getUserService(appContext.forgeType).getUserById(
-        String(data.targetUserId),
-      );
+      const targetUserInfo = await this.jiraUserService.getUserById(String(data.targetUserId));
       if (targetUserInfo) {
         data.targetUserName = targetUserInfo.displayName;
         data.targetAvatarUrl = targetUserInfo.avatarUrls["32x32"];
@@ -326,11 +301,11 @@ class SecurityNoteServiceImpl implements SecurityNoteService {
       data.id = v4();
       datas.push(data);
     }
-    await SECURITY_NOTE_REPOSITORY.createSecurityNote(
+    await this.securityNoteRepository.createSecurityNote(
       datas as Partial<InferInsertModel<typeof securityNotes>>[],
     );
     for (const data of datas) {
-      await SECURITY_STORAGE.savePayload(String(data.id), securityNote.encryptedPayload);
+      await this.securityStorage.savePayload(String(data.id), securityNote.encryptedPayload);
       const appUrlParts = context.localId.split("/");
       const appUrl = `${appUrlParts[1]}/${appUrlParts[2]}/view/${data.id}`;
       const noteLink = `${context.siteUrl}/jira/apps/${appUrl}`;
@@ -350,10 +325,10 @@ class SecurityNoteServiceImpl implements SecurityNoteService {
   }
 
   async deleteSecurityNote(securityNoteId: string): Promise<void> {
-    await SECURITY_STORAGE.deletePayload(securityNoteId);
-    const sn = await SECURITY_NOTE_REPOSITORY.getSecurityNode(securityNoteId);
+    await this.securityStorage.deletePayload(securityNoteId);
+    const sn = await this.securityNoteRepository.getSecurityNode(securityNoteId);
     if (sn) {
-      await SECURITY_NOTE_REPOSITORY.deleteSecurityNote(securityNoteId);
+      await this.securityNoteRepository.deleteSecurityNote(securityNoteId);
       try {
         await sendNoteDeletedNotification({
           issueKey: sn!.issueKey ?? "",
@@ -367,5 +342,3 @@ class SecurityNoteServiceImpl implements SecurityNoteService {
     }
   }
 }
-
-export const SECURITY_NOTE_SERVICE: SecurityNoteService = new SecurityNoteServiceImpl();

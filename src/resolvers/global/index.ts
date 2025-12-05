@@ -1,20 +1,42 @@
 import Resolver from "@forge/resolver";
-import OpenSecurityNoteController from "../../controllers/global/OpenSecurityNoteController";
-import FetchSecurityNoteController from "../../controllers/global/FetchSecurityNoteController";
-import AuditUserController from "../../controllers/global/AuditUserController";
-import AuditUsersController from "../../controllers/global/AuditUsersController";
-import IssueProjectsController from "../../controllers/global/IssueProjectsController";
-import IssueAuditController from "../../controllers/global/IssueAuditController";
-import ProjectAuditController from "../../controllers/global/ProjectAuditController";
-import BootStrapController from "../../controllers/global/BootStrapController";
+import {
+  OpenSecurityNoteController,
+  FetchSecurityNoteController,
+  AuditUserController,
+  AuditUsersController,
+  IssueProjectsController,
+  IssueAuditController,
+  ProjectAuditController,
+  BootStrapController,
+} from "../../controllers";
 
-export default function (resolver: Resolver): void {
-  OpenSecurityNoteController.register(resolver);
-  FetchSecurityNoteController.register(resolver);
-  AuditUserController.register(resolver);
-  AuditUsersController.register(resolver);
-  IssueProjectsController.register(resolver);
-  IssueAuditController.register(resolver);
-  ProjectAuditController.register(resolver);
-  BootStrapController.register(resolver);
+import { setupContainer } from "./di";
+import { FORGE_INJECTION_TOKENS } from "../../constants";
+
+export function global(resolver: Resolver): void {
+  const container = setupContainer();
+  container
+    .get<OpenSecurityNoteController>(FORGE_INJECTION_TOKENS.OpenSecurityNoteController)
+    .register(resolver, container);
+  container
+    .get<FetchSecurityNoteController>(FORGE_INJECTION_TOKENS.FetchSecurityNoteController)
+    .register(resolver, container);
+  container
+    .get<AuditUserController>(FORGE_INJECTION_TOKENS.AuditUserController)
+    .register(resolver, container);
+  container
+    .get<AuditUsersController>(FORGE_INJECTION_TOKENS.AuditUsersController)
+    .register(resolver, container);
+  container
+    .get<IssueProjectsController>(FORGE_INJECTION_TOKENS.IssueProjectsController)
+    .register(resolver, container);
+  container
+    .get<IssueAuditController>(FORGE_INJECTION_TOKENS.IssueAuditController)
+    .register(resolver, container);
+  container
+    .get<ProjectAuditController>(FORGE_INJECTION_TOKENS.ProjectAuditController)
+    .register(resolver, container);
+  container
+    .get<BootStrapController>(FORGE_INJECTION_TOKENS.BootStrapController)
+    .register(resolver, container);
 }

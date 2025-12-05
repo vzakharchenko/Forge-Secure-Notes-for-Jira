@@ -1,13 +1,18 @@
 import Resolver from "@forge/resolver";
 
 import { fetchSchemaWebTrigger } from "forge-sql-orm";
-import issue from "./resolvers/issue";
-import global from "./resolvers/global";
-import FiveMinuteTrigger from "./controllers/triggers/FiveMinutesTrigger";
-import SlowQueryTriggerTrigger from "./controllers/triggers/SlowQueryTriggerTrigger";
-import DropSchemaMigrationTrigger from "./controllers/triggers/DropSchemaMigrationTrigger";
-import ApplySchemaMigrationTrigger from "./controllers/triggers/ApplySchemaMigrationTrigger";
-import { ROVO_SERVICE } from "./core/services/RovoService";
+import { issue } from "./resolvers";
+import { global } from "./resolvers";
+import {
+  FiveMinutesTrigger as FiveMinuteTrigger,
+  SlowQueryTriggerTrigger,
+  DropSchemaMigrationTrigger,
+  ApplySchemaMigrationTrigger,
+} from "./controllers";
+import { RovoService } from "./core";
+import { Container } from "inversify";
+import { FORGE_INJECTION_TOKENS } from "./constants";
+import { JiraUserService } from "./user";
 
 const issueResolver = new Resolver();
 const globalResolver = new Resolver();
@@ -30,5 +35,9 @@ export const fetchMigrations = async () => {
 };
 
 export const runSecurityNotesQuery = (event: any, context: any) => {
-  return ROVO_SERVICE.runSecurityNotesQuery(event, context);
+  const rovoContainer = new Container();
+  rovoContainer.bind(FORGE_INJECTION_TOKENS.JiraUserService).to(JiraUserService);
+  rovoContainer.bind(FORGE_INJECTION_TOKENS.RovoServiceImpl).to(RovoService);
+  const rovoService = rovoContainer.get<RovoService>(FORGE_INJECTION_TOKENS.RovoServiceImpl);
+  return rovoService.runSecurityNotesQuery(event, context);
 };

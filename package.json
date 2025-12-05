@@ -13,8 +13,8 @@
     "class-validator": "^0.14.3",
     "drizzle-orm": "^0.44.7",
     "forge-sql-orm": "^2.1.15",
+    "inversify": "^7.10.5",
     "luxon": "^3.7.2",
-    "reflect-metadata": "^0.2.2",
     "uuid": "^13.0.0"
   },
   "scripts": {
@@ -45,6 +45,7 @@
     "husky": "^9.1.7",
     "knip": "^5.70.2",
     "prettier": "^3.7.3",
+    "reflect-metadata": "^0.2.2",
     "typescript": "^5.9.3"
   },
   "overrides": {

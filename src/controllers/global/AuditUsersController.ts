@@ -1,20 +1,24 @@
-import { resolver } from "../../core/decorators/ResolverDecorator";
-import { ActualResolver } from "../../core/resolver/ActualResolver";
+import { resolver, exceptionHandler, ActualResolver, SecurityNoteService } from "../../core";
 import { ResolverNames } from "../../../shared/ResolverNames";
-import { exceptionHandler } from "../../core/decorators/ExceptionHandlerDecorator";
-import { SECURITY_NOTE_SERVICE } from "../../core/services/SecurityNoteService";
-import { AuditUsers } from "../../../shared/responses/AuditUsers";
-
+import { AuditUsers } from "../../../shared/responses";
+import { inject, injectable } from "inversify";
+import { FORGE_INJECTION_TOKENS } from "../../constants";
+@injectable()
 @resolver
-class AuditUsersController extends ActualResolver<AuditUsers> {
+export class AuditUsersController extends ActualResolver<AuditUsers> {
+  constructor(
+    @inject(FORGE_INJECTION_TOKENS.SecurityNoteService)
+    private readonly securityNoteService: SecurityNoteService,
+  ) {
+    super();
+  }
+
   functionName(): string {
     return ResolverNames.AUDIT_USERS_ALL;
   }
 
   @exceptionHandler()
   async response(): Promise<AuditUsers> {
-    return { result: await SECURITY_NOTE_SERVICE.getSecurityNoteUsers() };
+    return { result: await this.securityNoteService.getSecurityNoteUsers() };
   }
 }
-
-export default new AuditUsersController();

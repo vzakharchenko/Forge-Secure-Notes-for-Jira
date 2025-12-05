@@ -1,19 +1,32 @@
 import { publishGlobal } from "@forge/realtime";
-import { resolver } from "../../core/decorators/ResolverDecorator";
-import { ActualResolver } from "../../core/resolver/ActualResolver";
+import {
+  resolver,
+  exceptionHandler,
+  validBodyHandler,
+  ActualResolver,
+  isIssueContext,
+  IssueContext,
+  SecurityNoteService,
+} from "../../core";
 import { ResolverNames } from "../../../shared/ResolverNames";
-import { exceptionHandler } from "../../core/decorators/ExceptionHandlerDecorator";
-import { SECURITY_NOTE_SERVICE } from "../../core/services/SecurityNoteService";
-import { validBodyHandler } from "../../core/decorators/ValidBodyHandlerDecorator";
-import { NewSecurityNote } from "../../../shared/dto/NewSecurityNote";
+import { NewSecurityNote } from "../../../shared/dto";
 import { Request } from "@forge/resolver";
-import { AuditUser } from "../../../shared/responses/AuditUser";
-import { applicationContext } from "../ApplicationContext";
-import { isIssueContext, IssueContext } from "../../core/services/ContextTypes";
+import { AuditUser } from "../../../shared/responses";
+import { getAppContext } from "../../controllers";
 import { SHARED_EVENT_NAME } from "../../../shared/Types";
+import { inject, injectable } from "inversify";
+import { FORGE_INJECTION_TOKENS } from "../../constants";
 
+@injectable()
 @resolver
-class CreateSecurityNoteController extends ActualResolver<AuditUser> {
+export class CreateSecurityNoteController extends ActualResolver<AuditUser> {
+  constructor(
+    @inject(FORGE_INJECTION_TOKENS.SecurityNoteService)
+    private readonly securityNoteService: SecurityNoteService,
+  ) {
+    super();
+  }
+
   functionName(): string {
     return ResolverNames.CREATE_SECURITY_NOTE;
   }
@@ -21,17 +34,15 @@ class CreateSecurityNoteController extends ActualResolver<AuditUser> {
   @exceptionHandler()
   @validBodyHandler(NewSecurityNote)
   async response(req: Request<NewSecurityNote>): Promise<AuditUser> {
-    const { context } = applicationContext.getStore()!;
+    const { context } = getAppContext()!;
     if (!isIssueContext(context)) {
       throw new Error("expected Issue context");
     }
     const issueId = (context as IssueContext).extension.issue.id;
     const payload: NewSecurityNote = req.payload;
-    await SECURITY_NOTE_SERVICE.createSecurityNote(payload);
+    await this.securityNoteService.createSecurityNote(payload);
 
     await publishGlobal(SHARED_EVENT_NAME, issueId);
-    return { result: await SECURITY_NOTE_SERVICE.getMySecurityNoteIssue() };
+    return { result: await this.securityNoteService.getMySecurityNoteIssue() };
   }
 }
-
-export default new CreateSecurityNoteController();

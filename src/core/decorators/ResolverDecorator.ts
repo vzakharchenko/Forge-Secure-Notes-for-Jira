@@ -1,7 +1,7 @@
-import { ActualResolver } from "../resolver/ActualResolver";
+import { ActualResolver } from "../resolver";
 import { ErrorResponse } from "../../../shared/Types";
 
-export const resolver = <T extends { new (...args: unknown[]): unknown }>(constructor: T): T => {
+export const resolver = <T extends new (...args: any[]) => any>(constructor: T): T => {
   if (!("prototype" in constructor) || typeof constructor.prototype.response !== "function") {
     throw new Error(`@resolver you can use only with ActualResolver`);
   }

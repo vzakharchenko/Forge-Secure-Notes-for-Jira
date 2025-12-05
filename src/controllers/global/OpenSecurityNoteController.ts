@@ -1,15 +1,27 @@
-import { resolver } from "../../core/decorators/ResolverDecorator";
-import { ActualResolver } from "../../core/resolver/ActualResolver";
+import {
+  resolver,
+  exceptionHandler,
+  validBodyHandler,
+  ActualResolver,
+  SecurityNoteService,
+} from "../../core";
 import { ResolverNames } from "../../../shared/ResolverNames";
-import { exceptionHandler } from "../../core/decorators/ExceptionHandlerDecorator";
-import { SECURITY_NOTE_SERVICE } from "../../core/services/SecurityNoteService";
-import { validBodyHandler } from "../../core/decorators/ValidBodyHandlerDecorator";
 import { Request } from "@forge/resolver";
-import { SecurityNoteId } from "../../../shared/dto/SecurityNoteId";
-import { OpenSecurityNote } from "../../../shared/responses/OpenSecurityNote";
+import { SecurityNoteId } from "../../../shared/dto";
+import { OpenSecurityNote } from "../../../shared/responses";
+import { inject, injectable } from "inversify";
+import { FORGE_INJECTION_TOKENS } from "../../constants";
 
+@injectable()
 @resolver
-class OpenSecurityNoteController extends ActualResolver<OpenSecurityNote> {
+export class OpenSecurityNoteController extends ActualResolver<OpenSecurityNote> {
+  constructor(
+    @inject(FORGE_INJECTION_TOKENS.SecurityNoteService)
+    private readonly securityNoteService: SecurityNoteService,
+  ) {
+    super();
+  }
+
   functionName(): string {
     return ResolverNames.OPEN_LINK_SECURITY_NOTE;
   }
@@ -18,8 +30,6 @@ class OpenSecurityNoteController extends ActualResolver<OpenSecurityNote> {
   @validBodyHandler(SecurityNoteId)
   async response(req: Request): Promise<OpenSecurityNote> {
     const payload: SecurityNoteId = req.payload as SecurityNoteId;
-    return await SECURITY_NOTE_SERVICE.isValidLink(payload.id);
+    return await this.securityNoteService.isValidLink(payload.id);
   }
 }
-
-export default new OpenSecurityNoteController();
