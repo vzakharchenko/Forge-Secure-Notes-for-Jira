@@ -1,5 +1,3 @@
-import { ForgeTypes } from "../../shared/Types";
-
 export type CurrentUser = {
   accountId: string;
   emailAddress: string;
@@ -14,22 +12,3 @@ export type CurrentUser = {
   };
   locale: string;
 };
-
-export enum ServiceType {
-  JIRA,
-  CONFLUENCE,
-}
-
-export interface UserService {
-  getServiceType(): ServiceType;
-
-  getCurrentUser(): Promise<CurrentUser | undefined>;
-
-  getUserById(userId: string): Promise<CurrentUser | undefined>;
-
-  isJiraAdmin(): Promise<boolean>;
-}
-
-export interface UserFactory {
-  getUserService(type: ForgeTypes): UserService;
-}

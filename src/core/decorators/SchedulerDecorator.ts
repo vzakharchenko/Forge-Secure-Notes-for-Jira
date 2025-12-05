@@ -1,18 +1,25 @@
-import { SchedulerTrigger } from "../trigger/SchedulerTrigger";
+import "reflect-metadata";
 
-export const schedulerTrigger = <T extends { new (...args: unknown[]): unknown }>(
-  constructor: T,
-): T => {
-  if (!("prototype" in constructor) || typeof constructor.prototype.handler !== "function") {
+type Class<T = unknown> = new (...args: any[]) => T;
+
+export const schedulerTrigger = <T extends Class>(ctor: T): T => {
+  // проверяем наличие handler на прототипе
+  if (typeof (ctor as any)?.prototype?.handler !== "function") {
+    const name = (ctor as any).name ?? "<anonymous>";
     // eslint-disable-next-line no-console
-    console.error(`@schedulerTrigger you can use only with SchedulerTrigger`);
-    throw new Error(`@schedulerTrigger you can use only with SchedulerTrigger`);
+    console.error(
+      `@schedulerTrigger can only be used on classes implementing SchedulerTrigger (got: ${name})`,
+    );
+    throw new Error(
+      `@schedulerTrigger can only be used on classes implementing SchedulerTrigger (got: ${name})`,
+    );
   }
 
-  Reflect.defineMetadata("__isScheduler", true, constructor);
-
-  return constructor;
+  Reflect.defineMetadata("__isScheduler", true, ctor);
+  return ctor;
 };
 
-export const isSchedulerTrigger = (target: SchedulerTrigger): unknown =>
-  Reflect.getMetadata("__isScheduler", target.constructor);
+export function isSchedulerTrigger(target: object | Function): boolean {
+  const ctor = typeof target === "function" ? target : (target as any).constructor;
+  return Boolean(Reflect.getMetadata("__isScheduler", ctor));
+}

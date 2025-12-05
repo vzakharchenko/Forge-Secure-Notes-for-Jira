@@ -1,5 +1,4 @@
 import { formatLimitOffset } from "forge-sql-orm";
-import { securityNotes } from "./entities";
 import {
   and,
   asc,
@@ -16,72 +15,13 @@ import {
   sql,
 } from "drizzle-orm";
 import { FORGE_SQL_ORM } from "./DbUtils";
-import { withAppContext } from "../controllers/ApplicationContext";
-import { UserViewInfoType } from "../../shared/responses/ViewMySecurityNotes";
+import { securityNotes } from "./entities";
+import { withAppContext } from "../controllers";
+import { UserViewInfoType } from "../../shared/responses";
+import { injectable } from "inversify";
 
-export interface SecurityNoteRepository {
-  getIssuesAndProjects(): Promise<
-    {
-      issueId: string | null;
-      issueKey: string | null;
-      projectId: string | null;
-      projectKey: string | null;
-    }[]
-  >;
-
-  getAllSecurityNotesByIssue(
-    issueIdOrKey: string,
-    limit: number,
-    offset: number,
-    accountId: string | null,
-  ): Promise<
-    (InferSelectModel<typeof securityNotes> & {
-      count: number;
-    })[]
-  >;
-
-  getAllSecurityNotesByProject(
-    projectIdOrKey: string,
-    limit: number,
-    offset: number,
-    accountId: string | null,
-  ): Promise<
-    (InferSelectModel<typeof securityNotes> & {
-      count: number;
-    })[]
-  >;
-
-  getAllSecurityNotesByAccountId(
-    accountId: string,
-    limit: number,
-    offset: number,
-  ): Promise<
-    (InferSelectModel<typeof securityNotes> & {
-      count: number;
-    })[]
-  >;
-  getAllMySecurityNotes(
-    issueKey: string,
-    accountId: string,
-  ): Promise<
-    (InferSelectModel<typeof securityNotes> & {
-      count: number;
-    })[]
-  >;
-  createSecurityNote(datas: Partial<InferInsertModel<typeof securityNotes>>[]): Promise<void>;
-  deleteSecurityNote(id: string): Promise<void>;
-  viewSecurityNote(id: string): Promise<void>;
-  getSecurityNode(id: string): Promise<InferSelectModel<typeof securityNotes> | undefined>;
-  getAllExpiredNotes(): Promise<
-    (InferSelectModel<typeof securityNotes> & {
-      count: number;
-    })[]
-  >;
-  expireSecurityNote(ids: string[]): Promise<void>;
-  getSecurityNoteUsers(): Promise<UserViewInfoType[]>;
-}
-
-class SecurityNoteRepositoryImpl implements SecurityNoteRepository {
+@injectable()
+export class SecurityNoteRepository {
   async getAllSecurityNotesByIssue(
     issueIdOrKey: string,
     limit: number,
@@ -314,5 +254,3 @@ class SecurityNoteRepositoryImpl implements SecurityNoteRepository {
     return result?.length ? (result[0] as any) : [];
   }
 }
-
-export const SECURITY_NOTE_REPOSITORY: SecurityNoteRepository = new SecurityNoteRepositoryImpl();

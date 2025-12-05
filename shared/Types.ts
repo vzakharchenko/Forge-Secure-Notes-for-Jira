@@ -1,9 +1,3 @@
-export enum ForgeTypes {
-  issue = "issue",
-  globalJira = "globalJira",
-  jiraTrigger = "jiraTrigger",
-}
-
 export type ViewTimeOutType = "1min" | "3mins" | "5mins" | "15mins" | "30mins";
 
 export type SecurityNoteStatus = "NEW" | "VIEWED" | "DELETED" | "EXPIRED";

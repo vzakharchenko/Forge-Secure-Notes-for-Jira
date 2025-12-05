@@ -1,7 +1,7 @@
 import { isResolver } from "./ResolverDecorator";
-import { ActualResolver } from "../resolver/ActualResolver";
+import { ActualResolver } from "../resolver";
 import { isSchedulerTrigger } from "./SchedulerDecorator";
-import { SchedulerTrigger, SchedulerTriggerResponse } from "../trigger/SchedulerTrigger";
+import { SchedulerTrigger, SchedulerTriggerResponse } from "../triggers";
 import { ErrorResponse } from "../../../shared/Types";
 
 export const exceptionHandler =

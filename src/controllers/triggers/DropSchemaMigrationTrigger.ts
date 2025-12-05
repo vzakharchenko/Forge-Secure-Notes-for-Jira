@@ -1,14 +1,27 @@
-import { schedulerTrigger } from "../../core/decorators/SchedulerDecorator";
-import { SchedulerTrigger, SchedulerTriggerResponse } from "../../core/trigger/SchedulerTrigger";
-import { exceptionHandlerTrigger } from "../../core/decorators/ExceptionHandlerDecorator";
+import {
+  schedulerTrigger,
+  exceptionHandlerTrigger,
+  SchedulerTrigger,
+  SchedulerTriggerResponse,
+  KVSSchemaMigrationService,
+} from "../../core";
 import { dropSchemaMigrations } from "forge-sql-orm";
-import { KVS_SCHEMA_MIGRATION_SERVICE } from "../../core/services/KVSSchemaMigrationService";
+import { Container } from "inversify";
+import { FORGE_INJECTION_TOKENS } from "../../constants";
 
 @schedulerTrigger
 class DropSchemaMigrationTrigger implements SchedulerTrigger {
+  container(): Container {
+    const container = new Container();
+    container.bind(FORGE_INJECTION_TOKENS.KVSSchemaMigrationService).to(KVSSchemaMigrationService);
+    return container;
+  }
+
   @exceptionHandlerTrigger("SlowQuery Trigger Error")
   async handler(): Promise<SchedulerTriggerResponse<string>> {
-    await KVS_SCHEMA_MIGRATION_SERVICE.clearVersion();
+    await this.container()
+      .get<KVSSchemaMigrationService>(FORGE_INJECTION_TOKENS.KVSSchemaMigrationService)
+      .clearVersion();
     return dropSchemaMigrations();
   }
 }

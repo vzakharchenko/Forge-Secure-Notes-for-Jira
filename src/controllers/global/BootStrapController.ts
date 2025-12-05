@@ -1,21 +1,25 @@
-import { resolver } from "../../core/decorators/ResolverDecorator";
-import { ActualResolver } from "../../core/resolver/ActualResolver";
+import { resolver, exceptionHandler, ActualResolver, BootstrapService } from "../../core";
 import { ResolverNames } from "../../../shared/ResolverNames";
-import { exceptionHandler } from "../../core/decorators/ExceptionHandlerDecorator";
-import { Bootstrap } from "../../../shared/responses/Bootstrap";
-import { BOOTSTRAP_SERVICE } from "../../core/services/BootstrapService";
-
+import { Bootstrap } from "../../../shared/responses";
+import { inject, injectable } from "inversify";
+import { FORGE_INJECTION_TOKENS } from "../../constants";
+@injectable()
 @resolver
-class AuditUsersController extends ActualResolver<Bootstrap> {
+export class BootStrapController extends ActualResolver<Bootstrap> {
+  constructor(
+    @inject(FORGE_INJECTION_TOKENS.BootstrapService)
+    private readonly bootstrapService: BootstrapService,
+  ) {
+    super();
+  }
+
   functionName(): string {
     return ResolverNames.BOOTSTRAP;
   }
 
   @exceptionHandler()
   async response(): Promise<Bootstrap> {
-    const isAdmin = await BOOTSTRAP_SERVICE.isAdmin();
+    const isAdmin = await this.bootstrapService.isAdmin();
     return { isAdmin };
   }
 }
-
-export default new AuditUsersController();

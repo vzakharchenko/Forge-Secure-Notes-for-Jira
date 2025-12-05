@@ -1,15 +1,11 @@
 import { kvs } from "@forge/kvs";
 import { MIGRATION_VERSION } from "../../database/migration/migrationCount";
+import { injectable } from "inversify";
 
 const CURRENT_VERSION = "CURRENT_VERSION";
 
-export interface KVSSchemaMigrationService {
-  isLatestVersion(): Promise<boolean>;
-  setLatestVersion(): Promise<void>;
-  clearVersion(): Promise<void>;
-}
-
-class KVSSchemaMigrationServiceImpl implements KVSSchemaMigrationService {
+@injectable()
+export class KVSSchemaMigrationService {
   async clearVersion(): Promise<void> {
     await kvs.delete(CURRENT_VERSION);
   }
@@ -23,6 +19,3 @@ class KVSSchemaMigrationServiceImpl implements KVSSchemaMigrationService {
     await kvs.set(CURRENT_VERSION, `${MIGRATION_VERSION}`);
   }
 }
-
-export const KVS_SCHEMA_MIGRATION_SERVICE: KVSSchemaMigrationService =
-  new KVSSchemaMigrationServiceImpl();
