@@ -61,9 +61,11 @@ While Jira excels at task tracking and collaboration, it lacks a secure, ephemer
 
 ### Architecture
 
+The project follows a clean architecture pattern with clear separation of concerns:
+
 - **Frontend:** React + Vite (Forge Custom UI)
 - **Backend:** Forge Functions using `@forge/api`, `@forge/sql`, `@forge/kvs`
-- **ORM:** [forge-sql-orm](https://github.com/vassio/forge-sql-orm)
+- **ORM:** [forge-sql-orm](https://github.com/vzakharchenko/forge-sql-orm)
 - **AI Analytics:** Atlassian Rovo AI agent for natural language queries
 - **Storage:**
   - Encrypted content in `@forge/kvs` (via `setSecret`)
@@ -282,8 +284,185 @@ The application includes a **Rovo AI agent** that enables natural language queri
 
 - "Can you show all users which I shared security notes with for this issue?"
 - "Show all users which I shared security notes with for this project."
-- "Report security notes for this issue last month."
-- "Show me top 10 users who created the most security notes."
+  - "Report security notes for this issue last month."
+  - "Show me top 10 users who created the most security notes."
+
+## 🏗️ Development Architecture & Quality
+
+### Component Structure
+
+The codebase is organized into separate components (folders) for better maintainability and clear boundaries:
+
+- **`src/resolvers/`** - API resolvers (handlers for Forge functions)
+- **`src/services/`** - Business logic services
+- **`src/database/`** - Database repositories and entities
+- **`src/controllers/`** - Request controllers that coordinate services
+- **`src/storage/`** - Storage abstractions (KVS operations)
+- **`shared/`** - Shared contracts between frontend and backend
+
+This separation allows for:
+
+- Clear dependency boundaries
+- Easier testing and mocking
+- Better code organization
+- Explicit visibility of dependencies between components
+
+### Frontend-Backend Contract
+
+The project uses a **shared module** (`shared/`) to define the contract between frontend and backend:
+
+- **Resolver Names** in `shared/ResolverNames.ts` - **Centralized definition of all resolver function names**. This is the single source of truth for resolver names used by both frontend and backend. All resolver names must be defined here to ensure consistency.
+- **DTOs (Data Transfer Objects)** in `shared/dto/` - Define request/response structures
+- **Response Types** in `shared/responses/` - Type-safe response interfaces
+- **Type Definitions** in `shared/Types.ts` - Common type definitions
+
+**Important:** The contract uses **runtime validation** with `class-validator` because TypeScript types are erased at runtime. This means:
+
+- All DTOs are validated using `class-validator` decorators
+- Invalid requests are rejected before reaching business logic
+- Type safety in TypeScript is not enough - runtime validation is essential
+- This is different from languages like Java where types exist at runtime
+
+**Resolver Names:**
+All resolver function names are defined in `shared/ResolverNames.ts` as an enum. This ensures that:
+
+- Frontend and backend use the same resolver names
+- Typos and inconsistencies are prevented
+- Refactoring is easier (change in one place)
+- Type safety is maintained across the codebase
+
+Example:
+
+```typescript
+// shared/ResolverNames.ts
+export enum ResolverNames {
+  GET_MY_SECURED_NOTES = "getMySecuredNotes",
+  CREATE_SECURITY_NOTE = "createSecurityNote",
+  // ... all resolver names defined here
+}
+
+// Usage in controller
+functionName(): string {
+  return ResolverNames.CREATE_SECURITY_NOTE;
+}
+
+// Usage in frontend
+invoke(ResolverNames.CREATE_SECURITY_NOTE, payload);
+```
+
+**DTO Validation Example:**
+
+```typescript
+// shared/dto/NewSecurityNote.ts
+export class NewSecurityNote {
+  @IsString()
+  @IsNotEmpty()
+  description!: string;
+
+  @IsString()
+  @IsNotEmpty()
+  encryptedData!: string;
+  // ... validation ensures data integrity at runtime
+}
+```
+
+### Dependency Injection (DI)
+
+The project uses **[Inversify](https://github.com/inversify/InversifyJS)** for dependency injection, which provides several key benefits:
+
+- **Code Separation:** DI allows clear separation of concerns and makes dependencies explicit
+- **Modular Dependency Management:** Each resolver group and trigger can have its own dependency container, making it easy to see exactly which services are used in each module
+- **Explicit Dependencies:** You can clearly see where specific services are used (e.g., `@src/storage/SecurityStorage.ts`) by examining the DI container setup
+- **Security Boundaries:** Admin-only services can be restricted to admin modules in the manifest, preventing them from being accidentally used in non-admin resolvers
+- **Testability:** Services can be easily mocked and replaced for testing
+
+**Structure:**
+
+- Each resolver group (`src/resolvers/global/`, `src/resolvers/issue/`) has its own `di.ts` file that sets up the dependency container
+- Services are registered with injection tokens defined in `src/constants/ForgeInjectionTokens.ts`
+- Controllers and services use `@injectable()` decorator and `@inject()` for dependency injection
+
+**Example:**
+
+```typescript
+// src/resolvers/global/di.ts
+export const setupContainer = (): Container => {
+  const container = new Container();
+  container.bind(FORGE_INJECTION_TOKENS.SecurityNoteService).to(SecurityNoteService);
+  container.bind(FORGE_INJECTION_TOKENS.SecurityStorage).to(SecurityStorage);
+  // ... explicit dependency registration
+};
+```
+
+### Code Quality Tools
+
+The project uses several tools to maintain code quality and consistency:
+
+#### ESLint (Linter)
+
+**ESLint** is a static code analysis tool that identifies problematic patterns and potential bugs in JavaScript/TypeScript code. It's crucial for maintaining code quality and consistency across the project.
+
+**Why it's important:**
+
+- **Catches bugs early:** Identifies potential errors before they reach production
+- **Enforces coding standards:** Ensures consistent code style across the team
+- **Improves code maintainability:** Helps keep code readable and maintainable
+- **Prevents common mistakes:** Flags anti-patterns and problematic code structures
+
+**Usage:**
+
+```bash
+# Run linter
+npm run lint
+
+# Fix auto-fixable issues
+npm run lint:fix
+```
+
+**CI Integration:** The linter is run in CI pipelines to ensure all code meets quality standards before merging. It's also recommended to run `npm run lint` locally before committing changes to catch issues early.
+
+#### Prettier (Code Formatter)
+
+**Prettier** is an opinionated code formatter that enforces consistent code formatting across the project. It automatically formats code according to predefined rules, eliminating debates about code style.
+
+**Features:**
+
+- **Automatic formatting:** Formats code on save or via command
+- **Consistent style:** Ensures all code follows the same formatting rules
+- **Integration with Git hooks:** Uses `lint-staged` and `husky` to automatically format code before commits
+- **Improves readability:** Consistent formatting makes code easier to read and understand
+
+**Usage:**
+
+```bash
+# Format all files
+npm run format
+
+# Check formatting without making changes
+npm run format:check
+```
+
+**Git Hooks:** Prettier is integrated with `husky` and `lint-staged` to automatically format staged files before commits, ensuring all committed code is properly formatted.
+
+#### Knip (Dependency Checker)
+
+**Knip** is a tool that finds unused dependencies, files, and exports in your project. It's essential for maintaining a clean dependency tree and reducing security surface area.
+
+**Why it's important:**
+
+- **Reduces security risk:** Unused dependencies can contain vulnerabilities that Snyk will flag, even if you're not using them
+- **Cleaner dependency tree:** Helps identify and remove dependencies that are no longer needed
+- **Easier security maintenance:** When using Snyk for security scanning, it's much easier to maintain security if you only have dependencies you actually use
+- **Smaller bundle size:** Removing unused dependencies reduces the final bundle size
+
+**Usage:**
+
+```bash
+# Check for unused dependencies
+npm run knip
+```
+
+**Snyk Integration:** When using Snyk for security vulnerability scanning, Knip helps ensure that Snyk only checks dependencies that are actually used in the codebase. This significantly simplifies security maintenance by avoiding false positives from unused packages.
 
 ## 🤝 Contributing
 
