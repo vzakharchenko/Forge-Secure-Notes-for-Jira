@@ -6,6 +6,7 @@ import {
   SchedulerTrigger,
   SchedulerTriggerRequest,
   SchedulerTriggerResponse,
+  BootstrapService,
 } from "../../core";
 import { clearCacheSchedulerTrigger } from "forge-sql-orm";
 import { FORGE_SQL_ORM, SecurityNoteRepository } from "../../database";
@@ -23,6 +24,7 @@ class FiveMinutesTrigger implements SchedulerTrigger {
     container.bind(FORGE_INJECTION_TOKENS.JiraUserService).to(JiraUserService);
     container.bind(FORGE_INJECTION_TOKENS.SecurityNoteRepository).to(SecurityNoteRepository);
     container.bind(FORGE_INJECTION_TOKENS.SecurityStorage).to(SecurityStorage);
+    container.bind(FORGE_INJECTION_TOKENS.BootstrapService).to(BootstrapService);
     return container;
   }
   @exceptionHandlerTrigger("Five Minutes Trigger Error")
