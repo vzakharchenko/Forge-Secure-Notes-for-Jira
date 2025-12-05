@@ -1,16 +1,11 @@
-import {
-  resolver,
-  exceptionHandler,
-  validBodyHandler,
-  ActualResolver,
-  SecurityNoteService,
-} from "../../core";
+import { resolver, exceptionHandler, validBodyHandler, SecurityNoteService } from "../../core";
 import { ResolverNames } from "../../../shared/ResolverNames";
 import { Request } from "@forge/resolver";
 import { SecurityNoteId } from "../../../shared/dto";
 import { OpenSecurityNote } from "../../../shared/responses";
 import { inject, injectable } from "inversify";
 import { FORGE_INJECTION_TOKENS } from "../../constants";
+import { ActualResolver } from "..";
 
 @injectable()
 @resolver

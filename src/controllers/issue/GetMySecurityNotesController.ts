@@ -1,10 +1,10 @@
 import {
   resolver,
   exceptionHandler,
-  ActualResolver,
   KVSSchemaMigrationService,
   SecurityNoteService,
 } from "../../core";
+import { ActualResolver } from "..";
 import { ResolverNames } from "../../../shared/ResolverNames";
 import { AuditUser } from "../../../shared/responses";
 import { inject, injectable } from "inversify";

@@ -1,4 +1,4 @@
-import { ActualResolver } from "../resolver";
+import { ActualResolver } from "../../controllers";
 import { ErrorResponse } from "../../../shared/Types";
 
 export const resolver = <T extends new (...args: any[]) => any>(constructor: T): T => {
