@@ -33,7 +33,7 @@ export class SecurityNoteService {
     private readonly jiraUserService: JiraUserService,
     @inject(FORGE_INJECTION_TOKENS.SecurityNoteRepository)
     private readonly securityNoteRepository: SecurityNoteRepository,
-    @inject(FORGE_INJECTION_TOKENS.SecurityNoteRepository)
+    @inject(FORGE_INJECTION_TOKENS.BootstrapService)
     private readonly bootstrapService: BootstrapService,
     @inject(FORGE_INJECTION_TOKENS.SecurityStorage)
     private readonly securityStorage: SecurityStorage,
