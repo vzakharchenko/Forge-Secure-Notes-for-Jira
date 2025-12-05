@@ -1,8 +1,9 @@
-import { resolver, exceptionHandler, ActualResolver, SecurityNoteService } from "../../core";
+import { resolver, exceptionHandler, SecurityNoteService } from "../../core";
 import { ResolverNames } from "../../../shared/ResolverNames";
 import { AuditUsers } from "../../../shared/responses";
 import { inject, injectable } from "inversify";
 import { FORGE_INJECTION_TOKENS } from "../../constants";
+import { ActualResolver } from "..";
 @injectable()
 @resolver
 export class AuditUsersController extends ActualResolver<AuditUsers> {

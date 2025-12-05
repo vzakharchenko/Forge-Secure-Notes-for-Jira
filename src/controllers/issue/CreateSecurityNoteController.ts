@@ -3,11 +3,11 @@ import {
   resolver,
   exceptionHandler,
   validBodyHandler,
-  ActualResolver,
   isIssueContext,
   IssueContext,
   SecurityNoteService,
 } from "../../core";
+import { ActualResolver } from "..";
 import { ResolverNames } from "../../../shared/ResolverNames";
 import { NewSecurityNote } from "../../../shared/dto";
 import { Request } from "@forge/resolver";

@@ -1,12 +1,12 @@
 import "reflect-metadata";
 import Resolver, { Request } from "@forge/resolver";
-import { ErrorResponse } from "../../../shared/Types";
-import { applicationContext } from "../../controllers";
-import { ContextService, KVSSchemaMigrationService, AnalyticService } from "../../core";
-import { FORGE_SQL_ORM } from "../../database";
+import { ErrorResponse } from "../../shared/Types";
+import { applicationContext } from ".";
+import { ContextService, KVSSchemaMigrationService, AnalyticService } from "../core";
+import { FORGE_SQL_ORM } from "../database";
 import { Container } from "inversify";
-import { ApplySchemaMigrationTrigger } from "../../controllers";
-import { FORGE_INJECTION_TOKENS } from "../../constants";
+import { ApplySchemaMigrationTrigger } from ".";
+import { FORGE_INJECTION_TOKENS } from "../constants";
 
 export abstract class ActualResolver<T extends ErrorResponse> {
   abstract functionName(): string;

@@ -1,7 +1,7 @@
 import { isResolver } from "./ResolverDecorator";
 import { Request } from "@forge/resolver";
 import { validate } from "class-validator";
-import { ActualResolver } from "../resolver";
+import { ActualResolver } from "../../controllers";
 import { ErrorResponse } from "../../../shared/Types";
 
 export const validBodyHandler = <T extends object>(validateClass: new () => T) => {

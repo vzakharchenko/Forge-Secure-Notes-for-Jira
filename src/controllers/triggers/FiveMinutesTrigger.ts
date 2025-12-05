@@ -8,9 +8,11 @@ import {
   SchedulerTriggerResponse,
 } from "../../core";
 import { clearCacheSchedulerTrigger } from "forge-sql-orm";
-import { FORGE_SQL_ORM } from "../../database";
+import { FORGE_SQL_ORM, SecurityNoteRepository } from "../../database";
 import { Container } from "inversify";
 import { FORGE_INJECTION_TOKENS } from "../../constants";
+import { JiraUserService } from "../../user";
+import { SecurityStorage } from "../../storage";
 
 @schedulerTrigger
 class FiveMinutesTrigger implements SchedulerTrigger {
@@ -18,6 +20,9 @@ class FiveMinutesTrigger implements SchedulerTrigger {
     const container = new Container();
     container.bind(FORGE_INJECTION_TOKENS.AnalyticService).to(AnalyticService);
     container.bind(FORGE_INJECTION_TOKENS.SecurityNoteService).to(SecurityNoteService);
+    container.bind(FORGE_INJECTION_TOKENS.JiraUserService).to(JiraUserService);
+    container.bind(FORGE_INJECTION_TOKENS.SecurityNoteRepository).to(SecurityNoteRepository);
+    container.bind(FORGE_INJECTION_TOKENS.SecurityStorage).to(SecurityStorage);
     return container;
   }
   @exceptionHandlerTrigger("Five Minutes Trigger Error")
