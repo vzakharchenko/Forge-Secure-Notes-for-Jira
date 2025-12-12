@@ -6,7 +6,6 @@ import { showErrorFlag, showWarningFlag } from "@src/shared/utils/flags";
 import ApiError from "@src/shared/services/ApiError";
 
 // models
-import { RemoteClientResponse } from "@src/shared/models/remoteClient";
 import { InvokePayload } from "@forge/bridge/out/types";
 import { ErrorResponse } from "@shared/Types";
 
@@ -26,7 +25,7 @@ const handleForgeApiError = (errorResponse: ErrorResponse): Promise<never> => {
 
     case "GENERAL":
       showErrorFlag({
-        title: "Server error",
+        title: "Something went wrong",
         description: message,
       });
       isGlobalError = true;
@@ -40,8 +39,11 @@ const handleForgeApiError = (errorResponse: ErrorResponse): Promise<never> => {
 };
 
 export default {
-  async request<T>(functionKey: string, payload?: InvokePayload | undefined): Promise<T> {
-    let response = await invoke<RemoteClientResponse<T>>(functionKey, payload);
+  async request<T extends ErrorResponse>(
+    functionKey: string,
+    payload?: InvokePayload | undefined,
+  ): Promise<T> {
+    let response = await invoke<T>(functionKey, payload);
 
     if (response.isError && response.errorType === "INSTALLATION") {
       showWarningFlag({
@@ -49,33 +51,42 @@ export default {
         description: "Please wait",
       });
       await new Promise((resolve) => setTimeout(resolve, 20000));
-      response = await invoke<RemoteClientResponse<T>>(functionKey, payload);
+      response = await invoke<T>(functionKey, payload);
     }
 
     if (response.isError && response.errorType !== "INSTALLATION") {
       return handleForgeApiError(response as ErrorResponse);
     }
 
-    return response.result as T;
+    return response;
   },
 
-  get<T>(functionKey: string): Promise<T> {
+  get<T extends ErrorResponse>(functionKey: string): Promise<T> {
     return this.request<T>(functionKey);
   },
 
-  post<T>(functionKey: string, payload?: InvokePayload | undefined): Promise<T> {
+  post<T extends ErrorResponse>(
+    functionKey: string,
+    payload?: InvokePayload | undefined,
+  ): Promise<T> {
     return this.request<T>(functionKey, payload);
   },
 
-  put<T>(functionKey: string, payload?: InvokePayload | undefined): Promise<T> {
+  put<T extends ErrorResponse>(
+    functionKey: string,
+    payload?: InvokePayload | undefined,
+  ): Promise<T> {
     return this.request<T>(functionKey, payload);
   },
 
-  delete<T>(functionKey: string): Promise<T> {
+  delete<T extends ErrorResponse>(functionKey: string): Promise<T> {
     return this.request<T>(functionKey);
   },
 
-  patch<T>(functionKey: string, payload?: InvokePayload | undefined): Promise<T> {
+  patch<T extends ErrorResponse>(
+    functionKey: string,
+    payload?: InvokePayload | undefined,
+  ): Promise<T> {
     return this.request<T>(functionKey, payload);
   },
 };

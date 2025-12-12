@@ -1,5 +1,7 @@
+// libs
 import React from "react";
 import { view } from "@forge/bridge";
+import { Request } from "@forge/resolver";
 
 // helpers
 import { schema } from "./schema";
@@ -9,6 +11,7 @@ import {
   DERIVE_PURPOSE_VERIFICATION,
   encryptMessage,
 } from "@src/shared/utils/encode";
+import { getValidationErrors } from "../../../../../src/core/decorators/ValidBodyHandlerDecorator";
 
 // models
 import { NewSecurityNote } from "@shared/dto/NewSecurityNote";
@@ -41,6 +44,15 @@ const SecureNoteFormContainer = ({ accountId }: { accountId: string }) => {
       salt: encryptedPayload.salt,
       description: descriptionText,
     };
+    const validationErrors = await getValidationErrors(
+      { payload: noteData } as Request,
+      NewSecurityNote,
+    );
+
+    if (Object.keys(validationErrors).length > 0) {
+      throw { data: { validationErrors } };
+    }
+
     await view.close(noteData);
   };
 

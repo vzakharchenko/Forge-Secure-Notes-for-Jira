@@ -110,15 +110,14 @@ const SecureNoteForm = ({ accountId }: { accountId: string }) => {
         />
         <FormInput
           name="encryptionKey"
-          label="Encryption key"
-          placeholder="Click 'Generate new key' to create an encryption key"
+          label="Decryption key"
           isReadOnly
           isRequired
           elemAfterInput={
             <>
               <IconButton
                 icon={CopyIcon}
-                label="Copy value"
+                label="Copy"
                 appearance="subtle"
                 onClick={copyKeyToClipboard}
                 isTooltipDisabled={false}

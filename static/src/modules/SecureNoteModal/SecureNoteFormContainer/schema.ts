@@ -30,7 +30,7 @@ export const schema = object().shape({
     .default("")
     .sequence([
       string().required(VALIDATION_MESSAGES.REQUIRED(FORM_FIELDS.DESCRIPTION)),
-      string().min(3, VALIDATION_MESSAGES.MAX_LENGTH_SYMBOLS(FORM_FIELDS.DESCRIPTION, 3)),
+      string().min(3, VALIDATION_MESSAGES.MIN_LENGTH_SYMBOLS(FORM_FIELDS.DESCRIPTION, 3)),
       string().max(255, VALIDATION_MESSAGES.MAX_LENGTH_SYMBOLS(FORM_FIELDS.DESCRIPTION, 255)),
     ]),
   note: string().trim().required(VALIDATION_MESSAGES.REQUIRED(FORM_FIELDS.NOTE)),

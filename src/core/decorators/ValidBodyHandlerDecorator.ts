@@ -31,7 +31,7 @@ export const validBodyHandler = <T extends object>(validateClass: new () => T) =
   };
 };
 
-const getValidationErrors = async <T extends object>(
+export const getValidationErrors = async <T extends object>(
   req: Request,
   validateClass: new () => T,
 ): Promise<Record<string, string[]>> => {
@@ -40,12 +40,12 @@ const getValidationErrors = async <T extends object>(
   }
   const response: Record<string, string[]> = {};
   const entity = Object.assign(new validateClass(), req.payload);
-  const validationErrors = await validate(entity);
+  const validationErrors = await validate(entity, { stopAtFirstError: true });
   if (validationErrors && validationErrors.length > 0) {
     validationErrors.forEach((error) => {
       const values = response[error.property];
       if (!values) {
-        response[error.property] = [error.toString(false, true, undefined, true)];
+        response[error.property] = [Object.values(error.constraints!)[0]];
       } else {
         values.push(error.toString(false, true, undefined, true));
       }

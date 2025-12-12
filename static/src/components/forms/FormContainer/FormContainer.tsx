@@ -34,7 +34,7 @@ const FormContainer = <FormFields extends AnyObject>({
       {({ formProps, ...methods }) => (
         <FormProvider methods={methods}>
           <form {...formProps} noValidate className={className}>
-            <FormHeader title={title}>{titleContent}</FormHeader>
+            {Boolean(title) && <FormHeader title={title}>{titleContent}</FormHeader>}
             {children}
             <FormFooter align={footerAlign}>
               <ButtonGroup>

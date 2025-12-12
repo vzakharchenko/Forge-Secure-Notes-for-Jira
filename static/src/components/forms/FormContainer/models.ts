@@ -12,7 +12,7 @@ export interface FormContainerProps<FormFields extends AnyObject> {
   onSubmit: (data: FormFields, form: FormApi<FormFields>) => Promise<void>;
   onCancel?: () => void;
   title?: string;
-  titleContent?: string;
+  titleContent?: string | ReactElement;
   cancelText?: string;
   submitText?: string;
   cancelButtonAppearance?: Appearance;

@@ -10,7 +10,7 @@ import MyHistoryPage from "@src/modules/AuditGlobal/components/Pages/MyHistoryPa
 import MyIssueHistoryPage from "@src/modules/AuditGlobal/components/Pages/MyIssueHistoryPage";
 import MyProjectHistoryPage from "@src/modules/AuditGlobal/components/Pages/MyProjectHistoryPage";
 import UserHistoryPage from "@src/modules/AuditGlobal/components/Pages/UserHistoryPage";
-import LinkPage from "@src/modules/AuditGlobal/components/Pages/LinkPage";
+import LinkPage from "@src/modules/AuditGlobal/components/Pages/LinkPage/LinkPage";
 
 const GlobalRoute = (props: { timezone: string }) => {
   const navigate = useNavigate();

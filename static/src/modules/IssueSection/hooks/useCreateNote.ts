@@ -11,17 +11,17 @@ import { handleDefaultServerError } from "@src/shared/utils/errors";
 
 // models
 import { ServerError } from "@src/shared/models/remoteClient";
-import { ViewMySecurityNotes } from "@shared/responses/ViewMySecurityNotes";
+import { AuditUser } from "@shared/responses";
 
 // constants
 import { NOTES_QUERY_KEYS } from "@src/shared/constants/queryKeys";
 import { NewSecurityNote } from "@shared/dto/NewSecurityNote";
 
 export const useCreateNote = () => {
-  return useMutation<ViewMySecurityNotes[], ServerError, NewSecurityNote>({
+  return useMutation<AuditUser, ServerError, NewSecurityNote>({
     mutationFn: createSecureNote,
     onSuccess: (data) => {
-      queryClient.setQueryData(NOTES_QUERY_KEYS.LIST, data);
+      queryClient.setQueryData(NOTES_QUERY_KEYS.LIST, data.result);
       showSuccessFlag({
         title: "Security note successfully created",
         description:

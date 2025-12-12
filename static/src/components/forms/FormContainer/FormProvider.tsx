@@ -1,12 +1,13 @@
 // libs
 import React, { createContext, ReactElement, useContext } from "react";
 import { AnyObject } from "yup";
+import { FormState } from "final-form";
 
 interface FormMethods<FormFields extends AnyObject> {
   disabled: boolean;
   dirty: boolean;
   submitting: boolean;
-  getState: () => FormFields;
+  getState: () => FormState<FormFields>;
   setFieldValue: (name: string, value: unknown) => void;
   reset: (initialValues?: FormFields) => void;
 }

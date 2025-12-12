@@ -10,6 +10,10 @@ export type ErrorType =
 
 export type ValidationErrors = Record<string, string[]>;
 
+export interface BaseResponse<T> extends ErrorResponse {
+  data?: T;
+}
+
 export interface ErrorResponse {
   isError?: boolean;
   errorType?: ErrorType;

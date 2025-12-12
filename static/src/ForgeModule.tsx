@@ -6,12 +6,11 @@ import { FullContext } from "@forge/bridge";
 import { getAppUrl, getForgeContext } from "@src/shared/utils/context";
 
 // components
-// import Button from "@atlaskit/button/new";
-// import CenterDiv from "src/components/CenterDiv";
-import Loading from "@src/components/Loading";
 import SecureNoteModal from "@src/modules/SecureNoteModal/SecureNoteModal";
 import IssueSection from "@src/modules/IssueSection/IssueSection";
 import AuditGlobal from "@src/modules/AuditGlobal/AuditGlobal";
+import { Box } from "@atlaskit/primitives";
+import PageLoading from "@src/components/loaders/PageLoading/PageLoading";
 
 const ForgeModule = () => {
   const [context, setContext] = useState<FullContext>();
@@ -28,35 +27,18 @@ const ForgeModule = () => {
 
   if (isLoading) {
     return (
-      <div style={{ height: "100%" }}>
-        <Loading />
-      </div>
+      <Box paddingBlockStart="space.1000">
+        <PageLoading />
+      </Box>
     );
   }
 
   if (!context) {
-    return "Smth went wrong";
-    // TODO: why reload?
-    // return (
-    //   <CenterDiv>
-    //     <Button
-    //       height={200}
-    //       appearance={"primary"}
-    //       onClick={() => {
-    //         window.location.reload();
-    //       }}
-    //     >
-    //       RELOAD APPLICATION ${context?.moduleKey}
-    //     </Button>
-    //   </CenterDiv>
-    // );
+    return <div>Something went wrong. Please, refresh the page.</div>;
   }
 
-  // TODO: check context
-  console.log("context", context);
-
   if (context.extension.modal && context.extension.modal.modalType === "newSecureNote") {
-    return <SecureNoteModal accountId={context.accountId ?? ""} />;
+    return <SecureNoteModal accountId={context!.accountId ?? ""} />;
   }
 
   switch (context.moduleKey) {

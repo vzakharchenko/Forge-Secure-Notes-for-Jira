@@ -11,16 +11,16 @@ import { handleDefaultServerError } from "@src/shared/utils/errors";
 
 // models
 import { ServerError } from "@src/shared/models/remoteClient";
-import { ViewMySecurityNotes } from "@shared/responses/ViewMySecurityNotes";
+import { AuditUser } from "@shared/responses";
 
 // constants
 import { NOTES_QUERY_KEYS } from "@src/shared/constants/queryKeys";
 
 export const useDeleteNote = () => {
-  return useMutation<ViewMySecurityNotes[], ServerError, string>({
+  return useMutation<AuditUser, ServerError, string>({
     mutationFn: deleteSecureNote,
     onSuccess: (data) => {
-      queryClient.setQueryData(NOTES_QUERY_KEYS.LIST, data);
+      queryClient.setQueryData(NOTES_QUERY_KEYS.LIST, data.result);
       showSuccessFlag({
         title: "Security note successfully deleted",
         description: "Security note successfully deleted, audit logs are still available",
