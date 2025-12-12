@@ -178,7 +178,7 @@ export class SecurityNoteRepository {
           inArray(securityNotes.status, ["NEW", "VIEWED"]),
         ),
       )
-      .orderBy(desc(securityNotes.expiryDate));
+      .orderBy(desc(securityNotes.createdAt));
   }
 
   async getAllExpiredNotes(): Promise<
