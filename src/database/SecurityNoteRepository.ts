@@ -168,7 +168,6 @@ export class SecurityNoteRepository {
     return FORGE_SQL_ORM.select({
       ...getTableColumns(securityNotes),
       count: sql<number>`COUNT(*) OVER()`,
-      sleep: sql<number>`SLEEP(2)`,
     })
       .from(securityNotes)
       .where(
