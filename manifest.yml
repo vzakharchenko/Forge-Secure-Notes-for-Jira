@@ -427,7 +427,7 @@ resources:
       port: 3099
 app:
   runtime:
-    name: nodejs22.x
+    name: nodejs24.x
   id: ari:cloud:ecosystem::app/cf1ed986-09dd-4b7d-a803-1c73489817cd
   storage:
     entities:
@@ -443,12 +443,6 @@ app:
           - sql
           - expiration
 permissions:
-  external:
-    fetch:
-      backend:
-        - address: "*.posthog.com"
-          category: analytics
-          inScopeEUD: false
   content:
     styles:
       - "unsafe-inline"
