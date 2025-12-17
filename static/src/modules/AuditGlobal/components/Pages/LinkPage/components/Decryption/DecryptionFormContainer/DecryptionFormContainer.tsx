@@ -87,7 +87,7 @@ const DecryptionFormContainer = ({
         submitText="Decrypt note"
         shouldDisableSubmitOnDirty={false}
       >
-        <FormInput name="decryptionKey" label="Decryption dey" isRequired />
+        <FormInput name="decryptionKey" label="Decryption key" isRequired />
       </FormContainer>
     </Box>
   );
