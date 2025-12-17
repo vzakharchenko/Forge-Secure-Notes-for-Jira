@@ -30,12 +30,16 @@ modules:
       interval: fiveMinute
     - key: runSlowQuery
       function: runSlowQueryFunc
-      interval: hour
+      interval: day
   trigger:
     - key: post-install-schema-migration
       function: runSchemaMigration
       events:
         - avi:forge:installed:app
+  consumer:
+    - key: print-degradation-queries
+      queue: degradationQueue
+      function: handlerAsyncDegradation
   action:
     - key: run-security-notes-query
       name: Run Security Notes SQL query
@@ -410,6 +414,8 @@ modules:
       handler: index.runSlowQuery
     - key: runSecurityNotesQuery
       handler: index.runSecurityNotesQuery
+    - key: handlerAsyncDegradation
+      handler: index.handlerAsyncDegradation
 #    - key: dropMigrations
 #      handler: index.dropMigrations
 #    - key: fetchSchema

@@ -41,14 +41,14 @@ export const exceptionHandlerTrigger =
     descriptor.value = async function (
       ...args: unknown[]
     ): Promise<SchedulerTriggerResponse<unknown>> {
-      const schedulerTrigger: SchedulerTrigger = target as SchedulerTrigger;
-      if (!isSchedulerTrigger(schedulerTrigger)) {
+      const schedulerTriggerInstance = this as SchedulerTrigger;
+      if (!isSchedulerTrigger(schedulerTriggerInstance)) {
         // eslint-disable-next-line no-console
         console.log(`Error: @exceptionHandlerTrigger can use only with @schedulerTrigger.`);
         throw new Error(`Error: @exceptionHandlerTrigger can use only with @schedulerTrigger.`);
       }
       try {
-        return await originalMethod.apply(schedulerTrigger, args);
+        return await originalMethod.apply(schedulerTriggerInstance, args);
       } catch (e) {
         if (e.debug) {
           throw new Error("SQL Error :" + JSON.stringify(e.debug));

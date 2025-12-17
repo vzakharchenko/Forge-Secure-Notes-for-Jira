@@ -23,4 +23,5 @@ export const FORGE_INJECTION_TOKENS = {
   SecurityNoteRepository: Symbol.for("SecurityNoteRepository"),
   SecurityStorage: Symbol.for("SecurityStorage"),
   JiraUserService: Symbol.for("JiraUserService"),
+  AsyncService: Symbol.for("AsyncService"),
 };

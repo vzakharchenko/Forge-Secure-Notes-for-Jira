@@ -16,3 +16,4 @@ export { KVSSchemaMigrationService } from "./KVSSchemaMigrationService";
 export { RovoService } from "./RovoService";
 
 export { ContextService } from "./ContextService";
+export { AsyncService } from "./AsyncService";
