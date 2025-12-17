@@ -8,18 +8,21 @@ import {
 import { dropSchemaMigrations } from "forge-sql-orm";
 import { Container } from "inversify";
 import { FORGE_INJECTION_TOKENS } from "../../constants";
+import { diContainer, useDiContainer } from "../../core/decorators";
+
+const DROP_BINDINGS = [
+  { name: FORGE_INJECTION_TOKENS.KVSSchemaMigrationService, bind: KVSSchemaMigrationService },
+] as const;
 
 @schedulerTrigger
 class DropSchemaMigrationTrigger implements SchedulerTrigger {
-  container(): Container {
-    const container = new Container();
-    container.bind(FORGE_INJECTION_TOKENS.KVSSchemaMigrationService).to(KVSSchemaMigrationService);
-    return container;
-  }
+  @diContainer(...DROP_BINDINGS)
+  private _container!: Container;
 
+  @useDiContainer("_container")
   @exceptionHandlerTrigger("SlowQuery Trigger Error")
   async handler(): Promise<SchedulerTriggerResponse<string>> {
-    await this.container()
+    await this._container
       .get<KVSSchemaMigrationService>(FORGE_INJECTION_TOKENS.KVSSchemaMigrationService)
       .clearVersion();
     return dropSchemaMigrations();

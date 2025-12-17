@@ -61,6 +61,7 @@ export abstract class ActualResolver<T extends ErrorResponse> {
               );
             }
           },
+          { asyncQueueName: "degradationQueue" },
         );
       });
     });

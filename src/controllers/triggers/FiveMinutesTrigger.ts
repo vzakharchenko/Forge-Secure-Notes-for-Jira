@@ -14,25 +14,29 @@ import { Container } from "inversify";
 import { FORGE_INJECTION_TOKENS } from "../../constants";
 import { JiraUserService } from "../../user";
 import { SecurityStorage } from "../../storage";
+import { useDiContainer, diContainer } from "../../core/decorators";
+
+const FIVE_MINUTES_BINDINGS = [
+  { name: FORGE_INJECTION_TOKENS.AnalyticService, bind: AnalyticService },
+  { name: FORGE_INJECTION_TOKENS.SecurityNoteService, bind: SecurityNoteService },
+  { name: FORGE_INJECTION_TOKENS.JiraUserService, bind: JiraUserService },
+  { name: FORGE_INJECTION_TOKENS.SecurityNoteRepository, bind: SecurityNoteRepository },
+  { name: FORGE_INJECTION_TOKENS.SecurityStorage, bind: SecurityStorage },
+  { name: FORGE_INJECTION_TOKENS.BootstrapService, bind: BootstrapService },
+] as const;
 
 @schedulerTrigger
 class FiveMinutesTrigger implements SchedulerTrigger {
-  container(): Container {
-    const container = new Container();
-    container.bind(FORGE_INJECTION_TOKENS.AnalyticService).to(AnalyticService);
-    container.bind(FORGE_INJECTION_TOKENS.SecurityNoteService).to(SecurityNoteService);
-    container.bind(FORGE_INJECTION_TOKENS.JiraUserService).to(JiraUserService);
-    container.bind(FORGE_INJECTION_TOKENS.SecurityNoteRepository).to(SecurityNoteRepository);
-    container.bind(FORGE_INJECTION_TOKENS.SecurityStorage).to(SecurityStorage);
-    container.bind(FORGE_INJECTION_TOKENS.BootstrapService).to(BootstrapService);
-    return container;
-  }
+  @diContainer(...FIVE_MINUTES_BINDINGS)
+  private _container!: Container;
+
+  @useDiContainer("_container")
   @exceptionHandlerTrigger("Five Minutes Trigger Error")
   async handler(request: SchedulerTriggerRequest): Promise<SchedulerTriggerResponse<string>> {
-    const analyticService = this.container().get<AnalyticService>(
+    const analyticService = this._container.get<AnalyticService>(
       FORGE_INJECTION_TOKENS.AnalyticService,
     );
-    const securityNoteService = this.container().get<SecurityNoteService>(
+    const securityNoteService = this._container.get<SecurityNoteService>(
       FORGE_INJECTION_TOKENS.SecurityNoteService,
     );
     return FORGE_SQL_ORM.executeWithMetadata(

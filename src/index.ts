@@ -9,10 +9,11 @@ import {
   DropSchemaMigrationTrigger,
   ApplySchemaMigrationTrigger,
 } from "./controllers";
-import { RovoService } from "./core";
-import { Container } from "inversify";
+import { RovoService, AsyncService, SchedulerTriggerRequest } from "./core";
 import { FORGE_INJECTION_TOKENS } from "./constants";
 import { JiraUserService } from "./user";
+import { AsyncEvent } from "@forge/events";
+import { withContainer } from "./core/decorators";
 
 const issueResolver = new Resolver();
 const globalResolver = new Resolver();
@@ -22,22 +23,31 @@ global(globalResolver);
 export const handlerIssue = issueResolver.getDefinitions();
 export const handlerGlobal = globalResolver.getDefinitions();
 
-export const handlerFiveMinute = FiveMinuteTrigger.handler;
+export const handlerFiveMinute = async (request: SchedulerTriggerRequest) =>
+  FiveMinuteTrigger.handler(request);
 
-export const runSlowQuery = SlowQueryTriggerTrigger.handler;
+export const runSlowQuery = async () => SlowQueryTriggerTrigger.handler();
 
-export const handlerMigration = ApplySchemaMigrationTrigger.handler;
+export const handlerMigration = async () => ApplySchemaMigrationTrigger.handler();
 
-export const dropMigrations = DropSchemaMigrationTrigger.handler;
+export const dropMigrations = async () => DropSchemaMigrationTrigger.handler();
 
 export const fetchMigrations = async () => {
   return fetchSchemaWebTrigger();
 };
 
-export const runSecurityNotesQuery = (event: any, context: any) => {
-  const rovoContainer = new Container();
-  rovoContainer.bind(FORGE_INJECTION_TOKENS.JiraUserService).to(JiraUserService);
-  rovoContainer.bind(FORGE_INJECTION_TOKENS.RovoServiceImpl).to(RovoService);
+export const runSecurityNotesQuery = withContainer(
+  { name: FORGE_INJECTION_TOKENS.RovoServiceImpl, bind: RovoService },
+  { name: FORGE_INJECTION_TOKENS.JiraUserService, bind: JiraUserService },
+)((rovoContainer, event: any, context: any) => {
   const rovoService = rovoContainer.get<RovoService>(FORGE_INJECTION_TOKENS.RovoServiceImpl);
   return rovoService.runSecurityNotesQuery(event, context);
-};
+});
+
+export const handlerAsyncDegradation = withContainer(
+  { name: FORGE_INJECTION_TOKENS.AsyncService, bind: AsyncService },
+  { name: FORGE_INJECTION_TOKENS.JiraUserService, bind: JiraUserService },
+)((asyncContainer, event: AsyncEvent) => {
+  const asyncService = asyncContainer.get<AsyncService>(FORGE_INJECTION_TOKENS.AsyncService);
+  return asyncService.catchDegradation(event);
+});

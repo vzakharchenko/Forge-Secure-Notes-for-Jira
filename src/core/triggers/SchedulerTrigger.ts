@@ -1,5 +1,3 @@
-import { Container } from "inversify";
-
 export interface SchedulerTriggerRequest {
   context: {
     cloudId: string;
@@ -55,8 +53,6 @@ export const getHttpResponse = <Body>(
 };
 
 export abstract class SchedulerTrigger {
-  abstract container(): Container;
-
   abstract handler(
     request: SchedulerTriggerRequest,
     context: SchedulerTriggerContext,
