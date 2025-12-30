@@ -18,7 +18,7 @@ import { SecurityNoteRepository } from "../../database";
 import { JiraUserService } from "../../user";
 import { SecurityStorage } from "../../storage";
 
-export const ISSUE_BINDINGS = [
+const ISSUE_BINDINGS = [
   { name: FORGE_INJECTION_TOKENS.CreateSecurityNoteController, bind: CreateSecurityNoteController },
   { name: FORGE_INJECTION_TOKENS.DeleteSecurityNoteController, bind: DeleteSecurityNoteController },
   { name: FORGE_INJECTION_TOKENS.GetMySecurityNotesController, bind: GetMySecurityNotesController },
