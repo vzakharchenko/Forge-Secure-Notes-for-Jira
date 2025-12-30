@@ -8,14 +8,6 @@ import { ExportConfig } from "./useExportNotes";
 export const useRovoAgent = () => {
   const rovoAgent = async (exportConfig: ExportConfig) => {
     try {
-      showFlag({
-        id: "openRovoAgent",
-        title: "open Rovo Agent",
-        description: "Opening...",
-        type: "info",
-        appearance: "info",
-        isAutoDismiss: false,
-      });
       let prompt: string | undefined;
       switch (exportConfig?.resolverName) {
         case ResolverNames.AUDIT_DATA_PER_USER: {
