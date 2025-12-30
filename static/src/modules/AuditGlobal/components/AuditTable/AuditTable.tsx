@@ -23,6 +23,7 @@ import Pagination from "@atlaskit/pagination";
 import { token } from "@atlaskit/tokens";
 import { Stack } from "@atlaskit/primitives";
 import JiraUserTile from "@src/components/JiraUserTile";
+import { useRovoAgent } from "./hooks/useRovoAgent";
 
 interface TableTreeItem {
   id: string;
@@ -46,6 +47,7 @@ const AuditTable = ({
   const [currentPage, setCurrentPage] = useState(0);
   const [totalCount, setTotalCount] = useState(0);
   const { exportNotes } = useExportNotes();
+  const { rovoAgent } = useRovoAgent();
 
   useEffect(() => {
     loadData(0);
@@ -75,6 +77,12 @@ const AuditTable = ({
       exportNotes(exportConfig);
     }
   }, [exportConfig, exportNotes]);
+
+  const handleRovo = useCallback(() => {
+    if (exportConfig) {
+      rovoAgent(exportConfig);
+    }
+  }, []);
 
   useEffect(() => {
     if (onExportReady && exportConfig) {
@@ -513,6 +521,11 @@ const AuditTable = ({
           {showExportInTable && exportConfig && (
             <Button appearance="default" onClick={handleExport}>
               Export CSV
+            </Button>
+          )}
+          {showExportInTable && exportConfig && (
+            <Button appearance="default" onClick={handleRovo}>
+              Rovo Agent
             </Button>
           )}
           {totalPages > 1 && (
