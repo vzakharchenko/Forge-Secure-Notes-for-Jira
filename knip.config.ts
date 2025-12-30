@@ -22,6 +22,6 @@ export const defaultConfig: KnipConfig = {
 const config: KnipConfig = {
   ...defaultConfig,
   project: ["src/**/*.ts"],
-  ignoreDependencies: ["uuid", "globals", "@oxc-resolver/binding-linux-x64-gnu"],
+  ignoreDependencies: ["uuid", "globals", "@oxc-resolver/binding-linux-x64-gnu", "class-validator"],
 };
 export default config;

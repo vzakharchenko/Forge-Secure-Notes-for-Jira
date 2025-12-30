@@ -11,7 +11,7 @@ import {
   DERIVE_PURPOSE_VERIFICATION,
   encryptMessage,
 } from "@src/shared/utils/encode";
-import { getValidationErrors } from "../../../../../src/core/decorators/ValidBodyHandlerDecorator";
+import { getValidationErrors } from "@shared/CommonValidator";
 
 // models
 import { NewSecurityNote } from "@shared/dto/NewSecurityNote";
