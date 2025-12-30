@@ -26,7 +26,7 @@
     "@atlaskit/textarea": "^8.1.0",
     "@atlaskit/textfield": "^8.1.0",
     "@atlaskit/tokens": "8.2.0",
-    "@forge/bridge": "^5.8.0",
+    "@forge/bridge": "^5.10.1npm",
     "@forge/jira-bridge": "^0.39.0",
     "@tanstack/react-query": "5.90.10",
     "date-fns": "4.1.0",

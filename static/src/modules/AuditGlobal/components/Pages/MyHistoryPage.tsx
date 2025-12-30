@@ -13,9 +13,12 @@ import { Box, Stack } from "@atlaskit/primitives";
 import Button from "@atlaskit/button/new";
 import PageHeader from "@src/modules/AuditGlobal/components/PageHeader/PageHeader";
 import AuditTable from "@src/modules/AuditGlobal/components/AuditTable/AuditTable";
+import { useRovoAgent } from "../AuditTable/hooks/useRovoAgent";
+import { token } from "@atlaskit/tokens";
 
 export default function MyHistoryPage(props: { timezone: string }) {
   const { timezone } = props;
+  const { rovoAgent } = useRovoAgent();
   const [exportFn, setExportFn] = useState<(() => void) | null>(null);
 
   const fetchData = useCallback(async (offset: number, limit: number) => {
@@ -46,6 +49,14 @@ export default function MyHistoryPage(props: { timezone: string }) {
     setExportFn(() => fn);
   }, []);
 
+  const exportConfig = {
+    resolverName: ResolverNames.AUDIT_DATA_PER_USER,
+    params: {},
+    filenamePrefix: "my-history",
+  };
+  const handleRovoAgent = useCallback(() => {
+    rovoAgent(exportConfig);
+  }, []);
   return (
     <Box padding="space.400">
       <Stack space="space.400">
@@ -53,19 +64,22 @@ export default function MyHistoryPage(props: { timezone: string }) {
           title="My History"
           actions={
             exportFn && (
-              <Button appearance="default" onClick={exportFn}>
-                Export CSV
-              </Button>
+              <Box
+                style={{ display: "flex", gap: token("space.050", "4px"), alignItems: "center" }}
+              >
+                <Button appearance="default" onClick={exportFn}>
+                  Export CSV
+                </Button>
+                <Button appearance="default" onClick={handleRovoAgent}>
+                  Rovo Agent
+                </Button>
+              </Box>
             )
           }
         />
         <AuditTable
           fetchData={fetchData}
-          exportConfig={{
-            resolverName: ResolverNames.AUDIT_DATA_PER_USER,
-            params: {},
-            filenamePrefix: "my-history",
-          }}
+          exportConfig={exportConfig}
           showProjectKey={true}
           showIssueKey={true}
           timezone={timezone}

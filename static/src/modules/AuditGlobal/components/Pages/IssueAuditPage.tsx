@@ -15,11 +15,14 @@ import { token } from "@atlaskit/tokens";
 import { useParams, useNavigate, useLocation } from "react-router-dom";
 import PageHeader from "@src/modules/AuditGlobal/components/PageHeader/PageHeader";
 import AuditTable from "@src/modules/AuditGlobal/components/AuditTable/AuditTable";
+import { useRovoAgent } from "../AuditTable/hooks/useRovoAgent";
 
 export default function IssueAuditPage(props: { timezone: string }) {
   const { issueKey: issueKeyFromParams } = useParams<{ issueKey: string }>();
   const location = useLocation();
   const navigate = useNavigate();
+  const { rovoAgent } = useRovoAgent();
+
   const { timezone } = props;
   const [exportFn, setExportFn] = useState<(() => void) | null>(null);
 
@@ -63,17 +66,36 @@ export default function IssueAuditPage(props: { timezone: string }) {
     setExportFn(() => fn);
   }, []);
 
+  const exportConfig = issueKey
+    ? {
+        resolverName: ResolverNames.AUDIT_DATA_PER_ISSUE,
+        params: { issueId: issueKey },
+        filenamePrefix: `issue-${issueKey}`,
+      }
+    : undefined;
+  const handleRovoAgent = useCallback(() => {
+    if (exportConfig) {
+      rovoAgent(exportConfig);
+    }
+  }, []);
   return (
     <Box padding="space.400">
       <Stack space="space.400">
         <PageHeader
           title={`Issue Audit: ${issueKey}`}
           actions={
-            <Box style={{ display: "flex", gap: token("space.100", "8px"), alignItems: "center" }}>
+            <Box style={{ display: "flex", gap: token("space.150", "10px"), alignItems: "center" }}>
               {exportFn && (
-                <Button appearance="default" onClick={exportFn}>
-                  Export CSV
-                </Button>
+                <Box
+                  style={{ display: "flex", gap: token("space.050", "4px"), alignItems: "center" }}
+                >
+                  <Button appearance="default" onClick={exportFn}>
+                    Export CSV
+                  </Button>
+                  <Button appearance="default" onClick={handleRovoAgent}>
+                    Rovo Agent
+                  </Button>
+                </Box>
               )}
               <Button onClick={() => navigate("..")}>Back to issues</Button>
             </Box>
@@ -81,15 +103,7 @@ export default function IssueAuditPage(props: { timezone: string }) {
         />
         <AuditTable
           fetchData={fetchData}
-          exportConfig={
-            issueKey
-              ? {
-                  resolverName: ResolverNames.AUDIT_DATA_PER_ISSUE,
-                  params: { issueId: issueKey },
-                  filenamePrefix: `issue-${issueKey}`,
-                }
-              : undefined
-          }
+          exportConfig={exportConfig}
           showProjectKey={false}
           showIssueKey={false}
           timezone={timezone}
