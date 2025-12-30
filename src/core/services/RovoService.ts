@@ -1,6 +1,5 @@
 import { Result } from "@forge/sql/out/utils/types";
-import { FORGE_SQL_ORM } from "../../database";
-import { securityNotes } from "../../database";
+import { FORGE_SQL_ORM, securityNotes } from "../../database";
 import { getTableName } from "drizzle-orm";
 import { inject, injectable } from "inversify";
 import { FORGE_INJECTION_TOKENS } from "../../constants";
@@ -19,22 +18,19 @@ export class RovoService {
     url?: string;
     jiraContexts?: { projectKey: string }[];
   }): { issueKey: string; projectKey: string } {
-    const issueKey = jiraContext?.issueKey ? `${jiraContext.issueKey}` : "''";
-
-    let projectKey = jiraContext?.projectKey
-      ? `${jiraContext.projectKey}`
-      : jiraContext?.jiraContexts?.[0]?.projectKey
-        ? `'${jiraContext.jiraContexts[0].projectKey}'`
-        : null;
+    const issueKey = jiraContext?.issueKey ?? "";
+    let projectKey = jiraContext?.projectKey;
+    if (!projectKey && jiraContext?.jiraContexts?.[0]?.projectKey) {
+      projectKey = jiraContext?.jiraContexts?.[0]?.projectKey;
+    } else {
+      projectKey = undefined;
+    }
 
     // If projectKey is still not found, try to extract it from jiraContexts URL
     if (!projectKey && jiraContext?.url) {
       // Match patterns: projects/${projectKey} or project/${projectKey}
       const match = jiraContext.url.match(/projects?\/([^/]+)/);
-      const extractedKey = match?.[1];
-      if (extractedKey) {
-        projectKey = `'${extractedKey}'`;
-      }
+      projectKey = match?.[1];
     }
 
     // Final fallback
@@ -63,9 +59,9 @@ export class RovoService {
     const { issueKey, projectKey } = this.extractKeys(event.context?.jira);
     const settings = await rovoIntegration
       .rovoRawSettingBuilder(getTableName(securityNotes), accountId)
-      .addContextParameter(":currentUserId", `'${accountId}'`)
-      .addContextParameter(":currentProjectKey", projectKey)
-      .addContextParameter(":currentIssueKey", issueKey)
+      .addStringContextParameter(":currentUserId", accountId)
+      .addStringContextParameter(":currentProjectKey", projectKey)
+      .addStringContextParameter(":currentIssueKey", issueKey)
       .useRLS()
       .addRlsCondition(async () => await this.jiraUserService.isJiraAdmin())
       .addRlsColumn(securityNotes.createdBy)

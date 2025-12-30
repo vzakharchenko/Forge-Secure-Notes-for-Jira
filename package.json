@@ -13,7 +13,7 @@
     "@forge/sql": "^3.0.14",
     "class-validator": "^0.14.3",
     "drizzle-orm": "^0.45.1",
-    "forge-sql-orm": "^2.1.18",
+    "forge-sql-orm": "^2.1.21",
     "inversify": "^7.10.8",
     "luxon": "^3.7.2",
     "uuid": "^13.0.0"
@@ -42,7 +42,7 @@
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-import": "^2.32.0",
     "eslint-plugin-vitest": "^0.5.4",
-    "forge-sql-orm-cli": "^2.1.20",
+    "forge-sql-orm-cli": "^2.1.21",
     "husky": "^9.1.7",
     "knip": "^5.78.0",
     "prettier": "^3.7.4",
