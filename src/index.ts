@@ -1,8 +1,7 @@
 import Resolver from "@forge/resolver";
 
 import { fetchSchemaWebTrigger } from "forge-sql-orm";
-import { issue } from "./resolvers";
-import { global } from "./resolvers";
+import { issue, global, admin } from "./resolvers";
 import {
   FiveMinutesTrigger as FiveMinuteTrigger,
   SlowQueryTriggerTrigger,
@@ -18,11 +17,14 @@ import { decodeJwtPayload } from "./core/utils/cryptoUtils";
 
 const issueResolver = new Resolver();
 const globalResolver = new Resolver();
+const adminResolver = new Resolver();
 
 issue(issueResolver);
 global(globalResolver);
+admin(globalResolver);
 export const handlerIssue = issueResolver.getDefinitions();
 export const handlerGlobal = globalResolver.getDefinitions();
+export const handlerAdmin = adminResolver.getDefinitions();
 
 export const handlerFiveMinute = async (request: SchedulerTriggerRequest) =>
   FiveMinuteTrigger.handler(request);

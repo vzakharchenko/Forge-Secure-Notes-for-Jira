@@ -24,6 +24,18 @@ modules:
         - title: My Project History
           route: myProject
           icon: resource:main;app.png
+  jira:adminPage:
+    - key: admin-page
+      resource: main
+      layout: blank
+      icon: resource:main;app.png
+      title: Forge Secure Notes For Jira Admin Page
+      resolver:
+        function: adminResolver
+      pages:
+        - title: Users History
+          route: userHistory
+          icon: resource:main;app.png
   scheduledTrigger:
     - key: scheduled-fiveMinute
       function: runFiveMinute
@@ -406,6 +418,8 @@ modules:
       handler: index.handlerIssue
     - key: globalResolver
       handler: index.handlerGlobal
+    - key: adminResolver
+      handler: index.handlerAdmin
     - key: runFiveMinute
       handler: index.handlerFiveMinute
     - key: runSchemaMigration
