@@ -14,6 +14,7 @@ import { FORGE_INJECTION_TOKENS } from "./constants";
 import { JiraUserService } from "./user";
 import { AsyncEvent } from "@forge/events";
 import { withContainer } from "./core/decorators";
+import { decodeJwtPayload } from "./core/utils/cryptoUtils";
 
 const issueResolver = new Resolver();
 const globalResolver = new Resolver();
@@ -40,8 +41,10 @@ export const runSecurityNotesQuery = withContainer(
   { name: FORGE_INJECTION_TOKENS.RovoServiceImpl, bind: RovoService },
   { name: FORGE_INJECTION_TOKENS.JiraUserService, bind: JiraUserService },
 )((rovoContainer, event: any, context: any) => {
-  const rovoService = rovoContainer.get<RovoService>(FORGE_INJECTION_TOKENS.RovoServiceImpl);
-  return rovoService.runSecurityNotesQuery(event, context);
+  const rovoService: RovoService = rovoContainer.get<RovoService>(
+    FORGE_INJECTION_TOKENS.RovoServiceImpl,
+  );
+  return rovoService.runSecurityNotesQuery(event, context ?? decodeJwtPayload(event.contextToken));
 });
 
 export const handlerAsyncDegradation = withContainer(

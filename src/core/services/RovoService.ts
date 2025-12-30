@@ -13,6 +13,38 @@ export class RovoService {
     private readonly jiraUserService: JiraUserService,
   ) {}
 
+  private extractKeys(jiraContext: {
+    issueKey?: string;
+    projectKey?: string;
+    url?: string;
+    jiraContexts?: { projectKey: string }[];
+  }): { issueKey: string; projectKey: string } {
+    const issueKey = jiraContext?.issueKey ? `${jiraContext.issueKey}` : "''";
+
+    let projectKey = jiraContext?.projectKey
+      ? `${jiraContext.projectKey}`
+      : jiraContext?.jiraContexts?.[0]?.projectKey
+        ? `'${jiraContext.jiraContexts[0].projectKey}'`
+        : null;
+
+    // If projectKey is still not found, try to extract it from jiraContexts URL
+    if (!projectKey && jiraContext?.url) {
+      // Match patterns: projects/${projectKey} or project/${projectKey}
+      const match = jiraContext.url.match(/projects?\/([^/]+)/);
+      const extractedKey = match?.[1];
+      if (extractedKey) {
+        projectKey = `'${extractedKey}'`;
+      }
+    }
+
+    // Final fallback
+    if (!projectKey) {
+      projectKey = "''";
+    }
+
+    return { issueKey, projectKey };
+  }
+
   async runSecurityNotesQuery(
     event: {
       sql: string;
@@ -20,6 +52,7 @@ export class RovoService {
         jira: {
           issueKey: string;
           projectKey: string;
+          jiraContexts?: { url: string; projectKey: string }[];
         };
       };
     },
@@ -27,11 +60,12 @@ export class RovoService {
   ): Promise<Result<unknown>> {
     const rovoIntegration = FORGE_SQL_ORM.rovo();
     const accountId = context.principal.accountId;
+    const { issueKey, projectKey } = this.extractKeys(event.context?.jira);
     const settings = await rovoIntegration
       .rovoRawSettingBuilder(getTableName(securityNotes), accountId)
-      .addContextParameter(":currentUserId", accountId)
-      .addContextParameter(":currentProjectKey", event.context?.jira?.projectKey ?? "")
-      .addContextParameter(":currentIssueKey", event.context?.jira?.issueKey ?? "")
+      .addContextParameter(":currentUserId", `'${accountId}'`)
+      .addContextParameter(":currentProjectKey", projectKey)
+      .addContextParameter(":currentIssueKey", issueKey)
       .useRLS()
       .addRlsCondition(async () => await this.jiraUserService.isJiraAdmin())
       .addRlsColumn(securityNotes.createdBy)
