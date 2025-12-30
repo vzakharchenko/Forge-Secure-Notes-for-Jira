@@ -21,7 +21,7 @@ const adminResolver = new Resolver();
 
 issue(issueResolver);
 global(globalResolver);
-admin(globalResolver);
+admin(adminResolver);
 export const handlerIssue = issueResolver.getDefinitions();
 export const handlerGlobal = globalResolver.getDefinitions();
 export const handlerAdmin = adminResolver.getDefinitions();
