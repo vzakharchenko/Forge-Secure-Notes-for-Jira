@@ -11,6 +11,7 @@ import { AuditUser } from "@shared/responses/AuditUser";
 // components
 import { Box, Stack } from "@atlaskit/primitives";
 import Button from "@atlaskit/button/new";
+import AiAgentIcon from "@atlaskit/icon/core/ai-agent";
 import { token } from "@atlaskit/tokens";
 import { useParams, useNavigate, useLocation } from "react-router-dom";
 import PageHeader from "@src/modules/AuditGlobal/components/PageHeader/PageHeader";
@@ -91,12 +92,12 @@ export default function ProjectAuditPage(props: { timezone: string }) {
                   <Button appearance="default" onClick={exportFn}>
                     Export CSV
                   </Button>
-                  <Button appearance="default" onClick={handleRovoAgent}>
-                    Rovo Agent
+                  <Button iconBefore={AiAgentIcon} appearance="default" onClick={handleRovoAgent}>
+                    Ask Rovo
                   </Button>
                 </Box>
               )}
-              <Button onClick={() => navigate("..")}>Back to projects</Button>
+              <Button onClick={() => navigate("../myProject")}>Back to projects</Button>
             </Box>
           }
         />

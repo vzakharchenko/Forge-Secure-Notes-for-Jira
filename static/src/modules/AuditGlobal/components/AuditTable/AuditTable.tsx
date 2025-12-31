@@ -24,6 +24,7 @@ import { token } from "@atlaskit/tokens";
 import { Stack } from "@atlaskit/primitives";
 import JiraUserTile from "@src/components/JiraUserTile";
 import { useRovoAgent } from "./hooks/useRovoAgent";
+import AiAgentIcon from "@atlaskit/icon/core/ai-agent";
 
 interface TableTreeItem {
   id: string;
@@ -524,8 +525,8 @@ const AuditTable = ({
             </Button>
           )}
           {showExportInTable && exportConfig && (
-            <Button appearance="default" onClick={handleRovo}>
-              Rovo Agent
+            <Button iconBefore={AiAgentIcon} appearance="default" onClick={handleRovo}>
+              Ask Rovo
             </Button>
           )}
           {totalPages > 1 && (

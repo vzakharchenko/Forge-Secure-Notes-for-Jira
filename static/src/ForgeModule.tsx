@@ -11,6 +11,7 @@ import IssueSection from "@src/modules/IssueSection/IssueSection";
 import AuditGlobal from "@src/modules/AuditGlobal/AuditGlobal";
 import { Box } from "@atlaskit/primitives";
 import PageLoading from "@src/components/loaders/PageLoading/PageLoading";
+import AuditAdmin from "./modules/AuditGlobal/AuditAdmin";
 
 const ForgeModule = () => {
   const [context, setContext] = useState<FullContext>();
@@ -56,7 +57,7 @@ const ForgeModule = () => {
       return <AuditGlobal timezone={context.timezone} />;
     }
     case "admin-page": {
-      return <AuditGlobal timezone={context.timezone} />;
+      return <AuditAdmin timezone={context.timezone} />;
     }
     default: {
       return <div>{context.moduleKey} does not supported</div>;
