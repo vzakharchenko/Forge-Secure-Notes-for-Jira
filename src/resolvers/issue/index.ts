@@ -13,9 +13,9 @@ import {
   ContextService,
   KVSSchemaMigrationService,
   SecurityNoteService,
-} from "../../core";
+} from "../../services";
 import { SecurityNoteRepository } from "../../database";
-import { JiraUserService } from "../../user";
+import { JiraUserService } from "../../jira";
 import { SecurityStorage } from "../../storage";
 
 const ISSUE_BINDINGS = [

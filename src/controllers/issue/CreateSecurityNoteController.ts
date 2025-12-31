@@ -5,8 +5,8 @@ import {
   validBodyHandler,
   isIssueContext,
   IssueContext,
-  SecurityNoteService,
 } from "../../core";
+import { SecurityNoteService } from "../../services";
 import { ActualResolver } from "..";
 import { ResolverNames } from "../../../shared/ResolverNames";
 import { NewSecurityNote } from "../../../shared/dto";

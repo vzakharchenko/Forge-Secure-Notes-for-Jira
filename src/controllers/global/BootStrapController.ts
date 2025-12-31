@@ -1,4 +1,5 @@
-import { resolver, exceptionHandler, BootstrapService } from "../../core";
+import { resolver, exceptionHandler } from "../../core";
+import { BootstrapService } from "../../services";
 import { ResolverNames } from "../../../shared/ResolverNames";
 import { Bootstrap } from "../../../shared/responses";
 import { inject, injectable } from "inversify";

@@ -2,7 +2,7 @@ import "reflect-metadata";
 import Resolver, { Request } from "@forge/resolver";
 import { ErrorResponse } from "../../shared/Types";
 import { applicationContext } from ".";
-import { ContextService, KVSSchemaMigrationService, AnalyticService } from "../core";
+import { ContextService, KVSSchemaMigrationService, AnalyticService } from "../services";
 import { FORGE_SQL_ORM } from "../database";
 import { Container } from "inversify";
 import { ApplySchemaMigrationTrigger } from ".";

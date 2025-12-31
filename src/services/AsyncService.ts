@@ -1,7 +1,7 @@
 import { injectable } from "inversify";
 import { AsyncEvent } from "@forge/events";
 import { printDegradationQueriesConsumer } from "forge-sql-orm";
-import { FORGE_SQL_ORM } from "../../database";
+import { FORGE_SQL_ORM } from "../database";
 
 @injectable()
 export class AsyncService {

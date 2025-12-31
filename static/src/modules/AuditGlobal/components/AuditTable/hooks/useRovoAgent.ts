@@ -36,14 +36,6 @@ export const useRovoAgent = () => {
         agentKey: "security-notes-analytics-agent",
         prompt,
       });
-
-      showFlag({
-        id: "openRovoAgentSuccess",
-        title: "Opened Rovo Agent",
-        type: "success",
-        appearance: "success",
-        isAutoDismiss: true,
-      });
     } catch (error: any) {
       console.error("Opening rovo agent:", error);
       showFlag({

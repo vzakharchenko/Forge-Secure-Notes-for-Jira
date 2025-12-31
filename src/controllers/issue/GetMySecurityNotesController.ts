@@ -1,9 +1,5 @@
-import {
-  resolver,
-  exceptionHandler,
-  KVSSchemaMigrationService,
-  SecurityNoteService,
-} from "../../core";
+import { resolver, exceptionHandler } from "../../core";
+import { KVSSchemaMigrationService, SecurityNoteService } from "../../services";
 import { ActualResolver } from "..";
 import { ResolverNames } from "../../../shared/ResolverNames";
 import { AuditUser } from "../../../shared/responses";

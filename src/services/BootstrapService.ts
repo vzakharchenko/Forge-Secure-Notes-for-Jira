@@ -1,7 +1,7 @@
-import { withAppContext } from "../../controllers";
-import { FORGE_INJECTION_TOKENS } from "../../constants";
+import { withAppContext } from "../controllers";
+import { FORGE_INJECTION_TOKENS } from "../constants";
 import { inject, injectable } from "inversify";
-import { JiraUserService } from "../../user";
+import { JiraUserService } from "../jira";
 
 @injectable()
 export class BootstrapService {

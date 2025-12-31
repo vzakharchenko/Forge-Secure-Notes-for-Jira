@@ -1,9 +1,9 @@
 import { Result } from "@forge/sql/out/utils/types";
-import { FORGE_SQL_ORM, securityNotes } from "../../database";
+import { FORGE_SQL_ORM, securityNotes } from "../database";
 import { getTableName } from "drizzle-orm";
 import { inject, injectable } from "inversify";
-import { FORGE_INJECTION_TOKENS } from "../../constants";
-import { JiraUserService } from "../../user";
+import { FORGE_INJECTION_TOKENS } from "../constants";
+import { JiraUserService } from "../jira";
 
 @injectable()
 export class RovoService {

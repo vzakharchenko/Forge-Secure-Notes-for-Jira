@@ -1,6 +1,6 @@
 import { Request } from "@forge/resolver";
 
-import { BaseContext } from "./ContextTypes";
+import { BaseContext } from "../core";
 import { injectable } from "inversify";
 
 @injectable()

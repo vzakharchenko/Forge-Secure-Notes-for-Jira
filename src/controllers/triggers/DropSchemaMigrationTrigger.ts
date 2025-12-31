@@ -3,8 +3,8 @@ import {
   exceptionHandlerTrigger,
   SchedulerTrigger,
   SchedulerTriggerResponse,
-  KVSSchemaMigrationService,
 } from "../../core";
+import { KVSSchemaMigrationService } from "../../services";
 import { dropSchemaMigrations } from "forge-sql-orm";
 import { Container } from "inversify";
 import { FORGE_INJECTION_TOKENS } from "../../constants";
