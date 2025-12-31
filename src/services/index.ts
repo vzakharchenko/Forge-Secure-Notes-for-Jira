@@ -1,4 +1,4 @@
-export { isIssueContext } from "./ContextTypes";
+export { isIssueContext } from "../core/context/ContextTypes";
 export type {
   GeneralContext,
   Context,
@@ -8,7 +8,7 @@ export type {
   Issue,
   Project,
   IssueContext,
-} from "./ContextTypes";
+} from "../core/context/ContextTypes";
 export { SecurityNoteService } from "./SecurityNoteService";
 export { BootstrapService } from "./BootstrapService";
 export { AnalyticService } from "./AnalyticService";

@@ -1,18 +1,16 @@
 import {
-  SecurityNoteService,
-  AnalyticService,
   schedulerTrigger,
   exceptionHandlerTrigger,
   SchedulerTrigger,
   SchedulerTriggerRequest,
   SchedulerTriggerResponse,
-  BootstrapService,
 } from "../../core";
+import { SecurityNoteService, AnalyticService, BootstrapService } from "../../services";
 import { clearCacheSchedulerTrigger } from "forge-sql-orm";
 import { FORGE_SQL_ORM, SecurityNoteRepository } from "../../database";
 import { Container } from "inversify";
 import { FORGE_INJECTION_TOKENS } from "../../constants";
-import { JiraUserService } from "../../user";
+import { JiraUserService } from "../../jira";
 import { SecurityStorage } from "../../storage";
 import { useDiContainer, diContainer } from "../../core/decorators";
 

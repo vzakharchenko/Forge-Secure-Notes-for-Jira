@@ -1,4 +1,5 @@
-import { resolver, exceptionHandler, validBodyHandler, SecurityNoteService } from "../../core";
+import { resolver, exceptionHandler, validBodyHandler } from "../../core";
+import { SecurityNoteService } from "../../services";
 import { ResolverNames } from "../../../shared/ResolverNames";
 import { Request } from "@forge/resolver";
 import { ProjectWithPagination } from "../../../shared/dto";

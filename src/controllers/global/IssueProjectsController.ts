@@ -1,4 +1,5 @@
-import { resolver, exceptionHandler, SecurityNoteService } from "../../core";
+import { resolver, exceptionHandler } from "../../core";
+import { SecurityNoteService } from "../../services";
 import { ResolverNames } from "../../../shared/ResolverNames";
 import { ProjectIssue } from "../../../shared/responses";
 import { inject, injectable } from "inversify";

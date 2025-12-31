@@ -1,5 +1,5 @@
 import { kvs } from "@forge/kvs";
-import { MIGRATION_VERSION } from "../../database/migration/migrationCount";
+import { MIGRATION_VERSION } from "../database/migration/migrationCount";
 import { injectable } from "inversify";
 
 const CURRENT_VERSION = "CURRENT_VERSION";

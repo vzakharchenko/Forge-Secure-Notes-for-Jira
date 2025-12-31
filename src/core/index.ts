@@ -3,11 +3,11 @@ export { exceptionHandler, exceptionHandlerTrigger } from "./decorators/Exceptio
 export { schedulerTrigger, isSchedulerTrigger } from "./decorators/SchedulerDecorator";
 export { validBodyHandler } from "./decorators/ValidBodyHandlerDecorator";
 
-// Export services
-export * from "./services";
-
 // Export triggers
 export * from "./triggers";
 
 // Export utils
 export * from "./utils";
+
+// Export utils
+export * from "./context";

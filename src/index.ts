@@ -8,9 +8,10 @@ import {
   DropSchemaMigrationTrigger,
   ApplySchemaMigrationTrigger,
 } from "./controllers";
-import { RovoService, AsyncService, SchedulerTriggerRequest } from "./core";
+import { RovoService, AsyncService } from "./services";
+import { SchedulerTriggerRequest } from "./core";
 import { FORGE_INJECTION_TOKENS } from "./constants";
-import { JiraUserService } from "./user";
+import { JiraUserService } from "./jira";
 import { AsyncEvent } from "@forge/events";
 import { withContainer } from "./core/decorators";
 import { decodeJwtPayload } from "./core/utils/cryptoUtils";
