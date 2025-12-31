@@ -47,15 +47,15 @@ While Jira excels at task tracking and collaboration, it lacks a secure, ephemer
 - 👥 Multiple recipients support - send secure notes to multiple users at once
 - 📝 Description field for better note organization and tracking
 - 📊 Comprehensive audit pages with detailed history tracking:
-  - **My History**: View your personal secure notes history with pagination
-  - **My Issue History**: Browse notes by issue with detailed audit trails
-  - **My Project History**: View notes organized by project
-  - **User History**: Admin-only view of all users' secure notes
+  - **My History**: View your personal secure notes history with pagination (accessible from global page)
+  - **My Issue History**: Browse notes by issue with detailed audit trails (accessible from global page)
+  - **My Project History**: View notes organized by project (accessible from global page)
+  - **User History**: Admin-only view of all users' secure notes (accessible from admin page)
 - 📈 Expandable status history showing CREATED, VIEWED, DELETED, and EXPIRED events
 - 📥 CSV Export functionality on all audit pages for data analysis
 - 🔄 Automatic background polling (every 10 seconds) for real-time updates
 - 📋 Modern table UI using Atlassian Design System components
-- 🤖 **Rovo AI Agent** - Natural language analytics for Security Notes data
+- 🤖 **Rovo AI Agent** - Natural language analytics for Security Notes data with "Ask Rovo" button in audit pages for quick access
 
 ## 🛠 Technical Implementation
 
@@ -215,25 +215,25 @@ The application automatically sends email notifications for important events:
 
 ### Audit and History Pages
 
-The application provides comprehensive audit pages accessible from the global page:
+The application provides comprehensive audit pages:
 
-1. **My History** (`/myHistory`):
+1. **My History** (`/myHistory` - accessible from global page):
    - View all your secure notes with pagination
    - See description, status, issue/project keys, and timestamps
    - Expand rows to view status history (CREATED, VIEWED, DELETED, EXPIRED)
    - Export all data to CSV format
 
-2. **My Issue History** (`/myIssue`):
+2. **My Issue History** (`/myIssue` - accessible from global page):
    - Browse all issues that contain secure notes
    - Click on an issue to view detailed audit information
    - Export issue-specific data to CSV
 
-3. **My Project History** (`/myProject`):
+3. **My Project History** (`/myProject` - accessible from global page):
    - View all projects with secure notes
    - Drill down into project-specific audit details
    - Export project data to CSV
 
-4. **User History** (`/userHistory` - Admin only):
+4. **User History** (`/userHistory` - Admin only, accessible from admin page):
    - Administrators can view all users' secure notes
    - Select a user to see their complete history
    - Export user-specific audit data to CSV
@@ -244,6 +244,11 @@ All audit pages feature:
 - Expandable status history rows
 - CSV export functionality
 - Real-time data updates
+- **"Ask Rovo" button**: Automatically opens the Rovo AI agent with a pre-configured prompt based on the current audit tab:
+  - **My History**: Prepares an activity report for the current user, including notes created by them and shared with them
+  - **My Issue History**: Prepares an activity report for the selected issue
+  - **My Project History**: Prepares an activity report for the selected project
+  - **User History**: Prepares an activity report for the selected user
 
 ### Rovo AI Analytics
 
@@ -275,10 +280,11 @@ The application includes a **Rovo AI agent** that enables natural language queri
 
 **How to use:**
 
-1. Open the Rovo AI assistant in Jira
-2. Ask questions about Security Notes using natural language
-3. The agent will generate SQL queries and return results
-4. Results are explained in natural language with summaries and highlights
+1. **Quick access via Audit pages**: Click the "Ask Rovo" button on any audit page (My History, My Issue History, My Project History, or User History). The button automatically opens the Rovo AI agent with a pre-configured prompt based on the current tab context.
+2. **Manual access**: Open the Rovo AI assistant in Jira directly
+3. Ask questions about Security Notes using natural language
+4. The agent will generate SQL queries and return results
+5. Results are explained in natural language with summaries and highlights
 
 **Example queries:**
 
