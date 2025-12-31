@@ -16,6 +16,7 @@ import { useParams, useNavigate, useLocation } from "react-router-dom";
 import PageHeader from "@src/modules/AuditGlobal/components/PageHeader/PageHeader";
 import AuditTable from "@src/modules/AuditGlobal/components/AuditTable/AuditTable";
 import { useRovoAgent } from "../AuditTable/hooks/useRovoAgent";
+import AiAgentIcon from "@atlaskit/icon/core/ai-agent";
 
 export default function IssueAuditPage(props: { timezone: string }) {
   const { issueKey: issueKeyFromParams } = useParams<{ issueKey: string }>();
@@ -92,12 +93,12 @@ export default function IssueAuditPage(props: { timezone: string }) {
                   <Button appearance="default" onClick={exportFn}>
                     Export CSV
                   </Button>
-                  <Button appearance="default" onClick={handleRovoAgent}>
-                    Rovo Agent
+                  <Button iconBefore={AiAgentIcon} appearance="default" onClick={handleRovoAgent}>
+                    Ask Rovo
                   </Button>
                 </Box>
               )}
-              <Button onClick={() => navigate("..")}>Back to issues</Button>
+              <Button onClick={() => navigate("../myIssue")}>Back to issues</Button>
             </Box>
           }
         />
