@@ -53,7 +53,7 @@ While Jira excels at task tracking and collaboration, it lacks a secure, ephemer
   - **User History**: Admin-only view of all users' secure notes (accessible from admin page)
 - 📈 Expandable status history showing CREATED, VIEWED, DELETED, and EXPIRED events
 - 📥 CSV Export functionality on all audit pages for data analysis
-- 🔄 Automatic background polling (every 10 seconds) for real-time updates
+- 🔄 Real-time updates using @forge/realtime for instant UI synchronization
 - 📋 Modern table UI using Atlassian Design System components
 - 🤖 **Rovo AI Agent** - Natural language analytics for Security Notes data with "Ask Rovo" button in audit pages for quick access
 
@@ -94,8 +94,8 @@ The project follows a clean architecture pattern with clear separation of concer
 
 ### Prerequisites
 
-- Node.js (v20 or higher)
-- npm (v7 or higher)
+- Node.js (v22 or higher)
+- npm
 - Atlassian Forge CLI (`forge` command-line tool)
 - A Jira Cloud instance with admin access
 - Forge development environment set up
@@ -181,7 +181,7 @@ forge tunnel
    - A direct link to access the secure note
    - The expiration date and time
    - Instructions on how to obtain the decryption key
-9. The note will be automatically updated in the panel every 10 seconds via background polling
+9. The note will be automatically updated in the panel in real-time using @forge/realtime
 
 ### Viewing a Secure Note
 
@@ -254,13 +254,17 @@ All audit pages feature:
 
 The application includes a **Rovo AI agent** that enables natural language queries about Security Notes data. Users can ask questions in plain English, and the agent will generate and execute SQL queries to provide insights.
 
+> **📖 Technical Details**: A detailed description of how Rovo works with SQL, including the secure "Guide + Guard" pattern, query validation, row-level security, and safety mechanisms, is available in this [community article](https://community.developer.atlassian.com/t/rovo-forge-sql-a-secure-pattern-for-natural-language-analytics-in-forge-apps/97028).
+
 **Features:**
 
 - Ask questions like:
-  - "Show all users which I shared security notes with for this issue"
-  - "Show my notes for this issue from last week"
-  - "Prepare a report of all descriptions and who shared for this issue last month"
-  - "Show top 10 users who created the most security notes"
+  - "Show all users which I shared security notes with"
+  - "Show my notes from last week"
+  - "Prepare a report of all descriptions and who shared notes last month"
+  - "Show top 10 users who created the most security notes" (Admin only)
+  - "Show all security notes created in the last 30 days"
+  - "Display all notes shared with me that are still active"
 
 **Security:**
 
@@ -281,17 +285,19 @@ The application includes a **Rovo AI agent** that enables natural language queri
 **How to use:**
 
 1. **Quick access via Audit pages**: Click the "Ask Rovo" button on any audit page (My History, My Issue History, My Project History, or User History). The button automatically opens the Rovo AI agent with a pre-configured prompt based on the current tab context.
-2. **Manual access**: Open the Rovo AI assistant in Jira directly
+2. **Manual access**: Open the Rovo AI assistant in Jira directly (agent "Security Notes analytics")
 3. Ask questions about Security Notes using natural language
 4. The agent will generate SQL queries and return results
 5. Results are explained in natural language with summaries and highlights
 
 **Example queries:**
 
-- "Can you show all users which I shared security notes with for this issue?"
-- "Show all users which I shared security notes with for this project."
-  - "Report security notes for this issue last month."
-  - "Show me top 10 users who created the most security notes."
+- "Can you show all users which I shared security notes with?"
+- "Show all users which I shared security notes with."
+- "Report security notes from last month."
+- "Show me top 10 users who created the most security notes." (Admin only)
+- "Display all security notes created in the last 30 days."
+- "Show all notes shared with me that are still active."
 
 ## 🏗️ Development Architecture & Quality
 
