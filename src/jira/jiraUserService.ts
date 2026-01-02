@@ -42,10 +42,16 @@ export class JiraUserService {
   }
 
   async isJiraAdmin(): Promise<boolean> {
-    const jiraPermissions = await this.getMyPermissions(["ADMINISTER", "SYSTEM_ADMIN"]);
-    return (
-      jiraPermissions.permissions.ADMINISTER?.havePermission ||
-      jiraPermissions.permissions.SYSTEM_ADMIN?.havePermission
-    );
+    try {
+      const jiraPermissions = await this.getMyPermissions(["ADMINISTER", "SYSTEM_ADMIN"]);
+      return !!(
+        jiraPermissions.permissions.ADMINISTER?.havePermission ||
+        jiraPermissions.permissions.SYSTEM_ADMIN?.havePermission
+      );
+    } catch (e) {
+      // eslint-disable-next-line no-console
+      console.error("Permission check error. fallback is not admin", e);
+      return false;
+    }
   }
 }

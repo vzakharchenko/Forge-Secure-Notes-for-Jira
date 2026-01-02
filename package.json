@@ -25,12 +25,15 @@
     "migration:drop": "forge-sql-orm-cli migrations:drop",
     "build:ci": "tsc --target esnext --project tsconfig.json  --outDir dist && rm -rf dist",
     "forge:debug": "forge tunnel -d -f index.handler",
-    "lint": "eslint src  --ext .ts,.tsx",
-    "lint:fix": "eslint src --ext .ts,.tsx --fix",
-    "format": "prettier --write src static/src shared ",
-    "format:check": "prettier src static/src shared --check",
+    "lint": "eslint src __tests__ --ext .ts,.tsx",
+    "lint:fix": "eslint src __tests__ --ext .ts,.tsx --fix",
+    "format": "prettier --write src static/src shared __tests__ ",
+    "format:check": "prettier src static/src shared __tests__ --check",
     "prepare": "husky",
-    "knip": "knip"
+    "knip": "knip",
+    "test": "vitest --run --config vitest.config.mjs",
+    "test:coverage": "vitest --run --config vitest.config.mjs --coverage",
+    "test:watch": "vitest --watch"
   },
   "devDependencies": {
     "@eslint/js": "^9.39.2",
@@ -47,7 +50,10 @@
     "knip": "^5.78.0",
     "prettier": "^3.7.4",
     "reflect-metadata": "^0.2.2",
-    "typescript": "^5.9.3"
+    "typescript": "^5.9.3",
+    "vitest": "^4.0.16",
+    "@vitest/coverage-v8": "^4.0.16",
+    "@vitest/ui": "^4.0.16"
   },
   "overrides": {
     "package-json": "npm:package-json@latest",
