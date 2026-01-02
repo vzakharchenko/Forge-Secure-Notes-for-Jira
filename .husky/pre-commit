@@ -16,6 +16,8 @@ npm run knip || { echo '❌ Dependency check failed.'; exit 1; }
 
 echo '➡️ lint check'
 npm run lint || { echo '❌ lint check failed.'; exit 1; }
+echo '➡️ lint check'
+npm run test || { echo '❌ tests failed.'; exit 1; }
 
 echo '🔍 Running static resources checks...'
 pushd static > /dev/null

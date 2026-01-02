@@ -58,6 +58,7 @@ jobs:
           npm run lint
           npm run format:check
           npm run build:ci
+          npm run test
 
       - name: Frontend install & build
         run: |
@@ -124,6 +125,7 @@ jobs:
           npm run lint
           npm run format:check
           npm run build:ci
+          npm run test
 
       - name: Frontend install & build
         run: |
@@ -140,14 +142,14 @@ jobs:
         run: |
           export FORGE_EMAIL=${{ secrets.FORGE_EMAIL }} && 
           export FORGE_API_TOKEN=${{ secrets.FORGE_API_TOKEN }} && 
-          forge  variables set ANALYTICS_API_KEY ${{ secrets.ANALYTICS_API_KEY }} -e staging && 
-          forge deploy --non-interactive -e staging
+          forge  variables set ANALYTICS_API_KEY ${{ secrets.ANALYTICS_API_KEY }} -e development && 
+          forge deploy --non-interactive -e development
 
       - name: Forge Install (staging)
         run: |
           export FORGE_EMAIL=${{ secrets.FORGE_EMAIL }} && \
           export FORGE_API_TOKEN=${{ secrets.FORGE_API_TOKEN }} && \
-          forge install -e staging -s ${{ secrets.FORGE_HOSTNAME }} -p Jira --confirm-scopes --non-interactive --upgrade
+          forge install -e development -s ${{ secrets.FORGE_HOSTNAME }} -p Jira --confirm-scopes --non-interactive --upgrade
 
   build-production:
     if: (github.event_name == 'push' && startsWith(github.ref, 'refs/tags/')) || (github.event_name == 'release' && github.event.action == 'published')
@@ -192,6 +194,7 @@ jobs:
           npm run lint
           npm run format:check
           npm run build:ci
+          npm run test
 
       - name: Frontend install & build
         run: |
