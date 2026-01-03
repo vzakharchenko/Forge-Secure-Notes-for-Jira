@@ -4,7 +4,7 @@ import { injectable } from "inversify";
 @injectable()
 export class AnalyticService {
   parseVersion(raw: string) {
-    return raw.replace(/[^0-9]/g, "");
+    return raw.replaceAll(/[^0-9]/g, "");
   }
   async sendAnalytics(
     eventName: string,

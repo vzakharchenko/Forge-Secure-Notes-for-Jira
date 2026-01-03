@@ -13,7 +13,7 @@ export class BootstrapService {
   @withAppContext()
   async isAdmin(): Promise<boolean> {
     try {
-      return this.jiraUserService.isJiraAdmin();
+      return await this.jiraUserService.isJiraAdmin();
     } catch (e: any) {
       // eslint-disable-next-line no-console
       console.error("Permission Error " + e.message, e);

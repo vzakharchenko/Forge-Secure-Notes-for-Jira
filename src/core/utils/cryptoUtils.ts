@@ -13,7 +13,7 @@ export function decodeJwtPayload(token: string) {
   const [, payloadB64Url] = token.split(".");
   if (!payloadB64Url) throw new Error("Not a JWT");
 
-  const b64 = payloadB64Url.replace(/-/g, "+").replace(/_/g, "/");
+  const b64 = payloadB64Url.replaceAll("-", "+").replaceAll("_", "/");
   const padded = b64 + "===".slice((b64.length + 3) % 4); // base64 padding
   const json = Buffer.from(padded, "base64").toString("utf8");
   return JSON.parse(json);
