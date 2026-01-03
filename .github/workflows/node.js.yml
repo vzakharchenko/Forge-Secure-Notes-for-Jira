@@ -58,7 +58,14 @@ jobs:
           npm run lint
           npm run format:check
           npm run build:ci
-          npm run test
+      - run: npm run test:coverage
+        if: github.actor != 'dependabot[bot]'
+      - name: Upload to Coveralls
+        if: github.actor != 'dependabot[bot]'
+        uses: coverallsapp/github-action@v2
+        with:
+          github-token: ${{ secrets.COVERALLS_REPO_TOKEN }}
+          path-to-lcov: ./coverage/lcov.info
 
       - name: Frontend install & build
         run: |
@@ -126,7 +133,6 @@ jobs:
           npm run lint
           npm run format:check
           npm run build:ci
-          npm run test
       - run: npm run test:coverage
         if: github.actor != 'dependabot[bot]'
       - name: Upload to Coveralls
