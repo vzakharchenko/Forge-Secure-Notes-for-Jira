@@ -17,7 +17,7 @@ const DROP_BINDINGS = [
 @schedulerTrigger
 class DropSchemaMigrationTrigger implements SchedulerTrigger {
   @diContainer(...DROP_BINDINGS)
-  private _container!: Container;
+  private readonly _container!: Container;
 
   @useDiContainer("_container")
   @exceptionHandlerTrigger("SlowQuery Trigger Error")

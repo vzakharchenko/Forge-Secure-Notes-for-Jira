@@ -26,7 +26,7 @@ const FIVE_MINUTES_BINDINGS = [
 @schedulerTrigger
 class FiveMinutesTrigger implements SchedulerTrigger {
   @diContainer(...FIVE_MINUTES_BINDINGS)
-  private _container!: Container;
+  private readonly _container!: Container;
 
   @useDiContainer("_container")
   @exceptionHandlerTrigger("Five Minutes Trigger Error")

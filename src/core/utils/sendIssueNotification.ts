@@ -104,7 +104,10 @@ This expiration is automatic and is designed to protect sensitive information.`;
     }),
   });
 
-  if (!res.ok) {
+  if (res.ok) {
+    // eslint-disable-next-line no-console
+    console.log(`✅ Expiration notification sent to ${recipientAccountId} for issue ${issueKey}`);
+  } else {
     const errorBody = await res.text();
     // eslint-disable-next-line no-console
     console.error(
@@ -113,8 +116,6 @@ This expiration is automatic and is designed to protect sensitive information.`;
     );
     throw new Error(`Jira API error: ${res.status}`);
   }
-  // eslint-disable-next-line no-console
-  console.log(`✅ Expiration notification sent to ${recipientAccountId} for issue ${issueKey}`);
 }
 
 type DeletedNoteNotificationParams = {
@@ -157,12 +158,13 @@ Note: Once deleted, the note cannot be restored.`;
     }),
   });
 
-  if (!res.ok) {
+  if (res.ok) {
+    // eslint-disable-next-line no-console
+    console.log(`✅ Deletion notification sent to ${recipientAccountId} for issue ${issueKey}`);
+  } else {
     const errorBody = await res.text();
     // eslint-disable-next-line no-console
     console.error(`❌ Failed to send deletion notification: ${res.status}`, errorBody);
     throw new Error(`Jira API error: ${res.status}`);
   }
-  // eslint-disable-next-line no-console
-  console.log(`✅ Deletion notification sent to ${recipientAccountId} for issue ${issueKey}`);
 }

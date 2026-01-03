@@ -1,9 +1,7 @@
-import { UserViewInfoType, ViewMySecurityNotes } from "../../shared/responses";
 import { SecurityNoteStatus, SHARED_EVENT_NAME } from "../../shared/Types";
 import { getAppContext, withAppContext } from "../controllers";
 import { NewSecurityNote } from "../../shared/dto";
 import { InferInsertModel, InferSelectModel } from "drizzle-orm";
-import { securityNotes } from "../database";
 import {
   calculateHash,
   sendExpirationNotification,
@@ -18,12 +16,14 @@ import {
   ProjectInfo,
   ProjectIssue,
   OpenSecurityNote,
+  UserViewInfoType,
+  ViewMySecurityNotes,
 } from "../../shared/responses";
 import { publishGlobal } from "@forge/realtime";
 import { inject, injectable } from "inversify";
 import { FORGE_INJECTION_TOKENS } from "../constants";
 import { JiraUserService } from "../jira";
-import { SecurityNoteRepository } from "../database";
+import { SecurityNoteRepository, securityNotes } from "../database";
 import { BootstrapService } from "./BootstrapService";
 import { SecurityStorage } from "../storage";
 
@@ -242,7 +242,7 @@ export class SecurityNoteService {
       throw new Error("expected Issue context");
     }
 
-    const issueContext = context as IssueContext;
+    const issueContext = context;
     const { key, id } = issueContext.extension.issue;
     const securityDbNotes = await this.securityNoteRepository.getAllMySecurityNotes(key, accountId);
     return this.mapSecurityNotesToView(securityDbNotes, {

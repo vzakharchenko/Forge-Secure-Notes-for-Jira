@@ -62,7 +62,7 @@ export function useDiContainer(field: string | symbol = "_container") {
       const res = original.apply(this, args);
 
       // keep container until promise settles
-      if (res && typeof (res as any).then === "function") {
+      if (res && typeof res.then === "function") {
         return (res as Promise<any>).finally(() => {
           this[field] = prev;
         }) as any;

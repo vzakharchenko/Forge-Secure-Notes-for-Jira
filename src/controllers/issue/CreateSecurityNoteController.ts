@@ -1,11 +1,5 @@
 import { publishGlobal } from "@forge/realtime";
-import {
-  resolver,
-  exceptionHandler,
-  validBodyHandler,
-  isIssueContext,
-  IssueContext,
-} from "../../core";
+import { resolver, exceptionHandler, validBodyHandler, isIssueContext } from "../../core";
 import { SecurityNoteService } from "../../services";
 import { ActualResolver } from "..";
 import { ResolverNames } from "../../../shared/ResolverNames";
@@ -38,7 +32,7 @@ export class CreateSecurityNoteController extends ActualResolver<AuditUser> {
     if (!isIssueContext(context)) {
       throw new Error("expected Issue context");
     }
-    const issueId = (context as IssueContext).extension.issue.id;
+    const issueId = context.extension.issue.id;
     const payload: NewSecurityNote = req.payload;
     await this.securityNoteService.createSecurityNote(payload);
 
