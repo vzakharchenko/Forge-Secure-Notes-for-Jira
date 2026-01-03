@@ -15,8 +15,8 @@ export const getValidationErrors = async <T extends object>(
       const values = response[error.property];
       if (values) {
         values.push(error.toString(false, true, undefined, true));
-      } else {
-        response[error.property] = [Object.values(error.constraints!)[0]];
+      } else if (error.constraints) {
+        response[error.property] = [Object.values(error.constraints)[0]];
       }
     });
   }

@@ -49,14 +49,14 @@ Note: This link is only accessible to you.`;
     }),
   });
 
-  if (!res.ok) {
+  if (res.ok) {
+    // eslint-disable-next-line no-console
+    console.log(await res.text());
+  } else {
     const errorBody = await res.text();
     // eslint-disable-next-line no-console
     console.error(`Failed to send notification: ${res.status} ${res.statusText}`, errorBody);
     throw new Error(`Jira API error: ${res.status}`);
-  } else {
-    // eslint-disable-next-line no-console
-    console.log(await res.text());
   }
   // eslint-disable-next-line no-console
   console.log(`✅ Notification sent to ${recipientAccountId} for issue ${issueKey}`);
