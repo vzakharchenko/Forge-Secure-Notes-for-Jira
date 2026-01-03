@@ -1,10 +1,4 @@
-import {
-  resolver,
-  exceptionHandler,
-  validBodyHandler,
-  isIssueContext,
-  IssueContext,
-} from "../../core";
+import { resolver, exceptionHandler, validBodyHandler, isIssueContext } from "../../core";
 import { SecurityNoteService } from "../../services";
 import { ActualResolver } from "..";
 import { ResolverNames } from "../../../shared/ResolverNames";
@@ -38,7 +32,7 @@ export class DeleteSecurityNoteController extends ActualResolver<AuditUser> {
     if (!isIssueContext(context)) {
       throw new Error("expected Issue context");
     }
-    const issueId = (context as IssueContext).extension.issue.id;
+    const issueId = context.extension.issue.id;
     const payload: SecurityNoteId = req.payload as SecurityNoteId;
     await this.securityNoteService.deleteSecurityNote(payload.id);
     await publishGlobal(SHARED_EVENT_NAME, issueId);

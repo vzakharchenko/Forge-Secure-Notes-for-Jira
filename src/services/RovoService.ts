@@ -29,7 +29,8 @@ export class RovoService {
     // If projectKey is still not found, try to extract it from jiraContexts URL
     if (!projectKey && jiraContext?.url) {
       // Match patterns: projects/${projectKey} or project/${projectKey}
-      const match = jiraContext.url.match(/projects?\/([^/]+)/);
+      const regex = /projects?\/([^/]+)/;
+      const match = regex.exec(jiraContext.url);
       projectKey = match?.[1];
     }
 

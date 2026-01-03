@@ -18,7 +18,7 @@ const MIGRATION_BINDINGS = [
 @schedulerTrigger
 class ApplySchemaMigrationTrigger implements SchedulerTrigger {
   @diContainer(...MIGRATION_BINDINGS)
-  private _container!: Container;
+  private readonly _container!: Container;
 
   @useDiContainer("_container")
   @exceptionHandlerTrigger("SlowQuery Trigger Error")
@@ -26,12 +26,12 @@ class ApplySchemaMigrationTrigger implements SchedulerTrigger {
     const kvsSchemaMigrationService = this._container.get<KVSSchemaMigrationService>(
       FORGE_INJECTION_TOKENS.KVSSchemaMigrationService,
     );
-    if (!(await kvsSchemaMigrationService.isLatestVersion())) {
+    if (await kvsSchemaMigrationService.isLatestVersion()) {
+      return getHttpResponse(200, "NOT NEEDED");
+    } else {
       const response = await applySchemaMigrations(migration);
       await kvsSchemaMigrationService.setLatestVersion();
       return response;
-    } else {
-      return getHttpResponse(200, "NOT NEEDED");
     }
   }
 }
