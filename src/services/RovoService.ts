@@ -55,6 +55,7 @@ export class RovoService {
     },
     context: { principal: { accountId: string } },
   ): Promise<Result<unknown>> {
+    const isAdmin = await this.jiraUserService.isJiraAdmin();
     const rovoIntegration = FORGE_SQL_ORM.rovo();
     const accountId = context.principal.accountId;
     const { issueKey, projectKey } = this.extractKeys(event.context?.jira);
@@ -64,7 +65,7 @@ export class RovoService {
       .addStringContextParameter(":currentProjectKey", projectKey)
       .addStringContextParameter(":currentIssueKey", issueKey)
       .useRLS()
-      .addRlsCondition(async () => await this.jiraUserService.isJiraAdmin())
+      .addRlsCondition(async () => !isAdmin)
       .addRlsColumn(securityNotes.createdBy)
       .addRlsColumn(securityNotes.targetUserId)
       .addRlsWherePart(
