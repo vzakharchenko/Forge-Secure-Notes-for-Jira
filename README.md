@@ -3,7 +3,6 @@
 [![Node.js CI](https://github.com/vzakharchenko/Forge-Secure-Notes-for-Jira/actions/workflows/node.js.yml/badge.svg)](https://github.com/vzakharchenko/Forge-Secure-Notes-for-Jira/actions/workflows/node.js.yml)
 [![Snyk Vulnerabilities](https://snyk.io/test/github/vzakharchenko/Forge-Secure-Notes-for-Jira/badge.svg)](https://snyk.io/test/github/vzakharchenko/Forge-Secure-Notes-for-Jira)
 [![DeepScan grade](https://deepscan.io/api/teams/26652/projects/30673/branches/987394/badge/grade.svg)](https://deepscan.io/dashboard#view=project&tid=26652&pid=30673&bid=987394)
-
 [![Coverage Status](https://coveralls.io/repos/github/vzakharchenko/Forge-Secure-Notes-for-Jira/badge.svg)](https://coveralls.io/github/vzakharchenko/Forge-Secure-Notes-for-Jira)
 
 ![GitHub License](https://img.shields.io/github/license/vzakharchenko/Forge-Secure-Notes-for-Jira)
