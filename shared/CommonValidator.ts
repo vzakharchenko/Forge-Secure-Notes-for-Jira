@@ -5,7 +5,7 @@ export const getValidationErrors = async <T extends object>(
   validateClass: new () => T,
 ): Promise<Record<string, string[]>> => {
   if (!req?.payload) {
-    throw Error("empty request");
+    throw new Error("empty request");
   }
   const response: Record<string, string[]> = {};
   const entity = Object.assign(new validateClass(), req.payload);
