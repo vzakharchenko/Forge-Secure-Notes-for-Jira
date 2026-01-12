@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: 🔐 Report a Security Vulnerability
+    url: https://github.com/vzakharchenko/Forge-Secure-Notes-for-Jira/blob/master/SECURITY.md
+    about: Please do not file public issues for security vulnerabilities. Click here to see our Security Policy.
+  - name: 💬 Ask a Question
+    url: https://github.com/vzakharchenko/Forge-Secure-Notes-for-Jira/discussions
+    about: Please ask and answer questions here.
