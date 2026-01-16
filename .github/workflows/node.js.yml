@@ -70,6 +70,14 @@ jobs:
 
       - name: Frontend install & build
         run: |
+          cd web-site
+          npm ci
+          npm run knip
+          npm run lint
+          npm run build
+
+      - name: Frontend install & build
+        run: |
           cd static
           npm ci
           npm run knip
