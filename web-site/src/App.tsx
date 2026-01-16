@@ -5,17 +5,20 @@ import React from "react";
 import "./App.css";
 
 // components
-import { Hero } from "./components";
-import { Features } from "./components";
-import { Security } from "./components";
-import { HowItWorks } from "./components";
-import { Screenshots } from "./components";
-import { Accordion } from "./components";
-import { Accomplishments } from "./components";
-import { CTA } from "./components";
-import { Footer } from "./components";
+import {
+  Accomplishments,
+  Accordion,
+  CallToAction,
+  Features,
+  Footer,
+  Hero,
+  HowItWorks,
+  Screenshots,
+  Security,
+} from "./components";
 
 const App = () => {
+  // @ts-ignore
   return (
     <div className="min-h-screen bg-white">
       <Hero />
@@ -25,7 +28,7 @@ const App = () => {
       <Screenshots />
       <Accordion />
       <Accomplishments />
-      <CTA />
+      <CallToAction />
       <Footer />
     </div>
   );

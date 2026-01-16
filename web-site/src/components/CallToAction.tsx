@@ -1,6 +1,6 @@
 import React from "react";
 
-export const CTA: React.FC = () => {
+export const CallToAction: React.FC = () => {
   return (
     <section className="py-24 px-4 relative bg-gradient-to-br from-blue-600 via-indigo-600 to-purple-600 text-white overflow-hidden">
       {/* Background pattern */}
