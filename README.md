@@ -499,9 +499,9 @@ npm run knip
 **Source Available / Fair Source**
 This project is licensed under the Business Source License (BSL 1.1).
 
-**Open for Audit**: You can review the source code to verify our "Zero Egress" and encryption claims.
-**Free for Dev**: You can fork, study, and test the code freely.
-**Paid for Prod**: Production use requires a license via the Atlassian Marketplace.
+- **Open for Audit**: You can review the source code to verify our "Zero Egress" and encryption claims.
+- **Free for Dev**: You can fork, study, and test the code freely.
+- **Paid for Prod**: Production use requires a license via the Atlassian Marketplace.
 
 Note: On 2030-01-01, this version of the code automatically becomes Open Source (MIT).
 
