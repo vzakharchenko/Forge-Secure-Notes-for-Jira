@@ -4,7 +4,7 @@ import tsparser from "@typescript-eslint/parser";
 import prettierConfig from "eslint-config-prettier";
 import pluginImport from "eslint-plugin-import";
 import vitest from "eslint-plugin-vitest";
-import globals from "globals"
+import globals from "globals";
 export default [
   js.configs.recommended,
   {
@@ -12,10 +12,10 @@ export default [
       parser: tsparser,
       sourceType: "module",
       ecmaVersion: "latest",
-        globals: globals.browser,
-        parserOptions: {
-            lib: ["dom", "esnext"],
-        },
+      globals: globals.browser,
+      parserOptions: {
+        lib: ["dom", "esnext"],
+      },
     },
     plugins: {
       "@typescript-eslint": tseslint,
