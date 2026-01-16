@@ -5,5 +5,5 @@ export { HowItWorks } from "./HowItWorks";
 export { Screenshots } from "./Screenshots";
 export { Accordion } from "./Accordion";
 export { Accomplishments } from "./Accomplishments";
-export { CTA } from "./CTA";
+export { CallToAction } from "./CallToAction";
 export { Footer } from "./Footer";
