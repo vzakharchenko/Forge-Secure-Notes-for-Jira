@@ -1,0 +1,56 @@
+{
+  "name": "Forge-Secure-Notes-for-Jira_site",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "dependencies": {
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "tailwindcss": "^3.4.19"
+  },
+  "devDependencies": {
+    "@types/jest": "^30.0.0",
+    "@types/node": "^24.10.1",
+    "@types/react": "^18.3.1",
+    "@types/react-dom": "^18.3.1",
+    "@vitejs/plugin-react": "^5.1.1",
+    "autoprefixer": "^10.4.23",
+    "dotenv": "17.2.3",
+    "knip": "^5.70.1",
+    "postcss": "^8.5.6",
+    "prettier": "^3.7.3",
+    "rollup-plugin-visualizer": "^6.0.5",
+    "@tailwindcss/vite": "^4.1.18",
+    "sass": "^1.97.2",
+    "typescript": "^5.9.3",
+    "vite": "^7.2.4"
+  },
+  "scripts": {
+    "build": "vite build",
+    "build:husky": "vite build",
+    "build:deploy": "vite build && cd  && ./deploy.sh ",
+    "start": "PORT=3099 vite serve",
+    "prettier": "prettier src vite.config.ts --write",
+    "lint": "eslint src  --ext .ts,.tsx",
+    "lint:fix": "eslint src --ext .ts,.tsx --fix",
+    "knip": "knip"
+  },
+  "lint-staged": {
+    "*.{ts,tsx,css,scss,md}": [
+      "prettier --write",
+      "eslint --fix"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  }
+}

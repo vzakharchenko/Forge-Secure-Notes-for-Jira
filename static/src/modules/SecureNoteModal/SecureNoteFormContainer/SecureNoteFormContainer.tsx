@@ -1,7 +1,7 @@
 // libs
 import React from "react";
 import { view } from "@forge/bridge";
-import { Request } from "@forge/resolver";
+import { Request } from "./constants";
 
 // helpers
 import { schema } from "./schema";

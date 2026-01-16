@@ -1,0 +1,9 @@
+export { Hero } from "./Hero";
+export { Features } from "./Features";
+export { Security } from "./Security";
+export { HowItWorks } from "./HowItWorks";
+export { Screenshots } from "./Screenshots";
+export { Accordion } from "./Accordion";
+export { Accomplishments } from "./Accomplishments";
+export { CTA } from "./CTA";
+export { Footer } from "./Footer";

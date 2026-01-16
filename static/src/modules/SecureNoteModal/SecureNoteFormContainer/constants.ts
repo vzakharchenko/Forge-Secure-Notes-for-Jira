@@ -5,3 +5,11 @@ export const EXPIRY_OPTIONS = [
   { label: "10 Days", value: "10d" },
   { label: "Custom", value: "custom" },
 ];
+
+export declare type Context = {
+  [key: string]: any;
+};
+export declare type Request<Argument = any> = {
+  payload: Argument;
+  context: Context;
+};

@@ -39,3 +39,23 @@ echo '➡️ lint check'
 npm run lint || { echo '❌ lint check failed.'; exit 1; }
 
 popd > /dev/null
+
+pushd web-site > /dev/null
+
+echo '➡️ npm audit (resolver)'
+npm audit fix|| { echo '❌ audit not fixed'; exit 1; }
+
+echo '➡️ lint-staged (static resources)'
+npx lint-staged || { echo '❌ lint-staged failed for static resources'; popd > /dev/null; exit 1; }
+
+
+echo '➡️ dependencies check'
+npm run knip || { echo '❌ Dependency check for static resources failed.'; exit 1; }
+
+echo '➡️ build'
+npm run build || { echo '❌ Build failed'; popd > /dev/null; exit 1; }
+
+echo '➡️ lint check'
+npm run lint || { echo '❌ lint check failed.'; exit 1; }
+
+popd > /dev/null
