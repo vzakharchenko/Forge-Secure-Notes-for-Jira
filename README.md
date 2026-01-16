@@ -495,9 +495,15 @@ npm run knip
 4. Push to the branch (`git push origin feature/amazing-feature`)
 5. Open a Pull Request
 
-## 📄 License
+## 📄 License & Security
+**Source Available / Fair Source**
+This project is licensed under the Business Source License (BSL 1.1).
 
-This project is licensed under the MIT License - see the LICENSE file for details.
+**Open for Audit**: You can review the source code to verify our "Zero Egress" and encryption claims.
+**Free for Dev**: You can fork, study, and test the code freely.
+**Paid for Prod**: Production use requires a license via the Atlassian Marketplace.
+
+Note: On 2030-01-01, this version of the code automatically becomes Open Source (MIT).
 
 ## 💬 Support
 
