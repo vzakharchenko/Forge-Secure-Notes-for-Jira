@@ -1,7 +1,7 @@
 import { ConfigEnv, defineConfig, UserConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import { config } from "dotenv";
-import { resolve } from "path";
+import { resolve } from "node:path";
 import { visualizer } from "rollup-plugin-visualizer";
 
 const manualChunks = (id: string) => {

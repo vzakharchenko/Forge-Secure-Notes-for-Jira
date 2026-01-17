@@ -60,20 +60,16 @@ export const Footer: React.FC = () => {
             <h3 className="text-white font-bold text-xl mb-4">Built With</h3>
             <ul className="space-y-2 text-slate-400">
               <li className="flex items-center gap-2">
-                <span className="w-2 h-2 bg-blue-500 rounded-full"></span>
-                React + Vite
+                <span className="w-2 h-2 bg-blue-500 rounded-full"></span>React + Vite
               </li>
               <li className="flex items-center gap-2">
-                <span className="w-2 h-2 bg-blue-500 rounded-full"></span>
-                Atlassian Forge
+                <span className="w-2 h-2 bg-blue-500 rounded-full"></span>Atlassian Forge
               </li>
               <li className="flex items-center gap-2">
-                <span className="w-2 h-2 bg-blue-500 rounded-full"></span>
-                TypeScript
+                <span className="w-2 h-2 bg-blue-500 rounded-full"></span>TypeScript
               </li>
               <li className="flex items-center gap-2">
-                <span className="w-2 h-2 bg-blue-500 rounded-full"></span>
-                Drizzle ORM
+                <span className="w-2 h-2 bg-blue-500 rounded-full"></span>Drizzle ORM
               </li>
             </ul>
           </div>
