@@ -3,8 +3,13 @@ import React from "react";
 const accomplishments = [
   {
     id: "open-source",
-    text: "Open-source project with MIT license",
+    text: "Source-available project with Business Source License",
     icon: "📜",
+  },
+  {
+    id: "security-audit",
+    text: "Open source - Security Officer can freely audit",
+    icon: "🔍",
   },
   {
     id: "test-coverage",

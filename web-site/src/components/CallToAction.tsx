@@ -66,7 +66,7 @@ export const CallToAction: React.FC = () => {
                 clipRule="evenodd"
               />
             </svg>
-            <span>Open-source project with MIT license</span>
+            <span>Source-available with Business Source License</span>
           </div>
           <div className="flex items-center gap-2">
             <svg className="w-5 h-5 text-green-300" fill="currentColor" viewBox="0 0 20 20">

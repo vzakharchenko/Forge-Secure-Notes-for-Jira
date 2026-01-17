@@ -2,7 +2,7 @@
   "name": "jira-global-page-custom-ui",
   "version": "1.1.4",
   "main": "index.js",
-  "license": "MIT",
+  "license": "BUSL-1.1",
   "private": true,
   "dependencies": {
     "@forge/api": "^6.4.3",

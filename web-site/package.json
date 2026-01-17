@@ -2,6 +2,7 @@
   "name": "Forge-Secure-Notes-for-Jira_site",
   "version": "1.0.0",
   "description": "",
+  "license": "BUSL-1.1",
   "main": "index.js",
   "dependencies": {
     "react": "^18.3.1",

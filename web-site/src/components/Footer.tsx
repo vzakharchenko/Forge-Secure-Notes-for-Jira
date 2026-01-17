@@ -78,7 +78,7 @@ export const Footer: React.FC = () => {
         <div className="border-t border-slate-800 pt-8">
           <div className="flex flex-col md:flex-row justify-between items-center gap-4">
             <p className="text-slate-400 text-sm">
-              © 2025 Secure Notes for Jira. Open-source project with MIT license.
+              © 2025 Secure Notes for Jira. Source-available with Business Source License (BSL 1.1).
             </p>
             <p className="text-slate-500 text-sm">
               Submitted to Codegeist 2025: Atlassian Williams Racing Edition
