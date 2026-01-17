@@ -48,8 +48,8 @@ export const Hero: React.FC = () => {
           </h1>
 
           <p className="text-xl md:text-2xl mb-12 text-blue-100 max-w-3xl mx-auto leading-relaxed font-light">
-            Share sensitive information securely within Jira issues.
-            <span className="text-white font-medium"> Zero-trust encryption</span> with
+            Share sensitive information securely within Jira issues.{/* */}
+            <span className="text-white font-medium"> Zero-trust encryption</span> with{/* */}
             <span className="text-white font-medium"> burn-after-reading</span> protection.
           </p>
 
@@ -61,7 +61,7 @@ export const Hero: React.FC = () => {
               className="group px-8 py-4 bg-white text-blue-900 font-semibold rounded-xl hover:bg-blue-50 transition-all duration-300 shadow-2xl hover:shadow-blue-500/50 hover:scale-105 transform"
             >
               <span className="flex items-center gap-2">
-                Get it on Marketplace
+                Get it on Marketplace{/* */}
                 <span className="text-xl group-hover:translate-x-1 transition-transform inline-block">
                   →
                 </span>
