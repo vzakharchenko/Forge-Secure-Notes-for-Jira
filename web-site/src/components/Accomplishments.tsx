@@ -73,7 +73,7 @@ export const Accomplishments: React.FC = () => {
               className="group px-6 py-3 bg-slate-900 text-white rounded-xl hover:bg-slate-800 transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105 transform font-semibold"
             >
               <span className="flex items-center gap-2">
-                View Snyk Report
+                View Snyk Report{/* */}
                 <span className="text-sm group-hover:translate-x-1 transition-transform inline-block">
                   ↗
                 </span>
@@ -86,7 +86,7 @@ export const Accomplishments: React.FC = () => {
               className="group px-6 py-3 bg-slate-900 text-white rounded-xl hover:bg-slate-800 transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105 transform font-semibold"
             >
               <span className="flex items-center gap-2">
-                View SonarCloud
+                View SonarCloud{/* */}
                 <span className="text-sm group-hover:translate-x-1 transition-transform inline-block">
                   ↗
                 </span>

@@ -27,9 +27,9 @@ export const CallToAction: React.FC = () => {
         </h2>
 
         <p className="text-xl md:text-2xl mb-12 text-blue-100 max-w-3xl mx-auto leading-relaxed">
-          Start sharing sensitive information securely today.
-          <span className="text-white font-semibold"> Zero-trust encryption</span>,
-          <span className="text-white font-semibold"> burn-after-reading</span>, and
+          Start sharing sensitive information securely today.{/* */}
+          <span className="text-white font-semibold"> Zero-trust encryption</span>,{/* */}
+          <span className="text-white font-semibold"> burn-after-reading</span>, and{/* */}
           <span className="text-white font-semibold"> comprehensive audit trails</span>.
         </p>
 
@@ -41,7 +41,7 @@ export const CallToAction: React.FC = () => {
             className="group px-10 py-5 bg-white text-blue-600 font-bold rounded-xl hover:bg-blue-50 transition-all duration-300 shadow-2xl hover:shadow-white/50 hover:scale-105 transform text-lg"
           >
             <span className="flex items-center gap-2">
-              Install from Marketplace
+              Install from Marketplace{/* */}
               <span className="text-xl group-hover:translate-x-1 transition-transform inline-block">
                 →
               </span>
