@@ -2,26 +2,32 @@ import React from "react";
 
 const accomplishments = [
   {
+    id: "open-source",
     text: "Open-source project with MIT license",
     icon: "📜",
   },
   {
+    id: "test-coverage",
     text: "85% test coverage with Vitest",
     icon: "✅",
   },
   {
+    id: "zero-vulnerabilities",
     text: "Zero bugs and vulnerabilities (Snyk & SonarCloud verified)",
     icon: "🛡️",
   },
   {
+    id: "typescript",
     text: "98.5% TypeScript codebase",
     icon: "💻",
   },
   {
+    id: "e2e-encryption",
     text: "Full end-to-end encrypted system",
     icon: "🔐",
   },
   {
+    id: "forge-native",
     text: "Forge-native without external services",
     icon: "⚡",
   },
@@ -41,9 +47,9 @@ export const Accomplishments: React.FC = () => {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
-          {accomplishments.map((accomplishment, index) => (
+          {accomplishments.map((accomplishment) => (
             <div
-              key={index}
+              key={accomplishment.id}
               className="group bg-white p-6 rounded-xl shadow-md hover:shadow-xl transition-all duration-300 border-l-4 border-blue-500 hover:border-indigo-600"
             >
               <div className="flex items-start gap-4">

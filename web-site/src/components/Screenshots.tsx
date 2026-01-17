@@ -2,24 +2,28 @@ import React from "react";
 
 const screenshots = [
   {
+    id: "create-notes",
     src: "/img/screenshot1.png",
     alt: "Creating secure note",
     title: "Create Encrypted Notes",
     description: "Easy-to-use interface for creating secure notes directly in Jira issues",
   },
   {
+    id: "decrypt-key",
     src: "/img/screenshot2.png",
     alt: "Decrypting secure note",
     title: "Decrypt with Key",
     description: "Simple decryption process with your unique key",
   },
   {
+    id: "view-content",
     src: "/img/screenshot3.png",
     alt: "Secure note decrypted",
     title: "View Content",
     description: "View your secure content with burn-after-reading protection",
   },
   {
+    id: "audit-dashboard",
     src: "/img/screenshot4.png",
     alt: "Secret notes history",
     title: "Audit Dashboard",
@@ -58,9 +62,9 @@ export const Screenshots: React.FC = () => {
 
         {/* Screenshots Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          {screenshots.map((screenshot, index) => (
+          {screenshots.map((screenshot) => (
             <div
-              key={index}
+              key={screenshot.id}
               className="group bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 border border-slate-100"
             >
               <div className="aspect-video bg-gradient-to-br from-slate-200 via-slate-100 to-slate-200 flex items-center justify-center relative overflow-hidden">

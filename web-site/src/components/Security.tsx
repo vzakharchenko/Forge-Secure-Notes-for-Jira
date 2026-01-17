@@ -2,6 +2,7 @@ import React from "react";
 
 const securityFeatures = [
   {
+    id: "zero-trust",
     icon: "🛡️",
     title: "Zero-Trust Architecture",
     description:
@@ -9,6 +10,7 @@ const securityFeatures = [
     color: "blue",
   },
   {
+    id: "client-side",
     icon: "🔑",
     title: "Client-Side Encryption",
     description:
@@ -16,6 +18,7 @@ const securityFeatures = [
     color: "indigo",
   },
   {
+    id: "no-recovery",
     icon: "🚫",
     title: "No Recovery",
     description:
@@ -23,6 +26,7 @@ const securityFeatures = [
     color: "red",
   },
   {
+    id: "runs-on-atlassian",
     icon: "☁️",
     title: "Runs on Atlassian",
     description: "The note lives fully inside Jira site, with native isolation and governance.",
@@ -61,9 +65,9 @@ export const Security: React.FC = () => {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-16">
-          {securityFeatures.map((feature, index) => (
+          {securityFeatures.map((feature) => (
             <div
-              key={index}
+              key={feature.id}
               className="group relative bg-white/5 backdrop-blur-sm p-8 rounded-2xl border border-white/10 hover:border-white/30 transition-all duration-300 hover:bg-white/10"
             >
               <div className="flex items-start gap-6">

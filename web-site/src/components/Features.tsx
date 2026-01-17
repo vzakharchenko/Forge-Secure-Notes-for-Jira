@@ -2,6 +2,7 @@ import React from "react";
 
 const features = [
   {
+    id: "e2e-encryption",
     icon: "🔐",
     title: "End-to-End Encryption",
     description:
@@ -9,6 +10,7 @@ const features = [
     gradient: "from-blue-500 to-cyan-500",
   },
   {
+    id: "automatic-expiration",
     icon: "⏰",
     title: "Automatic Expiration",
     description:
@@ -16,6 +18,7 @@ const features = [
     gradient: "from-purple-500 to-pink-500",
   },
   {
+    id: "one-time-access",
     icon: "👁️",
     title: "One-Time Access",
     description:
@@ -23,6 +26,7 @@ const features = [
     gradient: "from-orange-500 to-red-500",
   },
   {
+    id: "multiple-recipients",
     icon: "👥",
     title: "Multiple Recipients",
     description:
@@ -30,6 +34,7 @@ const features = [
     gradient: "from-green-500 to-emerald-500",
   },
   {
+    id: "audit-compliance",
     icon: "📊",
     title: "Audit & Compliance",
     description:
@@ -37,6 +42,7 @@ const features = [
     gradient: "from-indigo-500 to-blue-500",
   },
   {
+    id: "rovo-ai",
     icon: "🤖",
     title: "Rovo AI Analytics",
     description:
@@ -59,9 +65,9 @@ export const Features: React.FC = () => {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {features.map((feature, index) => (
+          {features.map((feature) => (
             <div
-              key={index}
+              key={feature.id}
               className="group relative bg-white p-8 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 border border-slate-100 hover:border-transparent overflow-hidden"
             >
               {/* Gradient background on hover */}

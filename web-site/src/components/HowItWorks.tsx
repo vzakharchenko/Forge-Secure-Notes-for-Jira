@@ -2,6 +2,7 @@ import React from "react";
 
 const steps = [
   {
+    id: "create-note",
     number: "1",
     title: "Create Note",
     description:
@@ -9,6 +10,7 @@ const steps = [
     icon: "📝",
   },
   {
+    id: "generate-key",
     number: "2",
     title: "Generate Key",
     description:
@@ -16,6 +18,7 @@ const steps = [
     icon: "🔑",
   },
   {
+    id: "share-securely",
     number: "3",
     title: "Share Securely",
     description:
@@ -23,6 +26,7 @@ const steps = [
     icon: "📧",
   },
   {
+    id: "decrypt-view",
     number: "4",
     title: "Decrypt & View",
     description:
@@ -48,8 +52,8 @@ export const HowItWorks: React.FC = () => {
           {/* Connecting line for desktop */}
           <div className="hidden lg:block absolute top-16 left-0 right-0 h-0.5 bg-gradient-to-r from-blue-200 via-indigo-300 to-purple-200"></div>
 
-          {steps.map((step, index) => (
-            <div key={index} className="relative text-center group">
+          {steps.map((step) => (
+            <div key={step.id} className="relative text-center group">
               {/* Step number circle */}
               <div className="relative mx-auto mb-6">
                 <div className="w-20 h-20 bg-gradient-to-br from-blue-500 to-indigo-600 text-white rounded-2xl flex items-center justify-center text-3xl font-bold shadow-xl group-hover:scale-110 transition-transform duration-300 relative z-10">
