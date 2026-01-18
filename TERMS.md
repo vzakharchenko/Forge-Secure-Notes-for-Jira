@@ -32,7 +32,17 @@ By using the App, you explicitly acknowledge and accept these limitations.
 
 ---
 
-## 3. Audit & Observability
+## 3. Privacy & Data Handling (Zero Egress)
+
+The App operates under a strict **"Zero Egress" policy** regarding sensitive data:
+
+- **Data Residency:** The App operates entirely within your Atlassian Cloud instance and the user's browser.
+- **No Data Transmission:** No decrypted data, encryption keys, or personal information is ever transmitted to, processed by, or stored on the Licensor's servers.
+- **Compliance:** Since the Licensor does not process or store your text data, the App simplifies compliance with GDPR, HIPAA, and other data protection regulations.
+
+---
+
+## 4. Audit & Observability
 
 While the App does not expose secret content, it provides **audit and observability mechanisms** to support security monitoring and compliance investigations.
 
@@ -47,7 +57,7 @@ These features are intended to support investigation and compliance workflows an
 
 ---
 
-## 4. License & Usage Rights
+## 5. License & Usage Rights
 
 The App is licensed under the **Business Source License 1.1 (BSL 1.1)** with the following parameters:
 
@@ -65,13 +75,22 @@ You may:
 ### Production Use
 "Production use" is defined as running the App in a live Atlassian environment (Jira / Confluence) for internal business operations or providing the App to third parties.
 
+### Permitted Use
+You may:
+- View, copy, and modify the source code.
+- Use the App for development, testing, security auditing, and educational purposes.
+- Review and audit the code for security and compliance evaluation.
+
+### Production Use
+"Production use" is defined as running the App in a live Atlassian environment (Jira / Confluence) for internal business operations or providing the App to third parties.
+
 Production use **requires a valid commercial license obtained via the Atlassian Marketplace**.
 
 On the License Change Date, the App will automatically become available under the MIT License.
 
 ---
 
-## 5. No Warranties
+## 6. No Warranties
 
 The App is provided **"as is"**, without warranties of any kind, express or implied, including but not limited to:
 - Merchantability
@@ -81,9 +100,12 @@ The App is provided **"as is"**, without warranties of any kind, express or impl
 
 Use of the App is at your own risk.
 
+**Technical support** is provided on a "best-effort" basis or according to the **Service Level Agreement (SLA)** applicable to your license tier, available at:
+[https://github.com/vzakharchenko/Forge-Secure-Notes-for-Jira/blob/master/SLA.md](https://github.com/vzakharchenko/Forge-Secure-Notes-for-Jira/blob/master/SLA.md)
+
 ---
 
-## 6. Limitation of Liability
+## 7. Limitation of Liability
 
 To the maximum extent permitted by law, the Licensor shall not be liable for:
 - Loss of data or encrypted content
@@ -93,7 +115,7 @@ To the maximum extent permitted by law, the Licensor shall not be liable for:
 
 ---
 
-## 7. Responsible Disclosure
+## 8. Responsible Disclosure
 
 If you believe you have discovered a security vulnerability, please follow the Responsible Disclosure Policy:
 
@@ -103,13 +125,13 @@ Valid security reports may be acknowledged and credited in release notes at the 
 
 ---
 
-## 8. Changes to These Terms
+## 9. Changes to These Terms
 
 These Terms may be updated from time to time. Continued use of the App after changes constitutes acceptance of the updated Terms.
 
 ---
 
-## 9. Contact
+## 10. Contact
 
 For licensing, security, or legal inquiries, contact:
 
