@@ -4,129 +4,106 @@ _Last updated: January 2026_
 
 This Privacy Policy explains how **Secure Notes for Jira** (the “App”) handles data when used within Atlassian products such as Jira and Confluence.
 
+We are committed to the principle of **Data Minimization** and a **Zero-Trust** security model.
+
 ---
 
 ## 1. Overview
 
-Secure Notes for Jira is designed with a **zero-trust security model**.  
-The App ensures that sensitive content is encrypted client-side and **never accessible to the backend**, administrators, or third parties.
+Secure Notes for Jira is designed so that the App developer **does not have access** to your sensitive data.
+- The App runs entirely on **Atlassian Forge** infrastructure.
+- Sensitive content is encrypted client-side.
+- The backend never receives plaintext data.
 
-This Privacy Policy applies to all users of the App.
+This Privacy Policy applies to all users of the App installed via the Atlassian Marketplace.
 
 ---
 
 ## 2. Data We Process
 
-### 2.1 Encrypted Content
+### 2.1 Encrypted Content (Zero Access)
+The App processes Secure Notes exclusively in the user's browser.
+- Content is encrypted **before** leaving the device.
+- The App stores only the **encrypted blob**.
+- Encryption keys are **never stored**, logged, transmitted, or recoverable by the App.
 
-- Encrypted note content is created and encrypted **entirely in the user’s browser**
-- The App backend **never receives plaintext**
-- Encryption keys are **never stored**, logged, or recoverable
+The Developer **cannot** decrypt, read, or restore encrypted content under any circumstances.
 
-The App **cannot** decrypt, read, or restore encrypted content under any circumstances.
+### 2.2 Technical Metadata
+To provide functionality and auditability, the App processes limited **technical metadata**, which is stored within your Atlassian instance:
+- Atlassian Account IDs (to identify senders/recipients)
+- Context Identifiers (Issue ID, Project ID, Site ID)
+- Timestamps (Creation, Access, Expiration)
+- Note Status (Active, Burned, Expired)
 
----
-
-### 2.2 Metadata (Non-Sensitive)
-
-To provide functionality, security, and auditability, the App processes limited **technical metadata**, including:
-
-- Atlassian account IDs
-- Jira issue, project, and site identifiers
-- Timestamps (creation, access, expiration, deletion)
-- Note status (created, viewed, expired, deleted)
-- Sender and intended recipient identifiers
-
-This metadata **never includes**:
-- encrypted content
-- encryption keys
-- passwords, secrets, or tokens
-- decrypted data of any kind
+This metadata **never includes** passwords, secrets, tokens, or decrypted payload data.
 
 ---
 
-## 3. Audit Logs
+## 3. Data Storage & Residency (Runs on Atlassian)
 
-The App maintains **audit logs** for transparency, compliance, and security monitoring.
+The App relies strictly on **Atlassian-hosted infrastructure** (Atlassian Forge).
 
-Audit logs may be used to:
-- display user activity history
-- provide administrators with visibility into secure note usage
-- investigate abnormal or suspicious usage patterns
-
-Audit logs contain **metadata only** and never include encrypted content or cryptographic material.
+- **No External Servers:** No data is transmitted to or stored on servers owned or operated by the Developer.
+- **Data Residency:** The App honors the Data Residency location of your Atlassian Cloud product. If your Jira instance is hosted in the EU, the App data remains in the EU.
+- **Storage:** All encrypted data and metadata are stored using Atlassian Forge Storage APIs, ensuring enterprise-grade security and compliance.
 
 ---
 
-## 4. AI & Automated Analysis (Rovo)
+## 4. Subprocessors
 
-Where enabled, the App may use **Atlassian Rovo** for AI-assisted analysis of audit data.
-
-- AI operates **exclusively on audit metadata**
-- Encrypted content and encryption keys are **never accessible**
-- All access is enforced using **Row-Level Security (RLS)**
-
-Users can only access their own data.  
-Administrators can access site-wide metadata, without exposure to secrets.
+We use **no third-party subprocessors** to process your data.
+The only infrastructure provider is **Atlassian Pty Ltd** (and its cloud providers, e.g., AWS), as part of the Forge platform.
 
 ---
 
-## 5. Data Storage & Infrastructure
+## 5. Audit Logs & AI Analysis
 
-- The App runs entirely on **Atlassian Forge**
-- All data is processed within **Atlassian-controlled infrastructure**
-- The App complies with **Runs on Atlassian** requirements
-- No external servers or third-party analytics services are used
+### 5.1 Audit Logs
+The App maintains immutable audit logs for security monitoring. These logs allow administrators to investigate usage patterns (e.g., "Who created a note?"). These logs contain **metadata only**.
 
----
-
-## 6. Data Retention
-
-- Encrypted content is permanently destroyed immediately after:
-  - being viewed (one-time access), or
-  - reaching its expiration time
-- Expired data cannot be recovered
-- Metadata may be retained for audit and compliance purposes
+### 5.2 AI Features (Atlassian Rovo)
+Where enabled by the customer, the App may use **Atlassian Rovo** to analyze audit metadata.
+- AI operates **strictly on metadata** (e.g., detecting anomaly access times).
+- AI **never accesses** encrypted payloads or keys.
+- AI access respects **Row-Level Security (RLS)**, ensuring users only see relevant data.
 
 ---
 
-## 7. No Recovery Guarantee
+## 6. Data Retention & Deletion
 
-Due to the App’s zero-trust design:
-
-- Encrypted content **cannot be recovered**
-- Administrators **cannot decrypt secrets**
-- There is **no password recovery**
-- Lost access means permanent loss of content
-
-By using the App, you acknowledge and accept these technical limitations.
+- **Automatic Destruction:** Encrypted content is permanently deleted from storage immediately upon "burn" (viewing) or expiration.
+- **Irrecoverable:** Once deleted, data cannot be restored by anyone, including Atlassian support or the Developer.
+- **Metadata Retention:** Metadata logs are retained according to the customer's Jira retention policies.
 
 ---
 
-## 8. Open Source & Self-Hosted Usage
+## 7. Your Rights (GDPR & CCPA)
 
-The App source code is publicly available.
+Since the App runs entirely within your Atlassian instance and the Developer has no access to your data:
 
-If you deploy, modify, or operate a derived version of the App outside the Atlassian Marketplace:
-- You are solely responsible for your own data handling
-- You are responsible for security, compliance, and legal obligations
+- **Access & Deletion Requests:** Must be directed to your organization's **Jira Administrator**.
+- **The Developer's Role:** The Developer acts purely as a software provider and **cannot** execute data deletion or export requests on behalf of individual users, as we have no technical access to your environment.
+
+---
+
+## 8. Cookies & Tracking
+
+The App **does not use** any third-party tracking cookies, analytics pixels, or advertising trackers.
+The App relies solely on standard Atlassian session cookies required for authentication and security.
 
 ---
 
 ## 9. Changes to This Policy
 
-This Privacy Policy may be updated to reflect product or regulatory changes.  
-Material changes will be documented in the project repository.
+This Privacy Policy may be updated to reflect product changes or legal requirements. Material changes will be documented in the project repository.
 
 ---
 
 ## 10. Contact
 
-For privacy or security-related questions, please refer to the project repository:
+For privacy inquiries, security reports, or compliance questions, please contact the developer via the project repository:
 
-- GitHub: https://github.com/vzakharchenko/Forge-Secure-Notes-for-Jira
-- Security Policy: https://github.com/vzakharchenko/Forge-Secure-Notes-for-Jira/blob/master/SECURITY.md
-
----
-
-By using Secure Notes for Jira, you agree to this Privacy Policy.
+- **Developer:** Vasyl Zakharchenko
+- **GitHub:** https://github.com/vzakharchenko
+- **Security Policy:** https://github.com/vzakharchenko/Forge-Secure-Notes-for-Jira/blob/master/SECURITY.md
