@@ -2,123 +2,131 @@
 
 _Last updated: January 2026_
 
-## Overview
-
-Secure Notes for Jira (“the App”) is designed with **privacy-by-design** and **zero-trust principles**.  
-Our primary goal is to ensure that sensitive information shared via the App is never exposed in plaintext — not to Atlassian, not to the App backend, and not to the App author.
-
-This Privacy Policy explains what data the App processes, how it is handled, and what **it explicitly does NOT collect**.
+This Privacy Policy explains how **Secure Notes for Jira** (the “App”) handles data when used within Atlassian products such as Jira and Confluence.
 
 ---
 
-## Data We Process
+## 1. Overview
 
-### 1. Encrypted Note Content
-- Secret content is **encrypted client-side** in the user’s browser.
-- The encryption key is **never transmitted** to the backend.
-- The backend stores only encrypted blobs.
-- Plaintext content is **never accessible** to the App, Atlassian infrastructure, or administrators.
+Secure Notes for Jira is designed with a **zero-trust security model**.  
+The App ensures that sensitive content is encrypted client-side and **never accessible to the backend**, administrators, or third parties.
 
-### 2. Metadata (Non-Secret)
-To support auditability and compliance, the App stores **limited metadata**, including:
-- Note identifier
-- Jira issue and project identifiers
-- Sender account ID
-- Recipient account IDs
-- Creation timestamp
-- Expiration timestamp
-- Read status (viewed / expired / deleted)
-- Optional user-provided description (non-secret)
-
-This metadata **does not contain secrets** and cannot be used to reconstruct encrypted content.
+This Privacy Policy applies to all users of the App.
 
 ---
 
-## Data We Do NOT Collect
+## 2. Data We Process
 
-The App explicitly does **not**:
-- Collect plaintext secrets
-- Store encryption keys
-- Track user behavior for analytics
-- Use cookies or tracking pixels
-- Send data to third-party analytics or monitoring services
-- Export data outside Atlassian infrastructure
+### 2.1 Encrypted Content
 
-There is **no external data egress**.
+- Encrypted note content is created and encrypted **entirely in the user’s browser**
+- The App backend **never receives plaintext**
+- Encryption keys are **never stored**, logged, or recoverable
+
+The App **cannot** decrypt, read, or restore encrypted content under any circumstances.
 
 ---
 
-## Data Storage & Processing
+### 2.2 Metadata (Non-Sensitive)
 
-- All backend processing runs on **Atlassian Forge infrastructure**
-- Encrypted data is stored using:
-  - `@forge/kvs.setSecret` for encrypted payloads
-  - Forge SQL for metadata and audit logs
-- The App is fully **Runs on Atlassian compliant**
+To provide functionality, security, and auditability, the App processes limited **technical metadata**, including:
 
----
+- Atlassian account IDs
+- Jira issue, project, and site identifiers
+- Timestamps (creation, access, expiration, deletion)
+- Note status (created, viewed, expired, deleted)
+- Sender and intended recipient identifiers
 
-## Access Control
-
-- Only intended recipients can decrypt and view a note.
-- Administrators can access **audit metadata only**, never secret content.
-- Row-Level Security (RLS) is enforced for all audit queries.
-- Rovo AI integration respects the same permission boundaries.
-
----
-
-## Data Retention
-
-- Encrypted notes are automatically deleted after:
-  - Being viewed (one-time access), or
-  - Reaching their expiration time
-- Metadata is retained for audit purposes only and can be exported by administrators if required.
+This metadata **never includes**:
+- encrypted content
+- encryption keys
+- passwords, secrets, or tokens
+- decrypted data of any kind
 
 ---
 
-## Third-Party Services
+## 3. Audit Logs
 
-The App does **not** integrate with third-party services for:
-- Analytics
-- Logging
-- Monitoring
-- Telemetry
+The App maintains **audit logs** for transparency, compliance, and security monitoring.
 
-All functionality is implemented using native Forge capabilities.
+Audit logs may be used to:
+- display user activity history
+- provide administrators with visibility into secure note usage
+- investigate abnormal or suspicious usage patterns
 
----
-
-## Open Source & Transparency
-
-The App is **source-available** under the Business Source License 1.1.
-
-You can audit the full implementation here:
-https://github.com/vzakharchenko/Forge-Secure-Notes-for-Jira
-
-Security researchers are encouraged to review the code and report issues responsibly.
+Audit logs contain **metadata only** and never include encrypted content or cryptographic material.
 
 ---
 
-## Responsible Disclosure
+## 4. AI & Automated Analysis (Rovo)
 
-If you discover a security or privacy issue, please follow our Responsible Disclosure Policy:
-https://github.com/vzakharchenko/Forge-Secure-Notes-for-Jira/blob/master/SECURITY.md
+Where enabled, the App may use **Atlassian Rovo** for AI-assisted analysis of audit data.
 
-Valid reports will be acknowledged and credited in release notes.
+- AI operates **exclusively on audit metadata**
+- Encrypted content and encryption keys are **never accessible**
+- All access is enforced using **Row-Level Security (RLS)**
 
----
-
-## Changes to This Policy
-
-This Privacy Policy may be updated as the App evolves.  
-Material changes will be documented in the repository history.
+Users can only access their own data.  
+Administrators can access site-wide metadata, without exposure to secrets.
 
 ---
 
-## Contact
+## 5. Data Storage & Infrastructure
 
-For privacy-related questions, contact:
+- The App runs entirely on **Atlassian Forge**
+- All data is processed within **Atlassian-controlled infrastructure**
+- The App complies with **Runs on Atlassian** requirements
+- No external servers or third-party analytics services are used
 
-**Vasyl Zakharchenko**  
-Project Maintainer  
-GitHub: https://github.com/vzakharchenko
+---
+
+## 6. Data Retention
+
+- Encrypted content is permanently destroyed immediately after:
+  - being viewed (one-time access), or
+  - reaching its expiration time
+- Expired data cannot be recovered
+- Metadata may be retained for audit and compliance purposes
+
+---
+
+## 7. No Recovery Guarantee
+
+Due to the App’s zero-trust design:
+
+- Encrypted content **cannot be recovered**
+- Administrators **cannot decrypt secrets**
+- There is **no password recovery**
+- Lost access means permanent loss of content
+
+By using the App, you acknowledge and accept these technical limitations.
+
+---
+
+## 8. Open Source & Self-Hosted Usage
+
+The App source code is publicly available.
+
+If you deploy, modify, or operate a derived version of the App outside the Atlassian Marketplace:
+- You are solely responsible for your own data handling
+- You are responsible for security, compliance, and legal obligations
+
+---
+
+## 9. Changes to This Policy
+
+This Privacy Policy may be updated to reflect product or regulatory changes.  
+Material changes will be documented in the project repository.
+
+---
+
+## 10. Contact
+
+For privacy or security-related questions, please refer to the project repository:
+
+- GitHub: https://github.com/vzakharchenko/Forge-Secure-Notes-for-Jira
+- Security Policy: https://github.com/vzakharchenko/Forge-Secure-Notes-for-Jira/blob/master/SECURITY.md
+
+---
+
+By using Secure Notes for Jira, you agree to this Privacy Policy.
