@@ -31,9 +31,6 @@ class FiveMinutesTrigger implements SchedulerTrigger {
   @useDiContainer("_container")
   @exceptionHandlerTrigger("Five Minutes Trigger Error")
   async handler(request: SchedulerTriggerRequest): Promise<SchedulerTriggerResponse<string>> {
-    // const analyticService = this._container.get<AnalyticService>(
-    //   FORGE_INJECTION_TOKENS.AnalyticService,
-    // );
     const securityNoteService = this._container.get<SecurityNoteService>(
       FORGE_INJECTION_TOKENS.SecurityNoteService,
     );
@@ -44,12 +41,6 @@ class FiveMinutesTrigger implements SchedulerTrigger {
       },
       async (totalDbExecutionTime, totalResponseSize, printQueriesWithPlan) => {
         const resolverName = request.context.moduleKey;
-        // await analyticService.sendAnalytics(
-        //   "sql_5mins_performance",
-        //   resolverName,
-        //   request.context.cloudId,
-        //   { totalDbExecutionTime, totalResponseSize },
-        // );
         if (totalDbExecutionTime > 2000) {
           // eslint-disable-next-line no-console
           console.warn(
