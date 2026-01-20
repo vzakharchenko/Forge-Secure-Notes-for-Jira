@@ -1,6 +1,6 @@
 import * as api from "@forge/api";
 
-import { CurrentUser } from "./UserService";
+import { CurrentUser, CustomerRequest } from "./UserService";
 import { GetPermissionsResponse } from "./GetPermissionsResponse";
 import { injectable } from "inversify";
 
@@ -10,6 +10,24 @@ export class JiraUserService {
     try {
       const response = await api.asUser().requestJira(api.route`/rest/api/3/myself`);
       return await response.json();
+    } catch (e) {
+      // eslint-disable-next-line no-console
+      console.error(e);
+      return undefined;
+    }
+  }
+
+  async getIssueByPortalKey(key: string): Promise<CustomerRequest | undefined> {
+    try {
+      const response = await api
+        .asUser()
+        .requestJira(api.route`/rest/servicedeskapi/request/${key}`);
+      if (response.ok) {
+        return await response.json();
+      }
+      // eslint-disable-next-line no-console
+      console.warn("ServiceDeskApi error " + (await response.text()));
+      return undefined;
     } catch (e) {
       // eslint-disable-next-line no-console
       console.error(e);

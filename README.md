@@ -80,6 +80,77 @@ The project follows a clean architecture pattern with clear separation of concer
   - Encrypted content in `@forge/kvs` (via `setSecret`)
   - Metadata in `@forge/sql`
 
+### Jira Service Management Portal Integration
+
+The application seamlessly integrates with Jira Service Management portals through automatic context detection and transformation:
+
+- **Context Detection**: The `ContextService` automatically detects portal context by checking for `extension.portal` and `extension.request.key` properties
+- **Request Resolution**: When in portal context, the app uses `JiraUserService.getIssueByPortalKey()` to fetch customer request details via the Service Desk API (`/rest/servicedeskapi/request/{key}`)
+- **Context Transformation**: Portal requests are automatically transformed into issue context, ensuring all secure note functionality works identically:
+  - Portal request keys are mapped to underlying Jira issue keys
+  - Customer request metadata is preserved in the context
+  - Issue and project information is extracted from the customer request
+- **Frontend Integration**: The React frontend (`ForgeModule.tsx`) detects portal context and fetches customer request information when needed
+- **Seamless Experience**: Users (both portal customers and Jira users) experience the same secure notes functionality regardless of whether they're in a standard Jira issue or a JSM portal request
+
+### Forge Permissions & Scopes
+
+The application requires specific Forge scopes to function properly. Each scope is essential for core functionality:
+
+#### Required Scopes:
+
+- **`read:jira-user`**:
+  - **Purpose**: Read information about the current authenticated user
+  - **Usage**: Used by `JiraUserService.getCurrentUser()` to fetch the current user's profile, display name, and avatar URLs
+  - **Required for**: Displaying user information when creating secure notes, showing creator details in note cards
+
+- **`read:user:jira`**:
+  - **Purpose**: Read information about other Jira users by their account ID
+  - **Usage**: Used by `JiraUserService.getUserById()` to fetch recipient user details (display name, avatar) when creating secure notes
+  - **Required for**: Populating recipient information in secure note creation, showing user avatars and names in the UI
+
+- **`read:permission:jira`**:
+  - **Purpose**: Check user permissions in Jira
+  - **Usage**: Used by `JiraUserService.isJiraAdmin()` and `getMyPermissions()` to determine if a user has admin privileges
+  - **Required for**:
+    - Admin-only features (User History audit page)
+    - Row-level security in Rovo AI queries (admin users see all notes, non-admin users see only their own)
+    - Access control for audit pages
+
+- **`send:notification:jira`**:
+  - **Purpose**: Send email notifications to Jira users
+  - **Usage**: Used by notification functions (`sendIssueNotification`, `sendExpirationNotification`, `sendNoteDeletedNotification`) to send email alerts
+  - **Required for**:
+    - Notifying recipients when a secure note is created
+    - Alerting users when a secure note expires
+    - Notifying users when a secure note is deleted
+
+- **`storage:app`**:
+  - **Purpose**: Access Forge Key-Value Storage (KVS) for the app
+  - **Usage**: Used by `SecurityStorage` to store encrypted note content via `@forge/kvs.setSecret()`
+  - **Required for**:
+    - Storing encrypted secure note payloads
+    - Temporary storage of sensitive data before decryption
+    - Secure data persistence (encrypted content is stored separately from metadata)
+
+- **`read:app-global-channel:realtime`**:
+  - **Purpose**: Read from global real-time channels for cross-instance communication
+  - **Usage**: Used by `@forge/realtime.publishGlobal()` to broadcast events when notes are created, viewed, or deleted
+  - **Required for**:
+    - Real-time UI updates across all users viewing the same issue
+    - Instant synchronization when notes are created or deleted
+    - Live status updates without page refresh
+
+- **`read:request:jira-service-management`**:
+  - **Purpose**: Read customer request information from Jira Service Management portals
+  - **Usage**: Used by `JiraUserService.getIssueByPortalKey()` to fetch customer request details via Service Desk API
+  - **Required for**:
+    - JSM portal support - fetching request details from portal context
+    - Mapping portal request keys to underlying Jira issue keys
+    - Displaying secure notes in Jira Service Management customer portals
+
+> **Note**: All scopes are read-only except `send:notification:jira` and `storage:app`, which are necessary for core functionality. The app follows the principle of least privilege - it only requests the minimum permissions required to function.
+
 ### Security Design
 
 - **Client-side encryption** using Web Crypto API
@@ -173,9 +244,48 @@ forge tunnel
 
 ## 📝 Usage Guide
 
+### Jira Service Management Portal Support
+
+**Secure Notes for Jira** fully supports **Jira Service Management (JSM) portals**, allowing customers and agents to create and manage secure notes directly within customer request views.
+
+#### Key Features for JSM Portals:
+
+- ✅ **Automatic Portal Detection**: The app automatically detects when it's running in a JSM portal context and adapts accordingly
+- ✅ **Customer Request Integration**: Secure notes are seamlessly integrated with JSM customer requests
+- ✅ **Portal User Support**: Both portal customers and Jira users can create and view secure notes
+- ✅ **Request Type Awareness**: The app recognizes JSM request types and displays the secure notes panel appropriately
+- ✅ **Seamless Experience**: The same secure note functionality available in standard Jira issues works identically in JSM portals
+
+#### How It Works:
+
+1. **In JSM Portal Context**: When viewing a customer request in a JSM portal, the "Secure Notes For Jira" app appears in the Apps section
+2. **Secure Notes Panel**: The dedicated "Secure notes panel" is displayed below the request details
+3. **Create Notes**: Portal users can create secure notes just like in standard Jira issues
+4. **View Notes**: Both incoming and sent notes are displayed with the same UI and functionality
+5. **Automatic Context Handling**: The app automatically:
+   - Detects portal context via `extension.portal` and `extension.request.key`
+   - Fetches customer request details using the Service Desk API
+   - Transforms portal context to issue context for seamless operation
+   - Handles both portal customers and Jira users transparently
+
+#### Portal-Specific Behavior:
+
+- **For Portal Customers**: When a customer (reporter) views their request, they can see and interact with secure notes
+- **For Agents**: Jira users (agents) viewing the same request have full access to secure notes functionality
+- **Request Key Mapping**: Portal request keys (e.g., `SN-8`) are automatically mapped to underlying Jira issue keys
+- **Context Transformation**: Portal requests are automatically converted to issue context, ensuring all secure note features work seamlessly
+
+#### Example Use Cases:
+
+- **Customer Support**: Agents can share sensitive information (like temporary passwords or access codes) securely with customers through portal requests
+- **Internal Communication**: Team members can exchange confidential information related to customer requests
+- **Secure Documentation**: Store sensitive details about customer requests that shouldn't be visible in public comments
+
+> **Note**: The app maintains the same security guarantees in portal contexts as in standard Jira issues. All encryption, expiration, and access control features work identically.
+
 ### Creating a Secure Note
 
-1. Open any Jira issue
+1. Open any Jira issue or JSM customer request
 2. Click on the "Secure Notes" panel
 3. Click "Create New Secure Note"
 4. Fill in the required fields:
@@ -494,6 +604,7 @@ npm run knip
 5. Open a Pull Request
 
 ## 📄 License & Security
+
 **Source Available / Fair Source**
 This project is licensed under the Business Source License (BSL 1.1).
 

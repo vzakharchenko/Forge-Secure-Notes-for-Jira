@@ -20,8 +20,15 @@ import { SecureNoteFormFields } from "./models";
 // components
 import FormContainer from "@src/components/forms/FormContainer/FormContainer";
 import SecureNoteForm from "./SecureNoteForm";
+import { CustomerRequest } from "../../../shared/models/customerRequest";
 
-const SecureNoteFormContainer = ({ accountId }: { accountId: string }) => {
+const SecureNoteFormContainer = ({
+  accountId,
+  customerRequest,
+}: {
+  accountId: string;
+  customerRequest?: CustomerRequest;
+}) => {
   const handleSubmit = async (data: SecureNoteFormFields) => {
     const { targetUsers, description, note, expiryOption, expiryDate, encryptionKey } = data;
     const expiry = expiryOption === "custom" ? expiryDate : expiryOption;
@@ -69,7 +76,7 @@ const SecureNoteFormContainer = ({ accountId }: { accountId: string }) => {
       shouldDisableSubmitOnDirty={false}
       footerAlign="end"
     >
-      <SecureNoteForm accountId={accountId} />
+      <SecureNoteForm accountId={accountId} customerRequest={customerRequest} />
     </FormContainer>
   );
 };

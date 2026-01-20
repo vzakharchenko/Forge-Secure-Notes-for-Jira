@@ -309,5 +309,98 @@ describe("JiraUserService", () => {
 
       expect(result).toBe(false);
     });
+
+    it("should return false when getMyPermissions throws an error", async () => {
+      const error = new Error("Permission check failed");
+      mockRequestJira.mockRejectedValue(error);
+
+      const consoleSpy = vi.spyOn(console, "error").mockImplementation(() => {});
+
+      const result = await jiraUserService.isJiraAdmin();
+
+      expect(result).toBe(false);
+      expect(consoleSpy).toHaveBeenCalledWith(
+        "Permission check error. fallback is not admin",
+        error,
+      );
+
+      consoleSpy.mockRestore();
+    });
+  });
+
+  describe("getIssueByPortalKey", () => {
+    it("should return customer request when request succeeds", async () => {
+      const key = "PORTAL-1";
+      const mockCustomerRequest = {
+        issueId: "portal-issue-123",
+        issueKey: "PORTAL-1",
+        requestTypeId: "type-123",
+        serviceDeskId: "desk-123",
+        active: true,
+        summary: "Test request",
+        reporter: {
+          accountId: "reporter-123",
+          displayName: "Reporter",
+          _links: {
+            avatarUrls: {
+              "32x32": "avatar-url",
+            },
+          },
+        },
+      };
+
+      const mockResponse = {
+        ok: true,
+        json: vi.fn().mockResolvedValue(mockCustomerRequest),
+        text: vi.fn().mockResolvedValue(""),
+      };
+      mockRequestJira.mockResolvedValue(mockResponse);
+
+      const result = await jiraUserService.getIssueByPortalKey(key);
+
+      expect(result).toEqual(mockCustomerRequest);
+      expect(mockAsUser).toHaveBeenCalledTimes(1);
+      expect(mockRequestJira).toHaveBeenCalledTimes(1);
+      expect(mockRequestJira).toHaveBeenCalledWith(`/rest/servicedeskapi/request/${key}`);
+    });
+
+    it("should return undefined when response.ok is false", async () => {
+      const key = "PORTAL-1";
+      const mockResponse = {
+        ok: false,
+        text: vi.fn().mockResolvedValue("Service Desk API error"),
+      };
+      mockRequestJira.mockResolvedValue(mockResponse);
+
+      const consoleSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
+
+      const result = await jiraUserService.getIssueByPortalKey(key);
+
+      expect(result).toBeUndefined();
+      expect(mockAsUser).toHaveBeenCalledTimes(1);
+      expect(mockRequestJira).toHaveBeenCalledTimes(1);
+      expect(mockRequestJira).toHaveBeenCalledWith(`/rest/servicedeskapi/request/${key}`);
+      expect(consoleSpy).toHaveBeenCalledWith("ServiceDeskApi error Service Desk API error");
+
+      consoleSpy.mockRestore();
+    });
+
+    it("should return undefined when request fails", async () => {
+      const key = "PORTAL-1";
+      const error = new Error("Request failed");
+      mockRequestJira.mockRejectedValue(error);
+
+      const consoleSpy = vi.spyOn(console, "error").mockImplementation(() => {});
+
+      const result = await jiraUserService.getIssueByPortalKey(key);
+
+      expect(result).toBeUndefined();
+      expect(mockAsUser).toHaveBeenCalledTimes(1);
+      expect(mockRequestJira).toHaveBeenCalledTimes(1);
+      expect(mockRequestJira).toHaveBeenCalledWith(`/rest/servicedeskapi/request/${key}`);
+      expect(consoleSpy).toHaveBeenCalledWith(error);
+
+      consoleSpy.mockRestore();
+    });
   });
 });

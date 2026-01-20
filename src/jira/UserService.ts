@@ -12,3 +12,25 @@ export type CurrentUser = {
   };
   locale: string;
 };
+
+export interface CustomerRequest {
+  issueId: string;
+  issueKey: string;
+  summary: string;
+  requestTypeId: string;
+  serviceDeskId: string;
+  active: true;
+  reporter: {
+    accountId: string;
+    displayName: string;
+    _links: {
+      avatarUrls: {
+        "32x32": string;
+        "48x48": string;
+      };
+    };
+  };
+  _links: {
+    web: string;
+  };
+}

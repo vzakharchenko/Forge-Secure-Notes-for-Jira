@@ -1,9 +1,5 @@
 // libs
 import React from "react";
-import { useNavigate } from "react-router";
-
-// constants
-import { GLOBAL_ROUTES } from "@src/modules/AuditGlobal/constants/Routes";
 
 // components
 import { Box, Stack, Text } from "@atlaskit/primitives";
@@ -11,9 +7,7 @@ import SectionMessage from "@atlaskit/section-message";
 import Heading from "@atlaskit/heading";
 import Button from "@atlaskit/button/new";
 
-const ViewedContent = () => {
-  const navigate = useNavigate();
-
+const ViewedContent = ({ actionView }: { actionView: () => void }) => {
   return (
     <Box padding="space.400">
       <Stack space="space.300">
@@ -39,7 +33,7 @@ const ViewedContent = () => {
           </Text>
         </Stack>
         <Box>
-          <Button appearance="primary" onClick={() => navigate(GLOBAL_ROUTES.all.route)}>
+          <Button appearance="primary" onClick={() => actionView()}>
             Go to main page
           </Button>
         </Box>

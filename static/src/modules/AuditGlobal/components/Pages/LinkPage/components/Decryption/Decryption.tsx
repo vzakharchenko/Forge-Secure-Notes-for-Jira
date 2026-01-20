@@ -12,6 +12,7 @@ import DecryptionFormContainer from "./DecryptionFormContainer/DecryptionFormCon
 
 const Decryption = ({
   sourceAccountId,
+  recordId,
   setIsValid,
   setIsClosed,
   setDecryptedContent,
@@ -37,6 +38,7 @@ const Decryption = ({
           <DecryptionFormContainer
             sourceAccountId={sourceAccountId}
             setIsValid={setIsValid}
+            recordId={recordId}
             setIsClosed={setIsClosed}
             setDecryptedContent={setDecryptedContent}
           />

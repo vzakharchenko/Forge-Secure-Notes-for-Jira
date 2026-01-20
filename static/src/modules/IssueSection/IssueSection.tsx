@@ -1,5 +1,5 @@
 // libs
-import React, { useEffect, useMemo } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { realtime, router } from "@forge/bridge";
 
 // helpers
@@ -25,16 +25,28 @@ import NoteList from "./components/NoteList/NoteList";
 import PageLoading from "@src/components/loaders/PageLoading/PageLoading";
 import EmptyState from "@atlaskit/empty-state";
 import Heading from "@atlaskit/heading";
+import { CustomerRequest } from "@src/shared/models/customerRequest";
+import SecretPage from "../AuditGlobal/components/Pages/LinkPage/SecretPage";
 
 function IssueSection({
   accountId,
   appUrl,
   issueId,
   timezone,
-}: Readonly<{ accountId: string; appUrl: string; issueId: string; timezone: string }>) {
+  customerRequest,
+}: Readonly<{
+  accountId: string;
+  appUrl: string;
+  issueId: string;
+  timezone: string;
+  customerRequest?: CustomerRequest;
+}>) {
+  console.log(JSON.stringify(customerRequest));
   const { data: notes = [], isFetching: areNotesFetching } = useFetchNotes();
   const { mutate: mutateCreateNote, isPending: isCreateNotePending } = useCreateNote();
   const { mutate: mutateDeleteNote } = useDeleteNote();
+
+  const [showSecret, setShowSecret] = useState<string>();
 
   useEffect(() => {
     const globalSubscription = realtime.subscribeGlobal(SHARED_EVENT_NAME, async (payload) => {
@@ -42,7 +54,12 @@ function IssueSection({
         await queryClient.refetchQueries({ queryKey: NOTES_QUERY_KEYS.LIST });
       }
     });
-
+    const records = incomingNotes.filter(
+      (t) => t.status === "NEW" && t.targetUser.accountId === accountId,
+    );
+    if (records.length === 1) {
+      setShowSecret(records[0].id);
+    }
     return () => {
       globalSubscription.then((s) => s.unsubscribe());
     };
@@ -75,13 +92,30 @@ function IssueSection({
   };
 
   const handleOpenNote = async (noteId: string) => {
-    await router.open(`/jira/apps/${appUrl}${noteId}`);
+    if (customerRequest) {
+      handleClickNote(noteId);
+    } else {
+      await router.open(`/jira/apps/${appUrl}${noteId}`);
+    }
   };
 
   const handleDeleteNote = (noteId: string) => {
     mutateDeleteNote(noteId);
   };
 
+  const handleClickNote = (noteId: string) => {
+    setShowSecret(noteId);
+  };
+
+  if (showSecret) {
+    return (
+      <SecretPage
+        recordId={showSecret}
+        actionViewed={() => setShowSecret(undefined)}
+        navigate={() => setShowSecret(undefined)}
+      />
+    );
+  }
   return (
     <Box padding="space.400">
       <Stack space="space.400">
@@ -89,14 +123,16 @@ function IssueSection({
           <Heading size="large" as="h2">
             Secure notes panel
           </Heading>
-          <Button
-            appearance="primary"
-            iconBefore={AddIcon}
-            onClick={handleNewNote}
-            isDisabled={isCreateNotePending}
-          >
-            Create secure note
-          </Button>
+          {customerRequest && customerRequest.reporter.accountId === accountId ? null : (
+            <Button
+              appearance="primary"
+              iconBefore={AddIcon}
+              onClick={handleNewNote}
+              isDisabled={isCreateNotePending}
+            >
+              Create secure note
+            </Button>
+          )}
         </Inline>
         {areNotesFetching && <PageLoading text="Loading secure notes" />}
         {!areNotesFetching && !incomingNotes.length && !sentNotes.length && (
@@ -109,12 +145,15 @@ function IssueSection({
               notes={incomingNotes}
               variant="incoming"
               onOpen={handleOpenNote}
+              onClick={handleClickNote}
+              accountId={accountId}
               timezone={timezone}
             />
             <NoteList
               title="Sent notes (from me)"
               notes={sentNotes}
               variant="sent"
+              accountId={accountId}
               onDelete={handleDeleteNote}
               timezone={timezone}
             />

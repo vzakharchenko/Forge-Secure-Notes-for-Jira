@@ -21,11 +21,11 @@ describe("issue resolver", () => {
     vi.clearAllMocks();
   });
 
-  it("should register all three controllers", () => {
+  it("should register all five controllers", () => {
     issue(mockResolver);
 
-    // Verify that all three controllers are registered
-    expect(mockDefine).toHaveBeenCalledTimes(3);
+    // Verify that all five controllers are registered
+    expect(mockDefine).toHaveBeenCalledTimes(5);
   });
 
   it("should register GetMySecurityNotesController", () => {
@@ -33,19 +33,19 @@ describe("issue resolver", () => {
 
     // The resolver.define should be called with the function name from GetMySecurityNotesController
     // We can't directly check which controller called define, but we can verify the count
-    expect(mockDefine).toHaveBeenCalledTimes(3);
+    expect(mockDefine).toHaveBeenCalledTimes(5);
   });
 
   it("should register CreateSecurityNoteController", () => {
     issue(mockResolver);
 
-    expect(mockDefine).toHaveBeenCalledTimes(3);
+    expect(mockDefine).toHaveBeenCalledTimes(5);
   });
 
   it("should register DeleteSecurityNoteController", () => {
     issue(mockResolver);
 
-    expect(mockDefine).toHaveBeenCalledTimes(3);
+    expect(mockDefine).toHaveBeenCalledTimes(5);
   });
 
   it("should pass resolver and container to register method", () => {
@@ -57,6 +57,12 @@ describe("issue resolver", () => {
       register: vi.fn(),
     };
     const mockDeleteController = {
+      register: vi.fn(),
+    };
+    const mockOpenController = {
+      register: vi.fn(),
+    };
+    const mockFetchController = {
       register: vi.fn(),
     };
 
@@ -71,6 +77,12 @@ describe("issue resolver", () => {
       }
       if (serviceIdentifier === FORGE_INJECTION_TOKENS.DeleteSecurityNoteController) {
         return mockDeleteController as any;
+      }
+      if (serviceIdentifier === FORGE_INJECTION_TOKENS.OpenSecurityNoteController) {
+        return mockOpenController as any;
+      }
+      if (serviceIdentifier === FORGE_INJECTION_TOKENS.FetchSecurityNoteController) {
+        return mockFetchController as any;
       }
       // For other services, return a mock object
       return {} as any;
@@ -97,6 +109,18 @@ describe("issue resolver", () => {
       expect.any(Container), // container
     );
 
+    expect(mockOpenController.register).toHaveBeenCalledTimes(1);
+    expect(mockOpenController.register).toHaveBeenCalledWith(
+      expect.any(Object), // resolver
+      expect.any(Container), // container
+    );
+
+    expect(mockFetchController.register).toHaveBeenCalledTimes(1);
+    expect(mockFetchController.register).toHaveBeenCalledWith(
+      expect.any(Object), // resolver
+      expect.any(Container), // container
+    );
+
     // Restore original implementation
     Container.prototype.get = originalGet;
   });
@@ -107,7 +131,7 @@ describe("issue resolver", () => {
     issue(mockResolver);
 
     // Verify that bind was called (which means container was created and bindings were set up)
-    // We expect 11 bindings (3 controllers + 8 services)
-    expect(bindSpy).toHaveBeenCalledTimes(11);
+    // We expect 13 bindings (5 controllers + 8 services)
+    expect(bindSpy).toHaveBeenCalledTimes(13);
   });
 });

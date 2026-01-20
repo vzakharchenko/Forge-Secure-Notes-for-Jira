@@ -15,7 +15,7 @@ import Lozenge from "@atlaskit/lozenge";
 import DeleteIcon from "@atlaskit/icon/core/delete";
 import ArrowUpRightIcon from "@atlaskit/icon/core/arrow-up-right";
 
-const containerStyles = xcss({
+const baseContainerStyles = xcss({
   backgroundColor: "elevation.surface.raised",
   padding: "space.150",
   borderRadius: "radius.small",
@@ -29,15 +29,37 @@ const containerStyles = xcss({
   },
 });
 
-const NoteCard = ({ note, variant, onOpen, onDelete, timezone }: NoteCardProps) => {
+const clickableContainerStyles = xcss({
+  cursor: "pointer",
+});
+
+const NoteCard = ({
+  note,
+  variant,
+  onOpen,
+  accountId,
+  onClick,
+  onDelete,
+  timezone,
+}: NoteCardProps) => {
   const isNew = note.status === "NEW";
   const displayDate = isNew ? note.expiration : note.viewedAt;
   const dateLabel = isNew ? "Expires" : "Viewed";
   const displayUser = variant === "incoming" ? note.createdBy : note.targetUser;
   const userLabel = variant === "incoming" ? "From" : "To";
 
+  const handleCardClick = () => {
+    if (onClick) {
+      onClick(note.id, accountId);
+    }
+  };
+
+  const containerStyles = onClick
+    ? [baseContainerStyles, clickableContainerStyles]
+    : baseContainerStyles;
+
   return (
-    <Flex xcss={containerStyles}>
+    <Box xcss={containerStyles} onClick={onClick ? handleCardClick : undefined}>
       <Flex alignItems="start" justifyContent="space-between">
         <Text as="p" size="large">
           {userLabel}: <Text weight="semibold">{displayUser.displayName}</Text>
@@ -71,7 +93,10 @@ const NoteCard = ({ note, variant, onOpen, onDelete, timezone }: NoteCardProps) 
                 icon={ArrowUpRightIcon}
                 appearance="subtle"
                 isTooltipDisabled={false}
-                onClick={() => onOpen(note.id)}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onOpen(note.id);
+                }}
               />
             )}
             {variant === "sent" && onDelete && (
@@ -80,13 +105,16 @@ const NoteCard = ({ note, variant, onOpen, onDelete, timezone }: NoteCardProps) 
                 icon={DeleteIcon}
                 appearance="subtle"
                 isTooltipDisabled={false}
-                onClick={() => onDelete(note.id)}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onDelete(note.id);
+                }}
               />
             )}
           </>
         )}
       </Flex>
-    </Flex>
+    </Box>
   );
 };
 
