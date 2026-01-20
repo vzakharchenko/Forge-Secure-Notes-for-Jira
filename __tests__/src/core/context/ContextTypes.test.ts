@@ -256,7 +256,8 @@ describe("ContextTypes", () => {
 
       const result = isIssueContext(context);
 
-      expect(result).toBe(false);
+      // Since project is now optional in IssueContext, context with only issue should return true
+      expect(result).toBe(true);
     });
 
     it("should return false for BaseContext with only project", () => {

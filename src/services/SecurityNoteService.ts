@@ -248,8 +248,8 @@ export class SecurityNoteService {
     return this.mapSecurityNotesToView(securityDbNotes, {
       issueId: id,
       issueKey: key,
-      projectId: issueContext.extension.project.id,
-      projectKey: issueContext.extension.project.key,
+      projectId: issueContext.extension.project?.id,
+      projectKey: issueContext.extension.project?.key,
     });
   }
 
@@ -264,8 +264,8 @@ export class SecurityNoteService {
       const data: Partial<InferInsertModel<typeof securityNotes>> = {
         issueKey: context.extension.issue.key,
         issueId: context.extension.issue.id,
-        projectId: context.extension.project.id,
-        projectKey: context.extension.project.key,
+        projectId: context.extension.project?.id,
+        projectKey: context.extension.project?.key,
         targetUserId: targetUser.accountId,
         targetUserName: targetUser.userName,
         encryptionKeyHash: await calculateHash(
@@ -309,7 +309,9 @@ export class SecurityNoteService {
       await this.securityStorage.savePayload(String(data.id), securityNote.encryptedPayload);
       const appUrlParts = context.localId.split("/");
       const appUrl = `${appUrlParts[1]}/${appUrlParts[2]}/view/${data.id}`;
-      const noteLink = `${context.siteUrl}/jira/apps/${appUrl}`;
+      const noteLink = context.customerRequest
+        ? context.customerRequest._links.web
+        : `${context.siteUrl}/jira/apps/${appUrl}`;
       try {
         await sendIssueNotification({
           issueKey: context.extension.issue.key,

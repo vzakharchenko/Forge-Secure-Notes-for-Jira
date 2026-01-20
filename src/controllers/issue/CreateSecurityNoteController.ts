@@ -35,7 +35,6 @@ export class CreateSecurityNoteController extends ActualResolver<AuditUser> {
     const issueId = context.extension.issue.id;
     const payload: NewSecurityNote = req.payload;
     await this.securityNoteService.createSecurityNote(payload);
-
     await publishGlobal(SHARED_EVENT_NAME, issueId);
     return { result: await this.securityNoteService.getMySecurityNoteIssue() };
   }

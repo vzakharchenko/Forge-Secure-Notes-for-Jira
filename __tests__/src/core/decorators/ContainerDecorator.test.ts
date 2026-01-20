@@ -130,6 +130,40 @@ describe("ContainerDecorator", () => {
       expect(bindings).toBeDefined();
       expect(bindings.length).toBe(2);
     });
+
+    it("should reuse existing DI_META map when it already exists", () => {
+      class Service1 {
+        test1() {
+          return "service1";
+        }
+      }
+
+      class Service2 {
+        test2() {
+          return "service2";
+        }
+      }
+
+      class TestClass {
+        @diContainer({ name: "Service1", bind: Service1 })
+        field1: any;
+
+        @diContainer({ name: "Service2", bind: Service2 })
+        field2: any;
+      }
+
+      const instance = new TestClass();
+      const ctor = instance.constructor as any;
+      const bindings1 = ctor.__di_bindings__?.get("field1");
+      const bindings2 = ctor.__di_bindings__?.get("field2");
+
+      expect(bindings1).toBeDefined();
+      expect(bindings1.length).toBe(1);
+      expect(bindings2).toBeDefined();
+      expect(bindings2.length).toBe(1);
+      // Both should use the same map instance
+      expect(ctor.__di_bindings__).toBe(ctor.__di_bindings__);
+    });
   });
 
   describe("useDiContainer", () => {
@@ -231,6 +265,59 @@ describe("ContainerDecorator", () => {
 
       expect(result).toBe("test");
       expect(instance._container).toBeUndefined(); // Should be cleaned up immediately
+    });
+
+    it("should handle case when bindings map does not exist", async () => {
+      // class TestService {
+      //   test() {
+      //     return "test";
+      //   }
+      // }
+
+      class TestClass {
+        _container: Container;
+
+        @useDiContainer("_container")
+        async method() {
+          // No bindings defined, should use empty array
+          return "no-bindings";
+        }
+      }
+
+      const instance = new TestClass();
+      const result = await instance.method();
+
+      expect(result).toBe("no-bindings");
+    });
+
+    it("should handle case when field bindings do not exist in map", async () => {
+      class TestService1 {
+        test() {
+          return "service1";
+        }
+      }
+
+      // class TestService2 {
+      //   test() {
+      //     return "service2";
+      //   }
+      // }
+
+      class TestClass {
+        @diContainer({ name: "Service1", bind: TestService1 })
+        _container1: Container;
+
+        @useDiContainer("_container2")
+        async method() {
+          // _container2 has no bindings defined
+          return "no-bindings";
+        }
+      }
+
+      const instance = new TestClass();
+      const result = await instance.method();
+
+      expect(result).toBe("no-bindings");
     });
   });
 });

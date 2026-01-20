@@ -27,13 +27,21 @@ import FormMultiAutocomplete from "@src/components/forms/selects/MultiAutocomple
 import FormDatePicker from "@src/components/forms/DatePicker/FormDatePicker";
 import CopyIcon from "@atlaskit/icon/core/copy";
 import RefreshIcon from "@atlaskit/icon/core/refresh";
+import { requestToLookup } from "../../../shared/utils/portal";
+import { CustomerRequest } from "../../../shared/models/customerRequest";
 
 const stackStyles = xcss({
   marginTop: "space.100",
   marginBottom: "space.500",
 });
 
-const SecureNoteForm = ({ accountId }: { accountId: string }) => {
+const SecureNoteForm = ({
+  accountId,
+  customerRequest,
+}: {
+  accountId: string;
+  customerRequest?: CustomerRequest;
+}) => {
   const { setFieldValue } = useFormContext();
   const [isCustomExpiry, setIsCustomExpiry] = useState(false);
   const [encryptionKey, setEncryptionKey] = useState("");
@@ -42,6 +50,11 @@ const SecureNoteForm = ({ accountId }: { accountId: string }) => {
 
   useEffect(() => {
     createNewKey();
+    if (customerRequest) {
+      const options = requestToLookup(customerRequest);
+      setFieldValue("targetUsers", [options]);
+      setFieldValue("description", customerRequest.summary);
+    }
   }, []);
 
   const createNewKey = () => {
@@ -79,6 +92,7 @@ const SecureNoteForm = ({ accountId }: { accountId: string }) => {
           defaultOptions
           isScrollable
           isRequired
+          isDisabled={!!customerRequest}
         />
         <FormInput
           name="description"

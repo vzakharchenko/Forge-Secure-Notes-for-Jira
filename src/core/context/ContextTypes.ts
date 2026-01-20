@@ -1,3 +1,5 @@
+import { CustomerRequest } from "../../jira/UserService";
+
 export interface GeneralContext {
   [key: string]: unknown;
 }
@@ -61,11 +63,11 @@ export interface Project {
 export interface IssueContext extends BaseContext {
   extension: {
     issue: Issue;
-    project: Project;
+    project?: Project;
     type: string;
   };
+  customerRequest?: CustomerRequest;
 }
 
 export const isIssueContext = (context: BaseContext): context is IssueContext =>
-  (context as IssueContext).extension?.issue !== undefined &&
-  (context as IssueContext).extension?.project !== undefined;
+  (context as IssueContext).extension?.issue !== undefined;

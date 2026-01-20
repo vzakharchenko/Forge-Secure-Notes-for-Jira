@@ -9,7 +9,16 @@ import { Stack } from "@atlaskit/primitives";
 import NoteCard from "../NoteCard/NoteCard";
 import Heading from "@atlaskit/heading";
 
-const NoteList = ({ title, notes, variant, onOpen, onDelete, timezone }: NoteListProps) => {
+const NoteList = ({
+  title,
+  notes,
+  variant,
+  onOpen,
+  onDelete,
+  onClick,
+  timezone,
+  accountId,
+}: NoteListProps) => {
   if (notes.length === 0) {
     return null;
   }
@@ -24,6 +33,8 @@ const NoteList = ({ title, notes, variant, onOpen, onDelete, timezone }: NoteLis
           <NoteCard
             key={note.id}
             note={note}
+            accountId={accountId}
+            onClick={note.status === "NEW" ? onClick : undefined}
             variant={variant}
             onOpen={onOpen}
             onDelete={onDelete}

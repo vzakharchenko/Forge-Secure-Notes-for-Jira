@@ -14,7 +14,7 @@ export abstract class ActualResolver<T extends ErrorResponse> {
   register(resolver: Resolver, container: Container): void {
     resolver.define(this.functionName(), async (req: Request) => {
       const resolverName = this.functionName();
-      const context = container
+      const context = await container
         .get<ContextService>(FORGE_INJECTION_TOKENS.ContextService)
         .getContext(req);
       const kvsSchemaMigrationService: KVSSchemaMigrationService =

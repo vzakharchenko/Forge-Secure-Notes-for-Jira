@@ -1,6 +1,5 @@
 // libs
 import React from "react";
-import { useParams } from "react-router-dom";
 import { useMutation } from "@tanstack/react-query";
 
 // api
@@ -33,12 +32,11 @@ const containerStyles = xcss({
 
 const DecryptionFormContainer = ({
   sourceAccountId,
+  recordId,
   setIsValid,
   setIsClosed,
   setDecryptedContent,
 }: DecryptionFormContainerProps) => {
-  const params = useParams();
-
   const { mutateAsync: mutateAsyncGetSecureNote } = useMutation<
     SecurityNoteData,
     ServerError,
@@ -61,7 +59,7 @@ const DecryptionFormContainer = ({
     const keyForServer = await calculateHash(baseKey, DERIVE_PURPOSE_VERIFICATION, 1000);
 
     const decryptionData = {
-      id: params.recordId!,
+      id: recordId!,
       keyHash: keyForServer,
     };
 

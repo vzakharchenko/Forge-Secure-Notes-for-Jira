@@ -3,6 +3,8 @@ import {
   GetMySecurityNotesController,
   CreateSecurityNoteController,
   DeleteSecurityNoteController,
+  OpenSecurityNoteController,
+  FetchSecurityNoteController,
 } from "../../controllers";
 
 import { FORGE_INJECTION_TOKENS } from "../../constants";
@@ -24,6 +26,8 @@ const ISSUE_BINDINGS = [
   { name: FORGE_INJECTION_TOKENS.GetMySecurityNotesController, bind: GetMySecurityNotesController },
 
   { name: FORGE_INJECTION_TOKENS.SecurityNoteService, bind: SecurityNoteService },
+  { name: FORGE_INJECTION_TOKENS.OpenSecurityNoteController, bind: OpenSecurityNoteController },
+  { name: FORGE_INJECTION_TOKENS.FetchSecurityNoteController, bind: FetchSecurityNoteController },
   { name: FORGE_INJECTION_TOKENS.SecurityNoteRepository, bind: SecurityNoteRepository },
   { name: FORGE_INJECTION_TOKENS.BootstrapService, bind: BootstrapService },
   { name: FORGE_INJECTION_TOKENS.JiraUserService, bind: JiraUserService },
@@ -42,5 +46,11 @@ export const issue = withContainer(...ISSUE_BINDINGS)((container, resolver: Reso
     .register(resolver, container);
   container
     .get<DeleteSecurityNoteController>(FORGE_INJECTION_TOKENS.DeleteSecurityNoteController)
+    .register(resolver, container);
+  container
+    .get<OpenSecurityNoteController>(FORGE_INJECTION_TOKENS.OpenSecurityNoteController)
+    .register(resolver, container);
+  container
+    .get<FetchSecurityNoteController>(FORGE_INJECTION_TOKENS.FetchSecurityNoteController)
     .register(resolver, container);
 });

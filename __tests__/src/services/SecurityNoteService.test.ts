@@ -43,8 +43,9 @@ vi.mock("@forge/realtime", () => ({
   publishGlobal: vi.fn(),
 }));
 
+const mockV4 = vi.fn();
 vi.mock("uuid", () => ({
-  v4: vi.fn(),
+  v4: () => mockV4(),
 }));
 
 describe("SecurityNoteService", () => {
@@ -358,6 +359,217 @@ describe("SecurityNoteService", () => {
 
       expect(mockSecurityStorage.deletePayload).toHaveBeenCalled();
       expect(mockSecurityNoteRepository.deleteSecurityNote).not.toHaveBeenCalled();
+    });
+
+    it("should handle error when sending notification fails", async () => {
+      const mockNote = {
+        id: "note-1",
+        issueKey: "TEST-1",
+        targetUserId: "user-123",
+        createdUserName: "Creator",
+      };
+      vi.mocked(mockSecurityStorage.deletePayload).mockResolvedValue(undefined);
+      vi.mocked(mockSecurityNoteRepository.getSecurityNode).mockResolvedValue(mockNote as any);
+      vi.mocked(mockSecurityNoteRepository.deleteSecurityNote).mockResolvedValue(undefined);
+      vi.mocked(coreUtils.sendNoteDeletedNotification).mockRejectedValue(
+        new Error("Notification failed"),
+      );
+      const consoleSpy = vi.spyOn(console, "error").mockImplementation(() => {});
+
+      await service.deleteSecurityNote("note-1");
+
+      expect(mockSecurityStorage.deletePayload).toHaveBeenCalledWith("note-1");
+      expect(mockSecurityNoteRepository.deleteSecurityNote).toHaveBeenCalledWith("note-1");
+      expect(consoleSpy).toHaveBeenCalled();
+
+      consoleSpy.mockRestore();
+    });
+  });
+
+  describe("createSecurityNote", () => {
+    it("should create security note with current user info", async () => {
+      const mockContext = {
+        accountId: "user-123",
+        context: {
+          extension: {
+            issue: { key: "TEST-1", id: "issue-123" },
+            project: { id: "project-123", key: "PROJ" },
+          },
+          localId: "ari:cloud:ecosystem::app/abc123/def456",
+          siteUrl: "https://example.atlassian.net",
+        },
+      };
+      vi.mocked(getAppContext).mockReturnValue(mockContext as any);
+      const mockCurrentUser = {
+        displayName: "Test User",
+        avatarUrls: { "32x32": "avatar-url" },
+      };
+      vi.mocked(mockJiraUserService.getCurrentUser).mockResolvedValue(mockCurrentUser as any);
+      vi.mocked(mockJiraUserService.getUserById).mockResolvedValue({
+        displayName: "Target User",
+        avatarUrls: { "32x32": "target-avatar" },
+      } as any);
+      vi.mocked(coreUtils.calculateHash).mockResolvedValue("hash-value");
+      vi.mocked(mockSecurityNoteRepository.createSecurityNote).mockResolvedValue(undefined);
+      vi.mocked(mockSecurityStorage.savePayload).mockResolvedValue(undefined);
+      vi.mocked(coreUtils.sendIssueNotification).mockResolvedValue(undefined);
+      mockV4.mockReturnValue("note-id-123");
+
+      const securityNote = {
+        targetUsers: [{ accountId: "target-123", userName: "Target User" }],
+        encryptionKeyHash: "key-hash",
+        iv: "iv-value",
+        salt: "salt-value",
+        isCustomExpiry: false,
+        expiry: "1h",
+        description: "Test note",
+        encryptedPayload: "encrypted-data",
+      };
+
+      await service.createSecurityNote(securityNote as any);
+
+      expect(mockSecurityNoteRepository.createSecurityNote).toHaveBeenCalled();
+      expect(mockSecurityStorage.savePayload).toHaveBeenCalledWith("note-id-123", "encrypted-data");
+      expect(coreUtils.sendIssueNotification).toHaveBeenCalled();
+    });
+
+    it("should create security note without current user info", async () => {
+      const mockContext = {
+        accountId: "user-123",
+        context: {
+          extension: {
+            issue: { key: "TEST-1", id: "issue-123" },
+            project: { id: "project-123", key: "PROJ" },
+          },
+          localId: "ari:cloud:ecosystem::app/abc123/def456",
+          siteUrl: "https://example.atlassian.net",
+        },
+      };
+      vi.mocked(getAppContext).mockReturnValue(mockContext as any);
+      vi.mocked(mockJiraUserService.getCurrentUser).mockResolvedValue(undefined);
+      vi.mocked(mockJiraUserService.getUserById).mockResolvedValue(undefined);
+      vi.mocked(coreUtils.calculateHash).mockResolvedValue("hash-value");
+      vi.mocked(mockSecurityNoteRepository.createSecurityNote).mockResolvedValue(undefined);
+      vi.mocked(mockSecurityStorage.savePayload).mockResolvedValue(undefined);
+      vi.mocked(coreUtils.sendIssueNotification).mockResolvedValue(undefined);
+      mockV4.mockReturnValue("note-id-123");
+
+      const securityNote = {
+        targetUsers: [{ accountId: "target-123", userName: "Target User" }],
+        encryptionKeyHash: "key-hash",
+        iv: "iv-value",
+        salt: "salt-value",
+        isCustomExpiry: false,
+        expiry: "1h",
+        description: "Test note",
+        encryptedPayload: "encrypted-data",
+      };
+
+      await service.createSecurityNote(securityNote as any);
+
+      expect(mockSecurityNoteRepository.createSecurityNote).toHaveBeenCalled();
+      const createCall = vi.mocked(mockSecurityNoteRepository.createSecurityNote).mock
+        .calls[0][0][0];
+      expect(createCall.createdUserName).toBe("user-123");
+      expect(createCall.createdAvatarUrl).toBe("");
+      expect(createCall.targetAvatarUrl).toBe("");
+    });
+
+    it("should handle custom expiry date", async () => {
+      const mockContext = {
+        accountId: "user-123",
+        context: {
+          extension: {
+            issue: { key: "TEST-1", id: "issue-123" },
+            project: { id: "project-123", key: "PROJ" },
+          },
+          localId: "ari:cloud:ecosystem::app/abc123/def456",
+          siteUrl: "https://example.atlassian.net",
+        },
+      };
+      vi.mocked(getAppContext).mockReturnValue(mockContext as any);
+      vi.mocked(mockJiraUserService.getCurrentUser).mockResolvedValue({
+        displayName: "Test User",
+        avatarUrls: { "32x32": "avatar-url" },
+      } as any);
+      vi.mocked(mockJiraUserService.getUserById).mockResolvedValue({
+        displayName: "Target User",
+        avatarUrls: { "32x32": "target-avatar" },
+      } as any);
+      vi.mocked(coreUtils.calculateHash).mockResolvedValue("hash-value");
+      vi.mocked(mockSecurityNoteRepository.createSecurityNote).mockResolvedValue(undefined);
+      vi.mocked(mockSecurityStorage.savePayload).mockResolvedValue(undefined);
+      vi.mocked(coreUtils.sendIssueNotification).mockResolvedValue(undefined);
+      mockV4.mockReturnValue("note-id-123");
+
+      const customExpiryDate = new Date("2024-12-31");
+      const securityNote = {
+        targetUsers: [{ accountId: "target-123", userName: "Target User" }],
+        encryptionKeyHash: "key-hash",
+        iv: "iv-value",
+        salt: "salt-value",
+        isCustomExpiry: true,
+        expiry: customExpiryDate.toISOString(),
+        description: "Test note",
+        encryptedPayload: "encrypted-data",
+      };
+
+      await service.createSecurityNote(securityNote as any);
+
+      expect(mockSecurityNoteRepository.createSecurityNote).toHaveBeenCalled();
+      const createCall = vi.mocked(mockSecurityNoteRepository.createSecurityNote).mock
+        .calls[0][0][0];
+      expect(createCall.isCustomExpiry).toBe(1);
+      expect(new Date(createCall.expiryDate as Date).getTime()).toBe(customExpiryDate.getTime());
+    });
+
+    it("should handle error when sending notification fails", async () => {
+      const mockContext = {
+        accountId: "user-123",
+        context: {
+          extension: {
+            issue: { key: "TEST-1", id: "issue-123" },
+            project: { id: "project-123", key: "PROJ" },
+          },
+          localId: "ari:cloud:ecosystem::app/abc123/def456",
+          siteUrl: "https://example.atlassian.net",
+        },
+      };
+      vi.mocked(getAppContext).mockReturnValue(mockContext as any);
+      vi.mocked(mockJiraUserService.getCurrentUser).mockResolvedValue({
+        displayName: "Test User",
+        avatarUrls: { "32x32": "avatar-url" },
+      } as any);
+      vi.mocked(mockJiraUserService.getUserById).mockResolvedValue({
+        displayName: "Target User",
+        avatarUrls: { "32x32": "target-avatar" },
+      } as any);
+      vi.mocked(coreUtils.calculateHash).mockResolvedValue("hash-value");
+      vi.mocked(mockSecurityNoteRepository.createSecurityNote).mockResolvedValue(undefined);
+      vi.mocked(mockSecurityStorage.savePayload).mockResolvedValue(undefined);
+      vi.mocked(coreUtils.sendIssueNotification).mockRejectedValue(
+        new Error("Notification failed"),
+      );
+      mockV4.mockReturnValue("note-id-123");
+      const consoleSpy = vi.spyOn(console, "error").mockImplementation(() => {});
+
+      const securityNote = {
+        targetUsers: [{ accountId: "target-123", userName: "Target User" }],
+        encryptionKeyHash: "key-hash",
+        iv: "iv-value",
+        salt: "salt-value",
+        isCustomExpiry: false,
+        expiry: "1h",
+        description: "Test note",
+        encryptedPayload: "encrypted-data",
+      };
+
+      await service.createSecurityNote(securityNote as any);
+
+      expect(mockSecurityNoteRepository.createSecurityNote).toHaveBeenCalled();
+      expect(consoleSpy).toHaveBeenCalled();
+
+      consoleSpy.mockRestore();
     });
   });
 });

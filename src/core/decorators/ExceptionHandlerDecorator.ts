@@ -21,7 +21,10 @@ export const exceptionHandler =
           console.error("SQL Error :" + JSON.stringify(error.debug));
         } else {
           // eslint-disable-next-line no-console
-          console.error(`Catch Exception ${propertyKey}: ${e.message}`, e);
+          console.error(
+            `Catch Exception ${propertyKey}: ${e.message}`,
+            JSON.stringify(e?.cause ?? e),
+          );
         }
         return {
           isError: true,

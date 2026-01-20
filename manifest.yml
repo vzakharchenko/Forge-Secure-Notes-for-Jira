@@ -4,7 +4,17 @@ modules:
       resource: main
       resolver:
         function: resolver
-      title: Forge Secure Notes For Jira
+      title: Secure Notes For Jira
+      icon: resource:main;app.png
+  jiraServiceManagement:portalRequestDetail:
+    - key: forge-secure-notes-portal
+      resource: main
+      resolver:
+        function: resolver
+      title: Secure Notes For Jira
+      unlicensedAccess:
+        - customer
+        - unlicensed
       icon: resource:main;app.png
   jira:globalPage:
     - key: global-page
@@ -12,7 +22,7 @@ modules:
       layout: blank
       resolver:
         function: globalResolver
-      title: Forge Secure Notes For Jira
+      title: Secure Notes For Jira
       icon: resource:main;app.png
       pages:
         - title: My History
@@ -466,4 +476,6 @@ permissions:
     - "send:notification:jira"
     - "storage:app"
     - "read:app-global-channel:realtime"
+    - "read:request:jira-service-management"
+    - "read:user:jira"
 
