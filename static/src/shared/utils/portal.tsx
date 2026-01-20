@@ -26,7 +26,7 @@ export const requestToLookup = (request: CustomerRequest): JiraUser & Lookup => 
     displayName: request.reporter.displayName,
     value: request.reporter.accountId,
     label: request.reporter.displayName,
-    avatarUrl: request.reporter?._links?.avatarUrls["32x32"] ?? "",
+    avatarUrl: request.reporter._links?.avatarUrls["32x32"] ?? "",
     ...request,
   };
 };

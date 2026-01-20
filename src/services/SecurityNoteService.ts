@@ -253,78 +253,132 @@ export class SecurityNoteService {
     });
   }
 
+  private setCreatorInfo(
+    data: Partial<InferInsertModel<typeof securityNotes>>,
+    currentUser: any,
+    accountId: string,
+  ): void {
+    data.createdBy = accountId;
+    if (currentUser) {
+      data.createdUserName = currentUser.displayName;
+      data.createdAvatarUrl = currentUser.avatarUrls["32x32"];
+    } else {
+      data.createdUserName = accountId;
+      data.createdAvatarUrl = "";
+    }
+  }
+
+  private async setTargetUserInfo(
+    data: Partial<InferInsertModel<typeof securityNotes>>,
+  ): Promise<void> {
+    const targetUserInfo = await this.jiraUserService.getUserById(String(data.targetUserId));
+    if (targetUserInfo) {
+      data.targetUserName = targetUserInfo.displayName;
+      data.targetAvatarUrl = targetUserInfo.avatarUrls["32x32"];
+    } else {
+      data.targetAvatarUrl = "";
+    }
+  }
+
+  private calculateExpiryDate(isCustomExpiry: number, expiry: string): Date {
+    return Number(isCustomExpiry) > 0 ? new Date(String(expiry)) : this.getExpire(String(expiry));
+  }
+
+  private buildNoteLink(context: IssueContext, noteId: string): string {
+    if (context.customerRequest) {
+      return context.customerRequest._links.web;
+    }
+    const appUrlParts = context.localId.split("/");
+    const appUrl = `${appUrlParts[1]}/${appUrlParts[2]}/view/${noteId}`;
+    return `${context.siteUrl}/jira/apps/${appUrl}`;
+  }
+
+  private async sendNotificationSafely(
+    issueKey: string,
+    recipientAccountId: string,
+    displayName: string,
+    noteLink: string,
+    expiryDate: Date,
+  ): Promise<void> {
+    try {
+      await sendIssueNotification({
+        issueKey,
+        recipientAccountId,
+        displayName,
+        noteLink,
+        expiryDate,
+      });
+    } catch (e) {
+      // eslint-disable-next-line no-console
+      console.error(e);
+    }
+  }
+
+  private async buildSecurityNoteData(
+    targetUser: { accountId: string; userName: string },
+    securityNote: NewSecurityNote,
+    context: IssueContext,
+    currentUser: any,
+    accountId: string,
+  ): Promise<Partial<InferInsertModel<typeof securityNotes>>> {
+    const data: Partial<InferInsertModel<typeof securityNotes>> = {
+      issueKey: context.extension.issue.key,
+      issueId: context.extension.issue.id,
+      projectId: context.extension.project?.id,
+      projectKey: context.extension.project?.key,
+      targetUserId: targetUser.accountId,
+      targetUserName: targetUser.userName,
+      encryptionKeyHash: await calculateHash(securityNote.encryptionKeyHash, targetUser.accountId),
+      iv: securityNote.iv,
+      salt: securityNote.salt,
+      isCustomExpiry: securityNote.isCustomExpiry ? 1 : 0,
+      expiry: securityNote.expiry,
+      description: securityNote.description,
+      createdAt: new Date(),
+      status: "NEW",
+      id: v4(),
+    };
+
+    this.setCreatorInfo(data, currentUser, accountId);
+    await this.setTargetUserInfo(data);
+    data.expiryDate = this.calculateExpiryDate(
+      data.isCustomExpiry as number,
+      data.expiry as string,
+    );
+
+    return data;
+  }
+
   @withAppContext()
   async createSecurityNote(securityNote: NewSecurityNote): Promise<void> {
     const appContext = getAppContext()!;
     const accountId = appContext.accountId;
     const context = appContext.context as IssueContext;
-    const datas: Partial<InferInsertModel<typeof securityNotes>>[] = [];
     const currentUser = await this.jiraUserService.getCurrentUser();
-    for (const targetUser of securityNote.targetUsers) {
-      const data: Partial<InferInsertModel<typeof securityNotes>> = {
-        issueKey: context.extension.issue.key,
-        issueId: context.extension.issue.id,
-        projectId: context.extension.project?.id,
-        projectKey: context.extension.project?.key,
-        targetUserId: targetUser.accountId,
-        targetUserName: targetUser.userName,
-        encryptionKeyHash: await calculateHash(
-          securityNote.encryptionKeyHash,
-          targetUser.accountId,
-        ),
-        iv: securityNote.iv,
-        salt: securityNote.salt,
-        isCustomExpiry: securityNote.isCustomExpiry ? 1 : 0,
-        expiry: securityNote.expiry,
-        description: securityNote.description,
-      };
-      data.createdBy = accountId;
-      if (currentUser) {
-        data.createdUserName = currentUser.displayName;
-        data.createdAvatarUrl = currentUser.avatarUrls["32x32"];
-      } else {
-        data.createdUserName = accountId;
-        data.createdAvatarUrl = "";
-      }
-      const targetUserInfo = await this.jiraUserService.getUserById(String(data.targetUserId));
-      if (targetUserInfo) {
-        data.targetUserName = targetUserInfo.displayName;
-        data.targetAvatarUrl = targetUserInfo.avatarUrls["32x32"];
-      } else {
-        data.targetAvatarUrl = "";
-      }
-      data.createdAt = new Date();
-      data.expiryDate =
-        Number(data.isCustomExpiry) > 0
-          ? new Date(String(data.expiry))
-          : this.getExpire(String(data.expiry));
-      data.status = "NEW";
-      data.id = v4();
-      datas.push(data);
-    }
+
+    const datas = await Promise.all(
+      securityNote.targetUsers.map((targetUser) =>
+        this.buildSecurityNoteData(targetUser, securityNote, context, currentUser, accountId),
+      ),
+    );
+
     await this.securityNoteRepository.createSecurityNote(
       datas as Partial<InferInsertModel<typeof securityNotes>>[],
     );
-    for (const data of datas) {
-      await this.securityStorage.savePayload(String(data.id), securityNote.encryptedPayload);
-      const appUrlParts = context.localId.split("/");
-      const appUrl = `${appUrlParts[1]}/${appUrlParts[2]}/view/${data.id}`;
-      const noteLink = context.customerRequest
-        ? context.customerRequest._links.web
-        : `${context.siteUrl}/jira/apps/${appUrl}`;
-      try {
-        await sendIssueNotification({
-          issueKey: context.extension.issue.key,
-          recipientAccountId: String(data.targetUserId),
-          displayName: currentUser?.displayName ?? accountId,
-          noteLink: noteLink,
-          expiryDate: data.expiryDate as Date,
-        });
-      } catch (e) {
-        // eslint-disable-next-line no-console
-        console.error(e);
-      }
-    }
+
+    await Promise.all(
+      datas.map(async (data) => {
+        await this.securityStorage.savePayload(String(data.id), securityNote.encryptedPayload);
+        const noteLink = this.buildNoteLink(context, String(data.id));
+        await this.sendNotificationSafely(
+          context.extension.issue.key,
+          String(data.targetUserId),
+          currentUser?.displayName ?? accountId,
+          noteLink,
+          data.expiryDate as Date,
+        );
+      }),
+    );
   }
 
   async deleteSecurityNote(securityNoteId: string): Promise<void> {
