@@ -238,8 +238,8 @@ jobs:
           forge  variables set ANALYTICS_API_KEY ${{ secrets.ANALYTICS_API_KEY }} -e production && \
           forge deploy --non-interactive -e production
 
-      - name: Forge Install (production)
-        run: |
-          export FORGE_EMAIL=${{ secrets.FORGE_EMAIL }} && \
-          export FORGE_API_TOKEN=${{ secrets.FORGE_API_TOKEN }} && \
-          forge install -e production -s ${{ secrets.FORGE_HOSTNAME }} -p Jira --confirm-scopes --non-interactive --upgrade
+#      - name: Forge Install (production)
+#        run: |
+#          export FORGE_EMAIL=${{ secrets.FORGE_EMAIL }} && \
+#          export FORGE_API_TOKEN=${{ secrets.FORGE_API_TOKEN }} && \
+#          forge install -e production -s ${{ secrets.FORGE_HOSTNAME }} -p Jira --confirm-scopes --non-interactive --upgrade
