@@ -33,8 +33,10 @@ export class CreateSecurityNoteController extends ActualResolver<AuditUser> {
       throw new Error("expected Issue context");
     }
     const issueId = context.extension.issue.id;
+    const issueKey = context.extension.issue.key;
     const payload: NewSecurityNote = req.payload;
     await this.securityNoteService.createSecurityNote(payload);
+    await publishGlobal(SHARED_EVENT_NAME, issueKey);
     await publishGlobal(SHARED_EVENT_NAME, issueId);
     return { result: await this.securityNoteService.getMySecurityNoteIssue() };
   }
