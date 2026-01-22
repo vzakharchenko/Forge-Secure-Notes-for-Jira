@@ -124,16 +124,14 @@ function IssueSection({
           <Heading size="large" as="h2">
             Secure notes panel
           </Heading>
-          {customerRequest && customerRequest.reporter.accountId === accountId ? null : (
-            <Button
-              appearance="primary"
-              iconBefore={AddIcon}
-              onClick={handleNewNote}
-              isDisabled={isCreateNotePending}
-            >
-              Create secure note
-            </Button>
-          )}
+          <Button
+            appearance="primary"
+            iconBefore={AddIcon}
+            onClick={handleNewNote}
+            isDisabled={isCreateNotePending}
+          >
+            Create secure note
+          </Button>
         </Inline>
         {areNotesFetching && <PageLoading text="Loading secure notes" />}
         {!areNotesFetching && !incomingNotes.length && !sentNotes.length && (
