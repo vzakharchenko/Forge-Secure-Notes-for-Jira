@@ -78,6 +78,11 @@ const ForgeModule = () => {
           issueId={
             context.extension.issue?.id ?? customerRequest?.issueId ?? context.extension.request.key
           }
+          issueKey={
+            context.extension?.request?.key ??
+            customerRequest?.issueKey ??
+            context.extension.issue.key
+          }
           customerRequest={customerRequest}
           timezone={context.timezone}
         />

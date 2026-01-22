@@ -32,16 +32,17 @@ function IssueSection({
   accountId,
   appUrl,
   issueId,
+  issueKey,
   timezone,
   customerRequest,
 }: Readonly<{
   accountId: string;
   appUrl: string;
   issueId: string;
+  issueKey: string;
   timezone: string;
   customerRequest?: CustomerRequest;
 }>) {
-  console.log(JSON.stringify(customerRequest));
   const { data: notes = [], isFetching: areNotesFetching } = useFetchNotes();
   const { mutate: mutateCreateNote, isPending: isCreateNotePending } = useCreateNote();
   const { mutate: mutateDeleteNote } = useDeleteNote();
@@ -50,7 +51,7 @@ function IssueSection({
 
   useEffect(() => {
     const globalSubscription = realtime.subscribeGlobal(SHARED_EVENT_NAME, async (payload) => {
-      if (payload === issueId) {
+      if (payload === issueId || payload === issueKey) {
         await queryClient.refetchQueries({ queryKey: NOTES_QUERY_KEYS.LIST });
       }
     });
