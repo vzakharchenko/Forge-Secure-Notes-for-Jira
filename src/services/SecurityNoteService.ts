@@ -168,7 +168,7 @@ export class SecurityNoteService {
   async getSecuredData(securityNoteId: string, key: string): Promise<SecurityNoteData | undefined> {
     const accountId = getAppContext()!.accountId;
     const sn = await this.securityNoteRepository.getSecurityNode(securityNoteId);
-    if (!sn || accountId !== sn.targetUserId) {
+    if (accountId !== sn?.targetUserId) {
       return undefined;
     }
     const calculatedHash = await calculateHash(key, sn.targetUserId);
@@ -386,12 +386,12 @@ export class SecurityNoteService {
     const appContext = getAppContext()!;
     const accountId = appContext.accountId;
     const sn = await this.securityNoteRepository.getSecurityNode(securityNoteId);
-    if (sn && sn.createdBy === accountId) {
+    if (sn?.createdBy === accountId) {
       await this.securityStorage.deletePayload(securityNoteId);
       await this.securityNoteRepository.deleteSecurityNote(securityNoteId);
       try {
         await sendNoteDeletedNotification({
-          issueKey: sn!.issueKey ?? "",
+          issueKey: sn.issueKey ?? "",
           recipientAccountId: sn.targetUserId,
           displayName: sn.createdUserName,
         });
