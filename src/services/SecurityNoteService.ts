@@ -4,6 +4,7 @@ import { NewSecurityNote } from "../../shared/dto";
 import { InferInsertModel, InferSelectModel } from "drizzle-orm";
 import {
   calculateHash,
+  verifyHashConstantTime,
   sendExpirationNotification,
   sendIssueNotification,
   sendNoteDeletedNotification,
@@ -169,11 +170,9 @@ export class SecurityNoteService {
     if (!sn) {
       return undefined;
     }
-    if (sn.encryptionKeyHash !== (await calculateHash(key, sn.targetUserId))) {
-      throw new Error(
-        `SecurityKey is not valid, please ask ${sn.createdUserName} to sent you it. `,
-      );
-    }
+    const calculatedHash = await calculateHash(key, sn.targetUserId);
+    const errorMessage = `SecurityKey is not valid, please ask ${sn.createdUserName} to sent you it. `;
+    verifyHashConstantTime(sn.encryptionKeyHash, calculatedHash, errorMessage);
     const encryptedData = await this.securityStorage.getPayload(securityNoteId);
     if (!encryptedData) {
       // eslint-disable-next-line no-console

@@ -1,4 +1,4 @@
-export { calculateHash } from "./cryptoUtils";
+export { calculateHash, verifyHashConstantTime } from "./cryptoUtils";
 export { formatDateTime, formatDate, defaultDateForDatePicker } from "./dateUtils";
 export {
   sendIssueNotification,

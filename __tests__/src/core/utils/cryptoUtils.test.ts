@@ -1,5 +1,9 @@
 import { describe, it, expect } from "vitest";
-import { calculateHash, decodeJwtPayload } from "../../../../src/core/utils/cryptoUtils";
+import {
+  calculateHash,
+  decodeJwtPayload,
+  verifyHashConstantTime,
+} from "../../../../src/core/utils/cryptoUtils";
 
 describe("cryptoUtils", () => {
   describe("calculateHash", () => {
@@ -240,6 +244,104 @@ describe("cryptoUtils", () => {
       const result = decodeJwtPayload(token);
 
       expect(result).toEqual(payload);
+    });
+  });
+
+  describe("verifyHashConstantTime", () => {
+    it("should not throw when hashes match", () => {
+      const hash1 = "a".repeat(64); // 64 hex chars = 32 bytes
+      const hash2 = "a".repeat(64);
+      const errorMessage = "Hashes don't match";
+
+      expect(() => verifyHashConstantTime(hash1, hash2, errorMessage)).not.toThrow();
+    });
+
+    it("should throw error when hashes don't match", () => {
+      const hash1 = "a".repeat(64);
+      const hash2 = "b".repeat(64);
+      const errorMessage = "Hashes don't match";
+
+      expect(() => verifyHashConstantTime(hash1, hash2, errorMessage)).toThrow(errorMessage);
+    });
+
+    it("should throw error with custom message when hashes don't match", () => {
+      const hash1 = "a".repeat(64);
+      const hash2 = "b".repeat(64);
+      const customMessage = "SecurityKey is not valid, please ask John to sent you it.";
+
+      expect(() => verifyHashConstantTime(hash1, hash2, customMessage)).toThrow(customMessage);
+    });
+
+    it("should throw error when hashes have different lengths", () => {
+      const hash1 = "a".repeat(64); // 32 bytes
+      const hash2 = "b".repeat(32); // 16 bytes
+      const errorMessage = "Hashes don't match";
+
+      expect(() => verifyHashConstantTime(hash1, hash2, errorMessage)).toThrow(errorMessage);
+    });
+
+    it("should throw error when stored hash is shorter", () => {
+      const hash1 = "a".repeat(32);
+      const hash2 = "b".repeat(64);
+      const errorMessage = "Hashes don't match";
+
+      expect(() => verifyHashConstantTime(hash1, hash2, errorMessage)).toThrow(errorMessage);
+    });
+
+    it("should work with real hash values from calculateHash", async () => {
+      const password = "test-password";
+      const accountId = "user-123";
+      const hash1 = await calculateHash(password, accountId);
+      const hash2 = await calculateHash(password, accountId);
+      const errorMessage = "Hashes don't match";
+
+      expect(() => verifyHashConstantTime(hash1, hash2, errorMessage)).not.toThrow();
+    });
+
+    it("should throw when comparing different real hash values", async () => {
+      const hash1 = await calculateHash("password1", "user-123");
+      const hash2 = await calculateHash("password2", "user-123");
+      const errorMessage = "Hashes don't match";
+
+      expect(() => verifyHashConstantTime(hash1, hash2, errorMessage)).toThrow(errorMessage);
+    });
+
+    it("should handle edge case with single character difference", () => {
+      const hash1 = "a".repeat(63) + "b"; // Last char differs
+      const hash2 = "a".repeat(64);
+      const errorMessage = "Hashes don't match";
+
+      expect(() => verifyHashConstantTime(hash1, hash2, errorMessage)).toThrow(errorMessage);
+    });
+
+    it("should handle edge case with first character difference", () => {
+      const hash1 = "b" + "a".repeat(63);
+      const hash2 = "a".repeat(64);
+      const errorMessage = "Hashes don't match";
+
+      expect(() => verifyHashConstantTime(hash1, hash2, errorMessage)).toThrow(errorMessage);
+    });
+
+    it("should handle empty hex strings", () => {
+      const errorMessage = "Hashes don't match";
+
+      expect(() => verifyHashConstantTime("", "", errorMessage)).not.toThrow();
+    });
+
+    it("should handle minimum valid hex string length", () => {
+      const hash1 = "ab";
+      const hash2 = "ab";
+      const errorMessage = "Hashes don't match";
+
+      expect(() => verifyHashConstantTime(hash1, hash2, errorMessage)).not.toThrow();
+    });
+
+    it("should throw when minimum length strings differ", () => {
+      const hash1 = "ab";
+      const hash2 = "cd";
+      const errorMessage = "Hashes don't match";
+
+      expect(() => verifyHashConstantTime(hash1, hash2, errorMessage)).toThrow(errorMessage);
     });
   });
 });
