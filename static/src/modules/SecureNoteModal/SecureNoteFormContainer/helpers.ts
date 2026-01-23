@@ -1,6 +1,10 @@
 // helpers
-import { calculateHashBase64 } from "@src/shared/utils/encode";
+import { calculateHashBase64, bufferToHex } from "@src/shared/utils/encode";
 
 export const generateNewKey = async (accountId: string) => {
-  return await calculateHashBase64(Math.random().toString(8).substring(7), accountId, 80000);
+  // Generate 32 random bytes (256 bits of entropy) using cryptographically secure RNG
+  const randomBytes = crypto.getRandomValues(new Uint8Array(32));
+  // Convert to hex string - preserves all entropy
+  const randomHex = bufferToHex(randomBytes);
+  return await calculateHashBase64(randomHex, accountId, 80000);
 };

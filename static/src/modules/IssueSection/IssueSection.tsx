@@ -85,7 +85,6 @@ function IssueSection({
 
   const handleNewNote = async () => {
     await showNewIssueModal(async (noteData?: NewSecurityNote) => {
-      console.log("noteData", noteData);
       if (noteData) {
         mutateCreateNote(noteData);
       }
