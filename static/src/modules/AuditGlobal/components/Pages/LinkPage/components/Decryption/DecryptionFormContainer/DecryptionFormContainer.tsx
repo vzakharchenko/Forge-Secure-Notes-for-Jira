@@ -64,7 +64,6 @@ const DecryptionFormContainer = ({
     };
 
     const response = await mutateAsyncGetSecureNote(decryptionData);
-    console.log("response", response);
     const decrypted = await decryptMessage(
       { encrypted: response.encryptedData, iv: response.iv, salt: response.salt },
       keyForEncryption,

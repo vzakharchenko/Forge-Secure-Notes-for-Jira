@@ -1,7 +1,7 @@
 export const DERIVE_PURPOSE_ENCRYPTION = "forge-secure-note:v1:encrypt";
 export const DERIVE_PURPOSE_VERIFICATION = "forge-secure-note:v1:verify";
 
-function bufferToHex(buffer: ArrayBuffer | Uint8Array) {
+export function bufferToHex(buffer: ArrayBuffer | Uint8Array) {
   return Array.from(new Uint8Array(buffer))
     .map((b) => b.toString(16).padStart(2, "0"))
     .join("");
@@ -33,7 +33,7 @@ async function hashFunction(data: string, salt: string, iterations = 27000): Pro
   const importedKey = await crypto.subtle.importKey("raw", passwordBuffer, "PBKDF2", false, [
     "deriveBits",
   ]);
-  return window.crypto.subtle.deriveBits(
+  return crypto.subtle.deriveBits(
     {
       name: "PBKDF2",
       salt: new TextEncoder().encode(salt),

@@ -40,7 +40,6 @@ const SecretPage = ({
     queryFn: openSecureNoteLink(recordId!),
     enabled: Boolean(recordId),
   });
-  console.log(JSON.stringify(error));
   const { sourceAccountId = "" } = secureNoteData ?? {};
 
   useEffect(() => {
