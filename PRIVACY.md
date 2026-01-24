@@ -78,7 +78,36 @@ The only infrastructure provider is **Atlassian Pty Ltd** (and its cloud provide
 
 The App maintains immutable audit logs for security monitoring. These logs allow administrators to investigate usage patterns (e.g., "Who created a note?"). These logs contain **metadata only**.
 
-### 5.2 AI Features (Atlassian Rovo)
+### 5.2 Application Logging
+
+The App generates technical logs for debugging and monitoring purposes. These logs are stored on **Atlassian Forge infrastructure** and are accessible to the application developer for troubleshooting.
+
+**What is logged:**
+
+- Function execution status
+- API call results (status codes only, not full responses)
+- Error messages (sanitized, without sensitive data)
+- Performance metrics
+
+**What is NOT logged:**
+
+- Encryption keys or decrypted note content (never transmitted to backend)
+- Account IDs (removed from all log messages)
+- Note IDs (removed from all log messages)
+- Any other sensitive user data
+
+**Your Control:**
+
+- You can **disable logging** if you prefer that the developer does not have access to application logs
+- Logs are automatically sanitized to remove sensitive identifiers
+- If you encounter issues and need support, you may be asked to share logs (which you can review and sanitize further before sharing)
+
+**How to share logs for support:**
+
+- **Via JSM Request:** Create a support request in our Jira Service Management portal and attach the logs
+- **Via GitHub Issue:** Open an issue in the [GitHub repository](https://github.com/vzakharchenko/Forge-Secure-Notes-for-Jira/issues) and attach the logs
+
+### 5.3 AI Features (Atlassian Rovo)
 
 Where enabled by the customer, the App may use **Atlassian Rovo** to analyze audit metadata.
 

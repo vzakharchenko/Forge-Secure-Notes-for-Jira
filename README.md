@@ -199,6 +199,50 @@ The application requires specific Forge scopes to function properly. Each scope 
 - Out-of-band key exchange required (key must be shared separately via secure channel)
 - Automatic content deletion after viewing
 
+### 🔒 Logging & Privacy
+
+**Application Logging:**
+
+The application generates logs for debugging and monitoring purposes. These logs may contain technical information such as:
+
+- Function execution status
+- API call results
+- Error messages
+- Performance metrics
+
+**Privacy & Developer Access:**
+
+- **Logs are stored on Atlassian Forge infrastructure** and are accessible to the application developer for troubleshooting purposes
+- **You can disable logging** if you prefer that the developer does not have access to application logs
+- **Logs do not contain sensitive data** such as:
+  - Encryption keys or decrypted note content (these are never transmitted to the backend)
+- **Only technical information** is logged: function execution status, API call results, error messages (without sensitive data), and performance metrics
+
+**If You Encounter Issues:**
+
+If you experience problems with the application, we may need access to logs to diagnose the issue. Here's how you can help:
+
+1. **Download Application Logs:**
+   - Logs can be accessed through your Atlassian instance's Forge app management interface
+   - Export the relevant log entries for the time period when the issue occurred
+
+2. **Review Logs Before Sharing:**
+   - Logs have been sanitized and do not contain Account IDs or Note IDs
+   - However, please review the logs to ensure no other sensitive information is included
+   - Remove or redact any data you consider confidential before sharing
+
+3. **Submit Logs:**
+   - **Via JSM Request:** Create a support request in our Jira Service Management portal and attach the logs
+   - **Via GitHub Issue:** Open an issue in the [GitHub repository](https://github.com/vzakharchenko/Forge-Secure-Notes-for-Jira/issues) and attach the logs
+   - Choose whichever method is more convenient for you
+
+**Important Notes:**
+
+- Logs help us identify and fix bugs more quickly
+- We respect your privacy and only use logs for troubleshooting purposes
+- **Logs are automatically sanitized** - Account IDs and Note IDs have been removed from all log messages
+- If you prefer not to share logs, you can describe the issue in detail instead
+
 ## 🚀 Getting Started
 
 ### Prerequisites
