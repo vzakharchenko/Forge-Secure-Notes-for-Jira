@@ -54,6 +54,32 @@ export const Footer: React.FC = () => {
                   </span>
                 </a>
               </li>
+              <li>
+                <a
+                  href="https://github.com/vzakharchenko/Forge-Secure-Notes-for-Jira/blob/master/PRIVACY.md"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="hover:text-blue-400 transition-colors flex items-center gap-2 group"
+                >
+                  <span>Privacy Policy</span>
+                  <span className="text-sm group-hover:translate-x-1 transition-transform inline-block">
+                    ↗
+                  </span>
+                </a>
+              </li>
+              <li>
+                <a
+                  href="https://github.com/vzakharchenko/Forge-Secure-Notes-for-Jira/blob/master/TERMS.md"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="hover:text-blue-400 transition-colors flex items-center gap-2 group"
+                >
+                  <span>Terms of Use</span>
+                  <span className="text-sm group-hover:translate-x-1 transition-transform inline-block">
+                    ↗
+                  </span>
+                </a>
+              </li>
             </ul>
           </div>
           <div>

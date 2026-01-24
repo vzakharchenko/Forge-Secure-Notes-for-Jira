@@ -1,4 +1,5 @@
 export { Hero } from "./Hero";
+export { JSMIntegration } from "./JSMIntegration";
 export { Features } from "./Features";
 export { Security } from "./Security";
 export { HowItWorks } from "./HowItWorks";

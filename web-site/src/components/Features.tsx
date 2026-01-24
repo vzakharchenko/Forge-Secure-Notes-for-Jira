@@ -2,6 +2,14 @@ import React from "react";
 
 const features = [
   {
+    id: "jsm-portal",
+    icon: "🎯",
+    title: "JSM Portal Integration",
+    description:
+      "Seamlessly works in Jira Service Management portals. Automatic context detection for customer requests and agents. No configuration needed.",
+    gradient: "from-blue-600 to-indigo-600",
+  },
+  {
     id: "e2e-encryption",
     icon: "🔐",
     title: "End-to-End Encryption",

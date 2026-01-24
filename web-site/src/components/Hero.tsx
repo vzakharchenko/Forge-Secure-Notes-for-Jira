@@ -48,9 +48,17 @@ export const Hero: React.FC = () => {
           </h1>
 
           <p className="text-xl md:text-2xl mb-12 text-blue-100 max-w-3xl mx-auto leading-relaxed font-light">
-            Share sensitive information securely within Jira issues.{/* */}
+            Share sensitive information securely within Jira issues and JSM portals.{/* */}
             <span className="text-white font-medium"> Zero-trust encryption</span> with{/* */}
-            <span className="text-white font-medium"> burn-after-reading</span> protection.
+            <span className="text-white font-medium"> burn-after-reading</span> protection.{/* */}
+            <br />
+            <span className="text-lg text-blue-200 mt-2 block">
+              ✨{" "}
+              <span className="text-white font-medium">
+                Fully integrated with Jira Service Management portals
+              </span>{" "}
+              — seamless experience for customers and agents
+            </span>
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-12">

@@ -90,18 +90,48 @@ export const Security: React.FC = () => {
           ))}
         </div>
 
-        <div className="text-center">
-          <div className="inline-flex items-center gap-3 bg-gradient-to-r from-blue-600 to-indigo-600 px-8 py-4 rounded-xl shadow-2xl border border-blue-400/30">
-            <svg className="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20">
-              <path
-                fillRule="evenodd"
-                d="M2.166 4.999A11.954 11.954 0 0010 1.944 11.954 11.954 0 0017.834 5c.11.65.166 1.32.166 2.001 0 5.225-3.34 9.67-8 11.317C5.34 16.67 2 12.225 2 7c0-.682.057-1.35.166-2.001zm11.541 3.708a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                clipRule="evenodd"
-              />
-            </svg>
-            <div className="text-left">
-              <p className="text-white font-semibold text-lg">PBKDF2-based key derivation</p>
-              <p className="text-blue-100 text-sm">~200,000 iterations for maximum security</p>
+        <div className="space-y-6">
+          <div className="text-center">
+            <div className="inline-flex items-center gap-3 bg-gradient-to-r from-blue-600 to-indigo-600 px-8 py-4 rounded-xl shadow-2xl border border-blue-400/30">
+              <svg className="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20">
+                <path
+                  fillRule="evenodd"
+                  d="M2.166 4.999A11.954 11.954 0 0010 1.944 11.954 11.954 0 0017.834 5c.11.65.166 1.32.166 2.001 0 5.225-3.34 9.67-8 11.317C5.34 16.67 2 12.225 2 7c0-.682.057-1.35.166-2.001zm11.541 3.708a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                  clipRule="evenodd"
+                />
+              </svg>
+              <div className="text-left">
+                <p className="text-white font-semibold text-lg">PBKDF2-based key derivation</p>
+                <p className="text-blue-100 text-sm">~200,000 iterations for maximum security</p>
+              </div>
+            </div>
+          </div>
+
+          <div className="text-center">
+            <div className="inline-block max-w-4xl bg-white/10 backdrop-blur-sm p-8 rounded-2xl border border-white/20 shadow-xl">
+              <h3 className="text-2xl font-bold mb-4 text-white">
+                🔐 Double Protection: Out-of-Band Key + Authorization
+              </h3>
+              <div className="text-left space-y-4 text-blue-100">
+                <div className="space-y-2">
+                  <p className="font-semibold text-white">Security guarantees:</p>
+                  <ul className="space-y-2 ml-4 list-disc">
+                    <li>
+                      <strong>Key is useless without the correct account</strong> — even if an
+                      attacker obtains the key, they cannot use it under another account
+                    </li>
+                    <li>
+                      <strong>Key is useless without encrypted data</strong> — both components are
+                      needed
+                    </li>
+                    <li>
+                      <strong>Platform-level identity verification</strong> — Enterprise-grade
+                      authentication built into Atlassian Forge ensures only the intended recipient
+                      can access their notes, with no way to bypass identity checks
+                    </li>
+                  </ul>
+                </div>
+              </div>
             </div>
           </div>
         </div>
