@@ -28,7 +28,11 @@ const ForgeModule = () => {
         try {
           try {
             const cReq = await getRequestByKey(ctx?.extension?.request.key);
-            setCustomerRequest(cReq);
+            if (cReq?.errorMessage) {
+              console.warn("JSM Portal: ", cReq.errorMessage);
+            } else {
+              setCustomerRequest(cReq);
+            }
           } catch (e) {
             console.warn(e);
           }
@@ -38,7 +42,11 @@ const ForgeModule = () => {
       } else if (ctx?.extension?.issue?.key) {
         try {
           const cReq = await getRequestByKey(ctx.extension.issue.key);
-          setCustomerRequest(cReq);
+          if (cReq?.errorMessage) {
+            console.warn("JSM Portal: ", cReq.errorMessage);
+          } else {
+            setCustomerRequest(cReq);
+          }
         } catch (e) {
           console.warn(e);
         }
