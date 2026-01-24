@@ -13,20 +13,29 @@ By installing or using the App, you agree to be bound by these Terms. If you do 
 Secure Notes for Jira provides a mechanism to share sensitive information inside Atlassian products (such as Jira and Jira Service Management) using a **zero-trust, client-side encryption model**.
 
 The App is designed to ensure that:
+
 - Encrypted content is never available to the backend in plaintext.
 - Encryption keys are generated and used exclusively in the user’s browser.
-- Only explicitly authorized recipients can access a secure note.
+- Only explicitly authorized recipients can access a secure note (enforced through mandatory authorization checks and cryptographic binding of keys to account identities).
 
 ---
 
 ## 2. Zero-Trust Security Model
 
-The App implements a **strict zero-trust architecture**:
+The App implements a **strict zero-trust architecture** with **Double Protection: Key + Authorization**:
 
 - Encrypted content **cannot be recovered** if access is lost.
 - Administrators **cannot decrypt** or read secret content.
 - There is **no password recovery**, key escrow, or content restoration mechanism.
 - Once a note expires or is destroyed, it is **cryptographically unrecoverable**.
+
+**Double Protection Mechanism:**
+
+- **Authorization is mandatory**: Forge guarantees that only the authenticated user's account can access their notes. The backend verifies that the authenticated user's `accountId` matches the recipient's `accountId` before allowing decryption.
+- **Key is useless without the correct account**: The encryption key hash is calculated using the recipient's `accountId` as part of the cryptographic salt. This means:
+  - Even if an encryption key is compromised, it cannot be used under a different account because the hash calculation depends on the specific `accountId`.
+  - The key is cryptographically bound to the recipient's account identity.
+- **Key is useless without encrypted data**: Both the encryption key (shared out-of-band) and the encrypted content (stored securely) are required for decryption.
 
 By using the App, you explicitly acknowledge and accept these limitations.
 
@@ -47,6 +56,7 @@ The App operates under a strict **"Zero Egress" policy** regarding sensitive dat
 While the App does not expose secret content, it provides **audit and observability mechanisms** to support security monitoring and compliance investigations.
 
 These mechanisms may include:
+
 - Audit logs recording **who**, **when**, and **in which Jira context** secure notes were created, accessed, expired, or destroyed.
 - Administrative views with organization-wide visibility, protected by role-based access control.
 - Optional integration with a Rovo agent that can assist administrators in identifying **unusual or suspicious usage patterns** (for example, abnormal access timing or sharing behavior).
@@ -67,21 +77,27 @@ The App is licensed under the **Business Source License 1.1 (BSL 1.1)** with the
 - **Change License:** MIT License
 
 ### Permitted Use
+
 You may:
+
 - View, copy, and modify the source code.
 - Use the App for development, testing, security auditing, and educational purposes.
 - Review and audit the code for security and compliance evaluation.
 
 ### Production Use
+
 "Production use" is defined as running the App in a live Atlassian environment (Jira / Confluence) for internal business operations or providing the App to third parties.
 
 ### Permitted Use
+
 You may:
+
 - View, copy, and modify the source code.
 - Use the App for development, testing, security auditing, and educational purposes.
 - Review and audit the code for security and compliance evaluation.
 
 ### Production Use
+
 "Production use" is defined as running the App in a live Atlassian environment (Jira / Confluence) for internal business operations or providing the App to third parties.
 
 Production use **requires a valid commercial license obtained via the Atlassian Marketplace**.
@@ -93,6 +109,7 @@ On the License Change Date, the App will automatically become available under th
 ## 6. No Warranties
 
 The App is provided **"as is"**, without warranties of any kind, express or implied, including but not limited to:
+
 - Merchantability
 - Fitness for a particular purpose
 - Security guarantees
@@ -108,6 +125,7 @@ Use of the App is at your own risk.
 ## 7. Limitation of Liability
 
 To the maximum extent permitted by law, the Licensor shall not be liable for:
+
 - Loss of data or encrypted content
 - Business interruption
 - Security incidents or misuse

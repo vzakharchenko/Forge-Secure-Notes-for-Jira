@@ -134,7 +134,7 @@ The application requires specific Forge scopes to function properly. Each scope 
     - Secure data persistence (encrypted content is stored separately from metadata)
 
 - **`read:app-global-channel:realtime`**:
-  - **Purpose**: Read from global real-time channels for cross-instance communication
+  - **Purpose**: Read from global real-time channels for instance communication
   - **Usage**: Used by `@forge/realtime.publishGlobal()` to broadcast events when notes are created, viewed, or deleted
   - **Required for**:
     - Real-time UI updates across all users viewing the same issue
@@ -164,6 +164,35 @@ The application requires specific Forge scopes to function properly. Each scope 
   - Half of the decryption data is with the user: **encryption key** (known only to the user)
   - Other half is in metadata: **IV** (Initialization Vector) and **salt** stored in `@forge/sql`
   - Both parts are required to decrypt the content
+- **Double protection: Key + Authorization**
+  - **Authorization is mandatory**: Forge guarantees that `accountId` belongs to the authenticated user. The backend verifies that the authenticated user's `accountId` matches the `targetUserId` (recipient) before allowing decryption
+  - **Key is useless without the correct account**: The encryption key hash is calculated using PBKDF2 with the recipient's `accountId` as the salt. This means:
+    - Even if an attacker obtains the encryption key, they cannot use it under a different account because the hash calculation depends on the specific `accountId`
+    - The key is bound to the recipient's account identity
+  - **Key is useless without encrypted data**: Both components are required:
+    - The encryption key (shared out-of-band)
+    - The encrypted content (stored in `@forge/kvs`)
+  - **Security guarantees:**
+    - Key is useless without the correct account — even if an attacker obtains the key, they cannot use it under another account
+    - Key is useless without encrypted data — both components are needed
+    - Authorization is mandatory — Forge guarantees that `accountId` belongs to the authenticated user
+
+  **Implementation example:**
+
+  ```typescript
+  // src/services/SecurityNoteService.ts
+  async getSecuredData(securityNoteId: string, key: string) {
+    const accountId = getAppContext()!.accountId;  // ← Authorization via Forge
+    const sn = await this.securityNoteRepository.getSecurityNode(securityNoteId);
+    if (accountId !== sn?.targetUserId) {  // ← Check: only recipient can decrypt
+      return undefined;
+    }
+    const calculatedHash = await calculateSaltHash(key, sn.targetUserId);  // ← Key + accountId
+    verifyHashConstantTime(sn.encryptionKeyHash, calculatedHash, errorMessage);
+    // ...
+  }
+  ```
+
 - Random IV generation for each message
 - Encrypted content stored in `@forge/kvs.setSecret`
 - Metadata (IV, salt, encryption_key_hash) stored in `@forge/sql`
