@@ -1,4 +1,5 @@
 export interface CustomerRequest {
+  errorMessage?: string;
   issueId: string;
   issueKey: string;
   summary: string;

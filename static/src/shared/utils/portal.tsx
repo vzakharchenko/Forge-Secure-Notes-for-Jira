@@ -21,6 +21,7 @@ export const getRequesterUser = (
 };
 
 export const requestToLookup = (request: CustomerRequest): JiraUser & Lookup => {
+  debugger;
   return {
     accountId: request.reporter.accountId,
     displayName: request.reporter.displayName,
