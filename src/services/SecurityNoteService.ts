@@ -179,7 +179,7 @@ export class SecurityNoteService {
     // Security: Use consistent error handling that doesn't reveal note existence.
     // All error paths return undefined, which will be converted to PERMISSION_ERROR_OBJECT
     // in the controller with a generic error message.
-    if (!sn || accountId !== sn.targetUserId) {
+    if (sn?.targetUserId !== accountId) {
       // Perform hash verification even if note doesn't exist or user is unauthorized
       // to prevent timing attacks. Use a dummy hash that will always fail.
       const dummyHash = "0".repeat(64); // 32 bytes = 64 hex chars
@@ -202,7 +202,7 @@ export class SecurityNoteService {
     const encryptedData = await this.securityStorage.getPayload(securityNoteId);
     if (!encryptedData) {
       // eslint-disable-next-line no-console
-      console.error("Encrypted payload not found in storage for note:", securityNoteId);
+      console.error("Encrypted payload not found in storage");
       await this.securityNoteRepository.deleteSecurityNote(securityNoteId);
       return undefined;
     }

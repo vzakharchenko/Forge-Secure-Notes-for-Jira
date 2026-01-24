@@ -65,6 +65,32 @@ Audit data **never includes decrypted secret content**.
 
 These features are intended to support investigation and compliance workflows and **do not guarantee detection or prevention of all security incidents**.
 
+### 4.1 Application Logging
+
+The App generates technical logs for debugging and monitoring purposes. These logs are stored on **Atlassian Forge infrastructure** and are accessible to the Licensor for troubleshooting.
+
+**Logging Practices:**
+
+- Logs contain only technical information: function execution status, API call results, error messages (sanitized), and performance metrics
+- **Sensitive data is excluded**: Account IDs, Note IDs, encryption keys, and decrypted content are not logged
+- Logs are automatically sanitized to protect user privacy
+
+**Your Rights:**
+
+- You can **disable logging** if you prefer that the Licensor does not have access to application logs
+- You have the right to review logs before sharing them for support purposes
+- Logs are used solely for troubleshooting and improving the App
+
+**Support & Log Sharing:**
+If you encounter issues and need technical support, you may be asked to share application logs. You can:
+
+- Review and sanitize logs before sharing
+- Share logs via our Jira Service Management portal (available to all users)
+- Share logs via GitHub Issues
+- Alternatively, describe the issue in detail without sharing logs
+
+By using the App, you acknowledge that technical logs may be generated and stored on Atlassian Forge infrastructure for troubleshooting purposes.
+
 ---
 
 ## 5. License & Usage Rights
