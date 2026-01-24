@@ -31,6 +31,17 @@ const handleForgeApiError = (errorResponse: ErrorResponse): Promise<never> => {
       isGlobalError = true;
       break;
 
+    case "NO_PERMISSION":
+      // Security: Show generic error message that doesn't reveal note existence
+      // The message is already set in PERMISSION_ERROR_OBJECT on the backend
+      showErrorFlag({
+        title: message || "Invalid security note or decryption key",
+        description:
+          "Please verify the link and key, or contact the note creator if you believe this is an error.",
+      });
+      isGlobalError = false; // Not a global error, specific to the operation
+      break;
+
     default:
       break;
   }

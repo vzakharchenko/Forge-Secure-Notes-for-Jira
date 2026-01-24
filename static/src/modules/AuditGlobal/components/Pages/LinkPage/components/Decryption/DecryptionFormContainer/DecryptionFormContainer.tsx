@@ -45,9 +45,13 @@ const DecryptionFormContainer = ({
     mutationFn: getSecureNote,
     onError: (error) => {
       if (error.data.errorType === "NO_PERMISSION") {
+        // Security: Use the error message from backend which doesn't reveal note existence
+        // The backend provides a generic message in PERMISSION_ERROR_OBJECT
         setIsValid(false);
+        // The error message is already shown via handleForgeApiError in api.ts
+        // which displays the generic message from PERMISSION_ERROR_OBJECT
       }
-      if (error.data.errorType !== "VALIDATION") {
+      if (error.data.errorType !== "VALIDATION" && error.data.errorType !== "NO_PERMISSION") {
         handleDefaultServerError(error, "Failed to fetch security note");
       }
     },
