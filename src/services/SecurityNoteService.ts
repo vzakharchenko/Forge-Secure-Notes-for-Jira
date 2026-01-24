@@ -168,19 +168,45 @@ export class SecurityNoteService {
   async getSecuredData(securityNoteId: string, key: string): Promise<SecurityNoteData | undefined> {
     const accountId = getAppContext()!.accountId;
     const sn = await this.securityNoteRepository.getSecurityNode(securityNoteId);
-    if (accountId !== sn?.targetUserId) {
+
+    // Security: Always perform hash calculation to prevent timing attacks
+    // that could reveal whether a note exists or not.
+    // If note doesn't exist or user is not authorized, we still calculate
+    // a hash with a dummy value to maintain consistent response time.
+    const targetAccountId = sn?.targetUserId ?? accountId;
+    const calculatedHash = await calculateSaltHash(key, targetAccountId);
+
+    // Security: Use consistent error handling that doesn't reveal note existence.
+    // All error paths return undefined, which will be converted to PERMISSION_ERROR_OBJECT
+    // in the controller with a generic error message.
+    if (!sn || accountId !== sn.targetUserId) {
+      // Perform hash verification even if note doesn't exist or user is unauthorized
+      // to prevent timing attacks. Use a dummy hash that will always fail.
+      const dummyHash = "0".repeat(64); // 32 bytes = 64 hex chars
+      try {
+        verifyHashConstantTime(
+          dummyHash,
+          calculatedHash,
+          "Invalid security note or decryption key.",
+        );
+      } catch {
+        // Expected to always fail - this is intentional to maintain consistent timing
+      }
       return undefined;
     }
-    const calculatedHash = await calculateSaltHash(key, sn.targetUserId);
-    const errorMessage = `SecurityKey is not valid, please ask ${sn.createdUserName} to sent you it. `;
+
+    const errorMessage =
+      "Invalid security note or decryption key. Please verify the link and key, or contact the note creator if you believe this is an error.";
     verifyHashConstantTime(sn.encryptionKeyHash, calculatedHash, errorMessage);
+
     const encryptedData = await this.securityStorage.getPayload(securityNoteId);
     if (!encryptedData) {
       // eslint-disable-next-line no-console
-      console.error("data does not exists");
+      console.error("Encrypted payload not found in storage for note:", securityNoteId);
       await this.securityNoteRepository.deleteSecurityNote(securityNoteId);
       return undefined;
     }
+
     await this.securityStorage.deletePayload(securityNoteId);
     await this.securityNoteRepository.viewSecurityNote(securityNoteId);
     await publishGlobal(SHARED_EVENT_NAME, sn.issueId ?? "");
@@ -197,13 +223,21 @@ export class SecurityNoteService {
   @withAppContext()
   async isValidLink(securityNoteId: string): Promise<OpenSecurityNote> {
     const accountId = getAppContext()?.accountId;
-    if (!accountId) return { valid: false };
+    if (!accountId) {
+      // Security: Return same structure regardless of auth state to prevent information disclosure
+      return { valid: false };
+    }
 
     const sn = await this.securityNoteRepository.getSecurityNode(securityNoteId);
-    if (!sn) return { valid: false };
+    if (!sn) {
+      // Security: Return same structure whether note exists or not to prevent information disclosure
+      return { valid: false };
+    }
 
     const isValid = sn.targetUserId === accountId;
 
+    // Security: Only return sourceAccountId if link is valid and user is authorized.
+    // This prevents leaking information about note existence to unauthorized users.
     return {
       valid: isValid,
       sourceAccountId: isValid

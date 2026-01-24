@@ -963,7 +963,7 @@ describe("SecurityNoteService", () => {
       vi.mocked(mockSecurityStorage.getPayload).mockResolvedValue("encrypted-data");
       vi.mocked(mockSecurityStorage.deletePayload).mockResolvedValue(undefined);
       vi.mocked(mockSecurityNoteRepository.viewSecurityNote).mockResolvedValue(undefined);
-      vi.mocked(publishGlobal).mockResolvedValue(undefined);
+      vi.mocked(publishGlobal).mockResolvedValue({} as any);
 
       const result = await service.getSecuredData("note-1", "key");
 
@@ -981,19 +981,31 @@ describe("SecurityNoteService", () => {
       expect(publishGlobal).toHaveBeenCalled();
     });
 
-    it("should return undefined when note not found", async () => {
+    it("should return undefined when note not found and perform hash calculation to prevent timing attacks", async () => {
       const mockContext = {
         accountId: "user-123",
       };
       vi.mocked(getAppContext).mockReturnValue(mockContext as any);
       vi.mocked(mockSecurityNoteRepository.getSecurityNode).mockResolvedValue(undefined);
+      vi.mocked(coreUtils.calculateSaltHash).mockResolvedValue("calculated-hash");
+      vi.mocked(coreUtils.verifyHashConstantTime).mockImplementation(() => {
+        throw new Error("Hash mismatch");
+      });
 
       const result = await service.getSecuredData("non-existent", "key");
 
       expect(result).toBeUndefined();
+      // Security: Should always calculate hash even if note doesn't exist to prevent timing attacks
+      expect(coreUtils.calculateSaltHash).toHaveBeenCalledWith("key", "user-123");
+      // Security: Should attempt hash verification with dummy hash to maintain consistent timing
+      expect(coreUtils.verifyHashConstantTime).toHaveBeenCalledWith(
+        "0".repeat(64), // dummy hash
+        "calculated-hash",
+        "Invalid security note or decryption key.",
+      );
     });
 
-    it("should return undefined when accountId does not match", async () => {
+    it("should return undefined when accountId does not match and perform hash calculation to prevent timing attacks", async () => {
       const mockContext = {
         accountId: "user-123",
       };
@@ -1003,10 +1015,22 @@ describe("SecurityNoteService", () => {
         targetUserId: "other-user",
       };
       vi.mocked(mockSecurityNoteRepository.getSecurityNode).mockResolvedValue(mockNote as any);
+      vi.mocked(coreUtils.calculateSaltHash).mockResolvedValue("calculated-hash");
+      vi.mocked(coreUtils.verifyHashConstantTime).mockImplementation(() => {
+        throw new Error("Hash mismatch");
+      });
 
       const result = await service.getSecuredData("note-1", "key");
 
       expect(result).toBeUndefined();
+      // Security: Should always calculate hash even if user is unauthorized to prevent timing attacks
+      expect(coreUtils.calculateSaltHash).toHaveBeenCalledWith("key", "other-user");
+      // Security: Should attempt hash verification with dummy hash to maintain consistent timing
+      expect(coreUtils.verifyHashConstantTime).toHaveBeenCalledWith(
+        "0".repeat(64), // dummy hash
+        "calculated-hash",
+        "Invalid security note or decryption key.",
+      );
     });
 
     it("should return undefined and delete note when encrypted data not found", async () => {
@@ -1035,7 +1059,7 @@ describe("SecurityNoteService", () => {
       consoleSpy.mockRestore();
     });
 
-    it("should throw error when hash verification fails", async () => {
+    it("should throw error with generic message when hash verification fails", async () => {
       const mockContext = {
         accountId: "user-123",
       };
@@ -1049,10 +1073,20 @@ describe("SecurityNoteService", () => {
       vi.mocked(mockSecurityNoteRepository.getSecurityNode).mockResolvedValue(mockNote as any);
       vi.mocked(coreUtils.calculateSaltHash).mockResolvedValue("wrong-hash");
       vi.mocked(coreUtils.verifyHashConstantTime).mockImplementation(() => {
-        throw new Error("SecurityKey is not valid");
+        throw new Error(
+          "Invalid security note or decryption key. Please verify the link and key, or contact the note creator if you believe this is an error.",
+        );
       });
 
-      await expect(service.getSecuredData("note-1", "wrong-key")).rejects.toThrow();
+      await expect(service.getSecuredData("note-1", "wrong-key")).rejects.toThrow(
+        "Invalid security note or decryption key. Please verify the link and key, or contact the note creator if you believe this is an error.",
+      );
+      // Security: Error message should not reveal creator's name or confirm note existence
+      expect(coreUtils.verifyHashConstantTime).toHaveBeenCalledWith(
+        "hash-value",
+        "wrong-hash",
+        "Invalid security note or decryption key. Please verify the link and key, or contact the note creator if you believe this is an error.",
+      );
     });
 
     it("should handle null issueId when publishing global event", async () => {
@@ -1078,12 +1112,136 @@ describe("SecurityNoteService", () => {
       vi.mocked(mockSecurityStorage.getPayload).mockResolvedValue("encrypted-data");
       vi.mocked(mockSecurityStorage.deletePayload).mockResolvedValue(undefined);
       vi.mocked(mockSecurityNoteRepository.viewSecurityNote).mockResolvedValue(undefined);
-      vi.mocked(publishGlobal).mockResolvedValue(undefined);
+      vi.mocked(publishGlobal).mockResolvedValue({} as any);
 
       const result = await service.getSecuredData("note-1", "key");
 
       expect(result).toBeDefined();
       expect(publishGlobal).toHaveBeenCalledWith(expect.any(String), "");
+    });
+
+    it("should use consistent error message that does not reveal note existence or creator name", async () => {
+      const mockContext = {
+        accountId: "user-123",
+      };
+      vi.mocked(getAppContext).mockReturnValue(mockContext as any);
+      const mockNote = {
+        id: "note-1",
+        targetUserId: "user-123",
+        encryptionKeyHash: "hash-value",
+        createdUserName: "John Doe", // Should not appear in error message
+      };
+      vi.mocked(mockSecurityNoteRepository.getSecurityNode).mockResolvedValue(mockNote as any);
+      vi.mocked(coreUtils.calculateSaltHash).mockResolvedValue("wrong-hash");
+      vi.mocked(coreUtils.verifyHashConstantTime).mockImplementation(() => {
+        throw new Error(
+          "Invalid security note or decryption key. Please verify the link and key, or contact the note creator if you believe this is an error.",
+        );
+      });
+
+      await expect(service.getSecuredData("note-1", "wrong-key")).rejects.toThrow();
+
+      // Security: Error message should be generic and not reveal creator's name
+      const errorCall = vi.mocked(coreUtils.verifyHashConstantTime).mock.calls[0];
+      expect(errorCall[2]).toBe(
+        "Invalid security note or decryption key. Please verify the link and key, or contact the note creator if you believe this is an error.",
+      );
+      expect(errorCall[2]).not.toContain("John Doe");
+      expect(errorCall[2]).not.toContain("Creator");
+    });
+
+    it("should always perform hash calculation regardless of note existence to prevent timing attacks", async () => {
+      const mockContext = {
+        accountId: "user-123",
+      };
+      vi.mocked(getAppContext).mockReturnValue(mockContext as any);
+
+      // Test case 1: Note doesn't exist
+      vi.mocked(mockSecurityNoteRepository.getSecurityNode).mockResolvedValue(undefined);
+      vi.mocked(coreUtils.calculateSaltHash).mockResolvedValue("hash-1");
+      vi.mocked(coreUtils.verifyHashConstantTime).mockImplementation(() => {
+        throw new Error("Hash mismatch");
+      });
+
+      const result1 = await service.getSecuredData("non-existent", "key");
+      expect(result1).toBeUndefined();
+      expect(coreUtils.calculateSaltHash).toHaveBeenCalledWith("key", "user-123");
+
+      vi.clearAllMocks();
+
+      // Test case 2: Note exists but user is unauthorized
+      const mockNote = {
+        id: "note-1",
+        targetUserId: "other-user",
+      };
+      vi.mocked(mockSecurityNoteRepository.getSecurityNode).mockResolvedValue(mockNote as any);
+      vi.mocked(coreUtils.calculateSaltHash).mockResolvedValue("hash-2");
+      vi.mocked(coreUtils.verifyHashConstantTime).mockImplementation(() => {
+        throw new Error("Hash mismatch");
+      });
+
+      const result2 = await service.getSecuredData("note-1", "key");
+      expect(result2).toBeUndefined();
+      // Security: Should use targetUserId from note, not current user's accountId
+      expect(coreUtils.calculateSaltHash).toHaveBeenCalledWith("key", "other-user");
+
+      // Security: Both cases should attempt hash verification with dummy hash
+      expect(coreUtils.verifyHashConstantTime).toHaveBeenCalledWith(
+        "0".repeat(64),
+        expect.any(String),
+        "Invalid security note or decryption key.",
+      );
+    });
+
+    it("should use targetUserId for hash calculation when note exists, even if unauthorized", async () => {
+      const mockContext = {
+        accountId: "user-123",
+      };
+      vi.mocked(getAppContext).mockReturnValue(mockContext as any);
+      const mockNote = {
+        id: "note-1",
+        targetUserId: "target-user-456", // Different from current user
+      };
+      vi.mocked(mockSecurityNoteRepository.getSecurityNode).mockResolvedValue(mockNote as any);
+      vi.mocked(coreUtils.calculateSaltHash).mockResolvedValue("calculated-hash");
+      vi.mocked(coreUtils.verifyHashConstantTime).mockImplementation(() => {
+        throw new Error("Hash mismatch");
+      });
+
+      const result = await service.getSecuredData("note-1", "key");
+
+      expect(result).toBeUndefined();
+      // Security: Should use targetUserId from note for hash calculation, not current user's accountId
+      // This ensures consistent behavior and prevents information leakage
+      expect(coreUtils.calculateSaltHash).toHaveBeenCalledWith("key", "target-user-456");
+      expect(coreUtils.calculateSaltHash).not.toHaveBeenCalledWith("key", "user-123");
+    });
+
+    it("should maintain consistent response time by performing hash operations even when note doesn't exist", async () => {
+      const mockContext = {
+        accountId: "user-123",
+      };
+      vi.mocked(getAppContext).mockReturnValue(mockContext as any);
+
+      const startTime = Date.now();
+      vi.mocked(mockSecurityNoteRepository.getSecurityNode).mockResolvedValue(undefined);
+      vi.mocked(coreUtils.calculateSaltHash).mockImplementation(
+        () => new Promise((resolve) => setTimeout(() => resolve("hash"), 10)), // Simulate hash calculation delay
+      );
+      vi.mocked(coreUtils.verifyHashConstantTime).mockImplementation(() => {
+        throw new Error("Hash mismatch");
+      });
+
+      await service.getSecuredData("non-existent", "key");
+
+      const endTime = Date.now();
+      const duration = endTime - startTime;
+
+      // Security: Should take time due to hash calculation, not return immediately
+      // This prevents timing attacks that could reveal note existence
+      expect(duration).toBeGreaterThan(5); // At least some time should pass
+      expect(coreUtils.calculateSaltHash).toHaveBeenCalled();
+      expect(coreUtils.verifyHashConstantTime).toHaveBeenCalled();
     });
   });
 
@@ -1139,7 +1297,7 @@ describe("SecurityNoteService", () => {
     });
 
     it("should return valid false when accountId is missing", async () => {
-      vi.mocked(getAppContext).mockReturnValue(null);
+      vi.mocked(getAppContext).mockReturnValue(undefined);
 
       const result = await service.isValidLink("note-1");
 
