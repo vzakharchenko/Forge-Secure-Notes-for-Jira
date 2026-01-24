@@ -143,7 +143,7 @@ function IssueSection({
               notes={incomingNotes}
               variant="incoming"
               onOpen={handleOpenNote}
-              onClick={handleClickNote}
+              onClick={customerRequest ? handleClickNote : undefined}
               accountId={accountId}
               timezone={timezone}
             />
