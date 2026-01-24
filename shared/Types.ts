@@ -22,3 +22,5 @@ export interface ErrorResponse {
 }
 
 export const SHARED_EVENT_NAME = "refreshIssuePage";
+
+export const SALT_ITERATIONS = 100_000;

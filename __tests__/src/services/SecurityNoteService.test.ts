@@ -33,7 +33,7 @@ vi.mock("../../../src/controllers", () => ({
 }));
 
 vi.mock("../../../src/core", () => ({
-  calculateHash: vi.fn(),
+  calculateSaltHash: vi.fn(),
   verifyHashConstantTime: vi.fn(),
   sendExpirationNotification: vi.fn(),
   sendIssueNotification: vi.fn(),
@@ -622,7 +622,7 @@ describe("SecurityNoteService", () => {
         displayName: "Target User",
         avatarUrls: { "32x32": "target-avatar" },
       } as any);
-      vi.mocked(coreUtils.calculateHash).mockResolvedValue("hash-value");
+      vi.mocked(coreUtils.calculateSaltHash).mockResolvedValue("hash-value");
       vi.mocked(mockSecurityNoteRepository.createSecurityNote).mockResolvedValue(undefined);
       vi.mocked(mockSecurityStorage.savePayload).mockResolvedValue(undefined);
       vi.mocked(coreUtils.sendIssueNotification).mockResolvedValue(undefined);
@@ -661,7 +661,7 @@ describe("SecurityNoteService", () => {
       vi.mocked(getAppContext).mockReturnValue(mockContext as any);
       vi.mocked(mockJiraUserService.getCurrentUser).mockResolvedValue(undefined);
       vi.mocked(mockJiraUserService.getUserById).mockResolvedValue(undefined);
-      vi.mocked(coreUtils.calculateHash).mockResolvedValue("hash-value");
+      vi.mocked(coreUtils.calculateSaltHash).mockResolvedValue("hash-value");
       vi.mocked(mockSecurityNoteRepository.createSecurityNote).mockResolvedValue(undefined);
       vi.mocked(mockSecurityStorage.savePayload).mockResolvedValue(undefined);
       vi.mocked(coreUtils.sendIssueNotification).mockResolvedValue(undefined);
@@ -709,7 +709,7 @@ describe("SecurityNoteService", () => {
         displayName: "Target User",
         avatarUrls: { "32x32": "target-avatar" },
       } as any);
-      vi.mocked(coreUtils.calculateHash).mockResolvedValue("hash-value");
+      vi.mocked(coreUtils.calculateSaltHash).mockResolvedValue("hash-value");
       vi.mocked(mockSecurityNoteRepository.createSecurityNote).mockResolvedValue(undefined);
       vi.mocked(mockSecurityStorage.savePayload).mockResolvedValue(undefined);
       vi.mocked(coreUtils.sendIssueNotification).mockResolvedValue(undefined);
@@ -757,7 +757,7 @@ describe("SecurityNoteService", () => {
         displayName: "Target User",
         avatarUrls: { "32x32": "target-avatar" },
       } as any);
-      vi.mocked(coreUtils.calculateHash).mockResolvedValue("hash-value");
+      vi.mocked(coreUtils.calculateSaltHash).mockResolvedValue("hash-value");
       vi.mocked(mockSecurityNoteRepository.createSecurityNote).mockResolvedValue(undefined);
       vi.mocked(mockSecurityStorage.savePayload).mockResolvedValue(undefined);
       vi.mocked(coreUtils.sendIssueNotification).mockRejectedValue(
@@ -811,7 +811,7 @@ describe("SecurityNoteService", () => {
           displayName: "Target User 2",
           avatarUrls: { "32x32": "target-avatar-2" },
         } as any);
-      vi.mocked(coreUtils.calculateHash).mockResolvedValue("hash-value");
+      vi.mocked(coreUtils.calculateSaltHash).mockResolvedValue("hash-value");
       vi.mocked(mockSecurityNoteRepository.createSecurityNote).mockResolvedValue(undefined);
       vi.mocked(mockSecurityStorage.savePayload).mockResolvedValue(undefined);
       vi.mocked(coreUtils.sendIssueNotification).mockResolvedValue(undefined);
@@ -866,7 +866,7 @@ describe("SecurityNoteService", () => {
         displayName: "Target User",
         avatarUrls: { "32x32": "target-avatar" },
       } as any);
-      vi.mocked(coreUtils.calculateHash).mockResolvedValue("hash-value");
+      vi.mocked(coreUtils.calculateSaltHash).mockResolvedValue("hash-value");
       vi.mocked(mockSecurityNoteRepository.createSecurityNote).mockResolvedValue(undefined);
       vi.mocked(mockSecurityStorage.savePayload).mockResolvedValue(undefined);
       vi.mocked(coreUtils.sendIssueNotification).mockResolvedValue(undefined);
@@ -913,7 +913,7 @@ describe("SecurityNoteService", () => {
         displayName: "Target User",
         avatarUrls: { "32x32": "target-avatar" },
       } as any);
-      vi.mocked(coreUtils.calculateHash).mockResolvedValue("hash-value");
+      vi.mocked(coreUtils.calculateSaltHash).mockResolvedValue("hash-value");
       vi.mocked(mockSecurityNoteRepository.createSecurityNote).mockResolvedValue(undefined);
       vi.mocked(mockSecurityStorage.savePayload).mockResolvedValue(undefined);
       vi.mocked(coreUtils.sendIssueNotification).mockResolvedValue(undefined);
@@ -958,7 +958,7 @@ describe("SecurityNoteService", () => {
         expiry: "1h",
       };
       vi.mocked(mockSecurityNoteRepository.getSecurityNode).mockResolvedValue(mockNote as any);
-      vi.mocked(coreUtils.calculateHash).mockResolvedValue("hash-value");
+      vi.mocked(coreUtils.calculateSaltHash).mockResolvedValue("hash-value");
       vi.mocked(coreUtils.verifyHashConstantTime).mockImplementation(() => {});
       vi.mocked(mockSecurityStorage.getPayload).mockResolvedValue("encrypted-data");
       vi.mocked(mockSecurityStorage.deletePayload).mockResolvedValue(undefined);
@@ -973,7 +973,7 @@ describe("SecurityNoteService", () => {
       expect(result?.salt).toBe("salt-value");
       expect(result?.encryptedData).toBe("encrypted-data");
       expect(result?.viewTimeOut).toBe(300);
-      expect(coreUtils.calculateHash).toHaveBeenCalledWith("key", "user-123");
+      expect(coreUtils.calculateSaltHash).toHaveBeenCalledWith("key", "user-123");
       expect(coreUtils.verifyHashConstantTime).toHaveBeenCalled();
       expect(mockSecurityStorage.getPayload).toHaveBeenCalledWith("note-1");
       expect(mockSecurityStorage.deletePayload).toHaveBeenCalledWith("note-1");
@@ -1020,7 +1020,7 @@ describe("SecurityNoteService", () => {
         encryptionKeyHash: "hash-value",
       };
       vi.mocked(mockSecurityNoteRepository.getSecurityNode).mockResolvedValue(mockNote as any);
-      vi.mocked(coreUtils.calculateHash).mockResolvedValue("hash-value");
+      vi.mocked(coreUtils.calculateSaltHash).mockResolvedValue("hash-value");
       vi.mocked(coreUtils.verifyHashConstantTime).mockImplementation(() => {});
       vi.mocked(mockSecurityStorage.getPayload).mockResolvedValue(undefined);
       vi.mocked(mockSecurityNoteRepository.deleteSecurityNote).mockResolvedValue(undefined);
@@ -1047,7 +1047,7 @@ describe("SecurityNoteService", () => {
         createdUserName: "Creator",
       };
       vi.mocked(mockSecurityNoteRepository.getSecurityNode).mockResolvedValue(mockNote as any);
-      vi.mocked(coreUtils.calculateHash).mockResolvedValue("wrong-hash");
+      vi.mocked(coreUtils.calculateSaltHash).mockResolvedValue("wrong-hash");
       vi.mocked(coreUtils.verifyHashConstantTime).mockImplementation(() => {
         throw new Error("SecurityKey is not valid");
       });
@@ -1073,7 +1073,7 @@ describe("SecurityNoteService", () => {
         expiry: "1h",
       };
       vi.mocked(mockSecurityNoteRepository.getSecurityNode).mockResolvedValue(mockNote as any);
-      vi.mocked(coreUtils.calculateHash).mockResolvedValue("hash-value");
+      vi.mocked(coreUtils.calculateSaltHash).mockResolvedValue("hash-value");
       vi.mocked(coreUtils.verifyHashConstantTime).mockImplementation(() => {});
       vi.mocked(mockSecurityStorage.getPayload).mockResolvedValue("encrypted-data");
       vi.mocked(mockSecurityStorage.deletePayload).mockResolvedValue(undefined);
@@ -1100,13 +1100,13 @@ describe("SecurityNoteService", () => {
         description: "test description",
       };
       vi.mocked(mockSecurityNoteRepository.getSecurityNode).mockResolvedValue(mockNote as any);
-      vi.mocked(coreUtils.calculateHash).mockResolvedValue("source-hash");
+      vi.mocked(coreUtils.calculateSaltHash).mockResolvedValue("source-hash");
 
       const result = await service.isValidLink("note-1");
 
       expect(result.valid).toBe(true);
       expect(result.sourceAccountId).toBe("source-hash");
-      expect(coreUtils.calculateHash).toHaveBeenCalledWith("test description", "creator-123");
+      expect(coreUtils.calculateSaltHash).toHaveBeenCalledWith("test description", "creator-123");
     });
 
     it("should return valid false when accountId does not match", async () => {
@@ -1158,12 +1158,12 @@ describe("SecurityNoteService", () => {
         description: null,
       };
       vi.mocked(mockSecurityNoteRepository.getSecurityNode).mockResolvedValue(mockNote as any);
-      vi.mocked(coreUtils.calculateHash).mockResolvedValue("source-hash");
+      vi.mocked(coreUtils.calculateSaltHash).mockResolvedValue("source-hash");
 
       const result = await service.isValidLink("note-1");
 
       expect(result.valid).toBe(true);
-      expect(coreUtils.calculateHash).toHaveBeenCalledWith("creator-123", "creator-123");
+      expect(coreUtils.calculateSaltHash).toHaveBeenCalledWith("creator-123", "creator-123");
     });
   });
 

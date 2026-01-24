@@ -3,7 +3,7 @@ import { getAppContext, withAppContext } from "../controllers";
 import { NewSecurityNote } from "../../shared/dto";
 import { InferInsertModel, InferSelectModel } from "drizzle-orm";
 import {
-  calculateHash,
+  calculateSaltHash,
   verifyHashConstantTime,
   sendExpirationNotification,
   sendIssueNotification,
@@ -171,7 +171,7 @@ export class SecurityNoteService {
     if (accountId !== sn?.targetUserId) {
       return undefined;
     }
-    const calculatedHash = await calculateHash(key, sn.targetUserId);
+    const calculatedHash = await calculateSaltHash(key, sn.targetUserId);
     const errorMessage = `SecurityKey is not valid, please ask ${sn.createdUserName} to sent you it. `;
     verifyHashConstantTime(sn.encryptionKeyHash, calculatedHash, errorMessage);
     const encryptedData = await this.securityStorage.getPayload(securityNoteId);
@@ -207,7 +207,7 @@ export class SecurityNoteService {
     return {
       valid: isValid,
       sourceAccountId: isValid
-        ? await calculateHash(sn.description ?? sn.createdBy, sn.createdBy)
+        ? await calculateSaltHash(sn.description ?? sn.createdBy, sn.createdBy)
         : undefined,
     };
   }
@@ -328,7 +328,10 @@ export class SecurityNoteService {
       projectKey: context.extension.project?.key,
       targetUserId: targetUser.accountId,
       targetUserName: targetUser.userName,
-      encryptionKeyHash: await calculateHash(securityNote.encryptionKeyHash, targetUser.accountId),
+      encryptionKeyHash: await calculateSaltHash(
+        securityNote.encryptionKeyHash,
+        targetUser.accountId,
+      ),
       iv: securityNote.iv,
       salt: securityNote.salt,
       isCustomExpiry: securityNote.isCustomExpiry ? 1 : 0,

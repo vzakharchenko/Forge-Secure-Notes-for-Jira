@@ -21,6 +21,11 @@ import { SecureNoteFormFields } from "./models";
 import FormContainer from "@src/components/forms/FormContainer/FormContainer";
 import SecureNoteForm from "./SecureNoteForm";
 import { CustomerRequest } from "../../../shared/models/customerRequest";
+import { SALT_ITERATIONS } from "@shared/Types";
+
+const BASE_ITERATION = 200_000;
+const ENCRYPTION_ITERATIONS = 1000;
+const VERIFICATION_ITERATIONS = 1000;
 
 const SecureNoteFormContainer = ({
   accountId,
@@ -33,10 +38,18 @@ const SecureNoteFormContainer = ({
     const { targetUsers, description, note, expiryOption, expiryDate, encryptionKey } = data;
     const expiry = expiryOption === "custom" ? expiryDate : expiryOption;
     const descriptionText = description.trim();
-    const salt = await calculateHash(descriptionText ?? accountId, accountId, 1000);
-    const baseKey = await calculateHash(encryptionKey, salt, 200_000);
-    const keyForEncryption = await calculateHash(baseKey, DERIVE_PURPOSE_ENCRYPTION, 1000);
-    const keyForServer = await calculateHash(baseKey, DERIVE_PURPOSE_VERIFICATION, 1000);
+    const salt = await calculateHash(descriptionText ?? accountId, accountId, SALT_ITERATIONS);
+    const baseKey = await calculateHash(encryptionKey, salt, BASE_ITERATION);
+    const keyForEncryption = await calculateHash(
+      baseKey,
+      DERIVE_PURPOSE_ENCRYPTION,
+      ENCRYPTION_ITERATIONS,
+    );
+    const keyForServer = await calculateHash(
+      baseKey,
+      DERIVE_PURPOSE_VERIFICATION,
+      VERIFICATION_ITERATIONS,
+    );
     const encryptedPayload = await encryptMessage(note.trim(), keyForEncryption);
     const noteData: NewSecurityNote = {
       targetUsers: targetUsers.map((user) => ({
