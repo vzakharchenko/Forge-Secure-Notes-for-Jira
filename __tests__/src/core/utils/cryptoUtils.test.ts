@@ -1,17 +1,17 @@
 import { describe, it, expect } from "vitest";
 import {
-  calculateHash,
+  calculateSaltHash,
   decodeJwtPayload,
   verifyHashConstantTime,
 } from "../../../../src/core/utils/cryptoUtils";
 
 describe("cryptoUtils", () => {
-  describe("calculateHash", () => {
+  describe("calculateSaltHash", () => {
     it("should calculate hash for password and accountId", async () => {
       const password = "test-password";
       const accountId = "user-123";
 
-      const result = await calculateHash(password, accountId);
+      const result = await calculateSaltHash(password, accountId);
 
       expect(result).toBeDefined();
       expect(typeof result).toBe("string");
@@ -21,16 +21,16 @@ describe("cryptoUtils", () => {
 
     it("should return different hashes for different passwords", async () => {
       const accountId = "user-123";
-      const hash1 = await calculateHash("password1", accountId);
-      const hash2 = await calculateHash("password2", accountId);
+      const hash1 = await calculateSaltHash("password1", accountId);
+      const hash2 = await calculateSaltHash("password2", accountId);
 
       expect(hash1).not.toBe(hash2);
     });
 
     it("should return different hashes for different accountIds", async () => {
       const password = "test-password";
-      const hash1 = await calculateHash(password, "user-123");
-      const hash2 = await calculateHash(password, "user-456");
+      const hash1 = await calculateSaltHash(password, "user-123");
+      const hash2 = await calculateSaltHash(password, "user-456");
 
       expect(hash1).not.toBe(hash2);
     });
@@ -39,15 +39,15 @@ describe("cryptoUtils", () => {
       const password = "test-password";
       const accountId = "user-123";
 
-      const hash1 = await calculateHash(password, accountId);
-      const hash2 = await calculateHash(password, accountId);
+      const hash1 = await calculateSaltHash(password, accountId);
+      const hash2 = await calculateSaltHash(password, accountId);
 
       expect(hash1).toBe(hash2);
     });
 
     it("should handle empty password", async () => {
       const accountId = "user-123";
-      const result = await calculateHash("", accountId);
+      const result = await calculateSaltHash("", accountId);
 
       expect(result).toBeDefined();
       expect(typeof result).toBe("string");
@@ -56,7 +56,7 @@ describe("cryptoUtils", () => {
 
     it("should handle empty accountId", async () => {
       const password = "test-password";
-      const result = await calculateHash(password, "");
+      const result = await calculateSaltHash(password, "");
 
       expect(result).toBeDefined();
       expect(typeof result).toBe("string");
@@ -66,7 +66,7 @@ describe("cryptoUtils", () => {
     it("should handle special characters in password", async () => {
       const password = "p@ssw0rd!@#$%^&*()";
       const accountId = "user-123";
-      const result = await calculateHash(password, accountId);
+      const result = await calculateSaltHash(password, accountId);
 
       expect(result).toBeDefined();
       expect(typeof result).toBe("string");
@@ -76,7 +76,7 @@ describe("cryptoUtils", () => {
     it("should handle special characters in accountId", async () => {
       const password = "test-password";
       const accountId = "user@example.com";
-      const result = await calculateHash(password, accountId);
+      const result = await calculateSaltHash(password, accountId);
 
       expect(result).toBeDefined();
       expect(typeof result).toBe("string");
@@ -86,7 +86,7 @@ describe("cryptoUtils", () => {
     it("should handle unicode characters", async () => {
       const password = "пароль";
       const accountId = "пользователь";
-      const result = await calculateHash(password, accountId);
+      const result = await calculateSaltHash(password, accountId);
 
       expect(result).toBeDefined();
       expect(typeof result).toBe("string");
@@ -96,7 +96,7 @@ describe("cryptoUtils", () => {
     it("should handle very long strings", async () => {
       const password = "a".repeat(1000);
       const accountId = "b".repeat(1000);
-      const result = await calculateHash(password, accountId);
+      const result = await calculateSaltHash(password, accountId);
 
       expect(result).toBeDefined();
       expect(typeof result).toBe("string");
@@ -288,19 +288,19 @@ describe("cryptoUtils", () => {
       expect(() => verifyHashConstantTime(hash1, hash2, errorMessage)).toThrow(errorMessage);
     });
 
-    it("should work with real hash values from calculateHash", async () => {
+    it("should work with real hash values from calculateSaltHash", async () => {
       const password = "test-password";
       const accountId = "user-123";
-      const hash1 = await calculateHash(password, accountId);
-      const hash2 = await calculateHash(password, accountId);
+      const hash1 = await calculateSaltHash(password, accountId);
+      const hash2 = await calculateSaltHash(password, accountId);
       const errorMessage = "Hashes don't match";
 
       expect(() => verifyHashConstantTime(hash1, hash2, errorMessage)).not.toThrow();
     });
 
     it("should throw when comparing different real hash values", async () => {
-      const hash1 = await calculateHash("password1", "user-123");
-      const hash2 = await calculateHash("password2", "user-123");
+      const hash1 = await calculateSaltHash("password1", "user-123");
+      const hash2 = await calculateSaltHash("password2", "user-123");
       const errorMessage = "Hashes don't match";
 
       expect(() => verifyHashConstantTime(hash1, hash2, errorMessage)).toThrow(errorMessage);

@@ -1,11 +1,12 @@
 import { pbkdf2, timingSafeEqual } from "node:crypto";
 import { promisify } from "node:util";
+import { SALT_ITERATIONS } from "../../../shared/Types";
 
 const pbkdf2Async = promisify(pbkdf2);
 
-export async function calculateHash(password: string, accountId: string) {
+export async function calculateSaltHash(password: string, accountId: string) {
   const salt = Buffer.from(accountId, "utf8");
-  const key = await pbkdf2Async(password, salt, 1000, 32, "sha256");
+  const key = await pbkdf2Async(password, salt, SALT_ITERATIONS, 32, "sha256");
   return key.toString("hex");
 }
 
