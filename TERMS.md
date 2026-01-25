@@ -114,18 +114,6 @@ You may:
 
 "Production use" is defined as running the App in a live Atlassian environment (Jira / Confluence) for internal business operations or providing the App to third parties.
 
-### Permitted Use
-
-You may:
-
-- View, copy, and modify the source code.
-- Use the App for development, testing, security auditing, and educational purposes.
-- Review and audit the code for security and compliance evaluation.
-
-### Production Use
-
-"Production use" is defined as running the App in a live Atlassian environment (Jira / Confluence) for internal business operations or providing the App to third parties.
-
 Production use **requires a valid commercial license obtained via the Atlassian Marketplace**.
 
 On the License Change Date, the App will automatically become available under the MIT License.
