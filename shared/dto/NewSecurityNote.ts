@@ -1,4 +1,4 @@
-import { ArrayNotEmpty, IsArray, IsNotEmpty, Length } from "class-validator";
+import { ArrayNotEmpty, IsArray, IsNotEmpty, IsOptional, IsUUID, Length } from "class-validator";
 
 export class NewSecurityNote {
   @ArrayNotEmpty()
@@ -19,6 +19,9 @@ export class NewSecurityNote {
   @Length(3, 255)
   @IsNotEmpty()
   salt!: string;
+  @IsOptional()
+  @IsUUID()
+  senderKeyId?: string;
   @Length(3, 255)
   @IsNotEmpty()
   description!: string;

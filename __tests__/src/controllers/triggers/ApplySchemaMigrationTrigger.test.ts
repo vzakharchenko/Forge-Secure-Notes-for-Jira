@@ -1,16 +1,22 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import ApplySchemaMigrationTrigger from "../../../../src/controllers/triggers/ApplySchemaMigrationTrigger";
 import * as forgeSqlOrm from "forge-sql-orm";
-import migration from "../../../../src/database/migration";
-import { kvs } from "@forge/kvs";
 
-vi.mock("@forge/kvs", () => ({
-  kvs: {
-    get: vi.fn(),
-    set: vi.fn(),
-    delete: vi.fn(),
-  },
-}));
+const mockKVSSchemaMigrationServiceInstance = {
+  isLatestVersion: vi.fn(),
+  setLatestVersion: vi.fn(),
+};
+
+// Mock KVSSchemaMigrationService as a class
+vi.mock("../../../../src/services", () => {
+  class MockKVSSchemaMigrationService {
+    isLatestVersion = mockKVSSchemaMigrationServiceInstance.isLatestVersion;
+    setLatestVersion = mockKVSSchemaMigrationServiceInstance.setLatestVersion;
+  }
+  return {
+    KVSSchemaMigrationService: MockKVSSchemaMigrationService,
+  };
+});
 
 vi.mock("forge-sql-orm", async (importOriginal) => {
   const actual = await importOriginal<typeof forgeSqlOrm>();
@@ -35,8 +41,8 @@ describe("ApplySchemaMigrationTrigger", () => {
 
   describe("handler", () => {
     it("should apply migrations when not latest version", async () => {
-      // Mock KVS to return false for isLatestVersion
-      vi.mocked(kvs.get).mockResolvedValue(undefined);
+      // Mock isLatestVersion to return false
+      mockKVSSchemaMigrationServiceInstance.isLatestVersion.mockResolvedValue(false);
 
       const mockResponse = { statusCode: 200, body: "Migrations applied" };
       vi.mocked(forgeSqlOrm.applySchemaMigrations).mockResolvedValue(mockResponse as any);
@@ -44,13 +50,13 @@ describe("ApplySchemaMigrationTrigger", () => {
       const result = await trigger.handler();
 
       expect(result).toEqual(mockResponse);
-      expect(forgeSqlOrm.applySchemaMigrations).toHaveBeenCalledWith(migration);
-      expect(kvs.set).toHaveBeenCalled();
+      expect(forgeSqlOrm.applySchemaMigrations).toHaveBeenCalledWith(expect.any(Function));
+      expect(mockKVSSchemaMigrationServiceInstance.setLatestVersion).toHaveBeenCalled();
     });
 
     it("should return NOT NEEDED when already latest version", async () => {
-      // Mock KVS to return current version (latest)
-      vi.mocked(kvs.get).mockResolvedValue("3" as any);
+      // Mock isLatestVersion to return true (already latest)
+      mockKVSSchemaMigrationServiceInstance.isLatestVersion.mockResolvedValue(true);
 
       const mockResponse = {
         statusCode: 200,

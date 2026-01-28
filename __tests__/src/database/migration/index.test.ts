@@ -15,6 +15,14 @@ vi.mock("../../../../src/database/migration/migrationV3", () => ({
   default: vi.fn((runner: MigrationRunner) => runner),
 }));
 
+vi.mock("../../../../src/database/migration/migrationV4", () => ({
+  default: vi.fn((runner: MigrationRunner) => runner),
+}));
+
+vi.mock("../../../../src/database/migration/migrationV5", () => ({
+  default: vi.fn((runner: MigrationRunner) => runner),
+}));
+
 describe("migration index", () => {
   let mockMigrationRunner: MigrationRunner;
   let mockEnqueue: ReturnType<typeof vi.fn>;
@@ -51,7 +59,8 @@ describe("migration index", () => {
   it("should handle dynamic imports correctly", async () => {
     // This test verifies that the dynamic import pattern works
     // The actual imports are mocked, so we just verify the function completes
-    await expect(migrationDefault(mockMigrationRunner)).resolves.toBe(mockMigrationRunner);
+    const result = migrationDefault(mockMigrationRunner);
+    expect(result).toBe(mockMigrationRunner);
   });
 
   it("should execute migrations in order from 1 to MIGRATION_VERSION", async () => {

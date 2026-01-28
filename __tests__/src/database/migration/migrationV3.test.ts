@@ -36,6 +36,6 @@ describe("migrationV3", () => {
     const sqlCall = mockEnqueue.mock.calls[0][1];
     expect(sqlCall).toContain("ALTER TABLE `security_notes`");
     expect(sqlCall).toContain("ADD COLUMN IF NOT EXISTS `description`");
-    expect(sqlCall).toContain("varchar(255) NULL");
+    expect(sqlCall).toContain("varchar(255) NOT NULL");
   });
 });

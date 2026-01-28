@@ -1,6 +1,6 @@
 import * as api from "@forge/api";
 
-import { CurrentUser, CustomerRequest } from "./UserService";
+import { CurrentUser, CustomerRequest, UserEmail } from "./UserService";
 import { GetPermissionsResponse } from "./GetPermissionsResponse";
 import { injectable } from "inversify";
 
@@ -9,7 +9,32 @@ export class JiraUserService {
   async getCurrentUser(): Promise<CurrentUser | undefined> {
     try {
       const response = await api.asUser().requestJira(api.route`/rest/api/3/myself`);
-      return await response.json();
+      if (response.ok) {
+        return await response.json();
+      } else {
+        // eslint-disable-next-line no-console
+        console.error(await response.text());
+        return undefined;
+      }
+    } catch (e) {
+      // eslint-disable-next-line no-console
+      console.error(e);
+      return undefined;
+    }
+  }
+
+  async getUserEmail(accountId: string): Promise<UserEmail | undefined> {
+    try {
+      const response = await api
+        .asApp()
+        .requestJira(api.route`/rest/api/3/user/email?accountId=${accountId}`);
+      if (response.ok) {
+        return await response.json();
+      } else {
+        // eslint-disable-next-line no-console
+        console.error(await response.text());
+        return undefined;
+      }
     } catch (e) {
       // eslint-disable-next-line no-console
       console.error(e);
@@ -24,10 +49,11 @@ export class JiraUserService {
         .requestJira(api.route`/rest/servicedeskapi/request/${key}`);
       if (response.ok) {
         return await response.json();
+      } else {
+        // eslint-disable-next-line no-console
+        console.warn(await response.text());
+        return undefined;
       }
-      // eslint-disable-next-line no-console
-      console.warn("ServiceDeskApi error " + (await response.text()));
-      return undefined;
     } catch (e) {
       // eslint-disable-next-line no-console
       console.error(e);

@@ -23,7 +23,7 @@ import {
 import { publishGlobal } from "@forge/realtime";
 import { inject, injectable } from "inversify";
 import { FORGE_INJECTION_TOKENS } from "../constants";
-import { JiraUserService } from "../jira";
+import { CurrentUser, JiraUserService } from "../jira";
 import { SecurityNoteRepository, securityNotes } from "../database";
 import { BootstrapService } from "./BootstrapService";
 import { SecurityStorage } from "../storage";
@@ -61,11 +61,13 @@ export class SecurityNoteService {
         displayName: sn.createdUserName,
         accountId: sn.createdBy,
         avatarUrl: sn.createdAvatarUrl,
+        email: sn.createdEmail,
       },
       targetUser: {
         displayName: sn.targetUserName,
         accountId: sn.targetUserId,
         avatarUrl: sn.targetAvatarUrl,
+        email: sn.targetEmail,
       },
       viewTimeOut: "5mins",
       status: sn.status as SecurityNoteStatus,
@@ -78,7 +80,8 @@ export class SecurityNoteService {
       viewedAt: sn.viewedAt ?? undefined,
       deletedAt: sn.deletedAt ?? undefined,
       expiry: sn.expiry,
-      description: sn.description ?? undefined,
+      description: sn.description,
+      senderKeyId: sn.senderKeyId ?? undefined,
       count: sn.count,
     }));
   }
@@ -289,28 +292,34 @@ export class SecurityNoteService {
 
   private setCreatorInfo(
     data: Partial<InferInsertModel<typeof securityNotes>>,
-    currentUser: any,
+    currentUser: CurrentUser,
     accountId: string,
   ): void {
     data.createdBy = accountId;
     if (currentUser) {
       data.createdUserName = currentUser.displayName;
       data.createdAvatarUrl = currentUser.avatarUrls["32x32"];
+      data.createdEmail = currentUser.emailAddress;
     } else {
       data.createdUserName = accountId;
       data.createdAvatarUrl = "";
+      data.createdEmail = "";
     }
   }
 
   private async setTargetUserInfo(
     data: Partial<InferInsertModel<typeof securityNotes>>,
   ): Promise<void> {
-    const targetUserInfo = await this.jiraUserService.getUserById(String(data.targetUserId));
+    const targetUserId = String(data.targetUserId);
+    const targetUserInfo = await this.jiraUserService.getUserById(targetUserId);
+    const userEmail = await this.jiraUserService.getUserEmail(targetUserId);
     if (targetUserInfo) {
       data.targetUserName = targetUserInfo.displayName;
       data.targetAvatarUrl = targetUserInfo.avatarUrls["32x32"];
+      data.targetEmail = userEmail?.email ?? targetUserInfo.emailAddress;
     } else {
       data.targetAvatarUrl = "";
+      data.targetEmail = userEmail?.email ?? "";
     }
   }
 
@@ -371,6 +380,7 @@ export class SecurityNoteService {
       isCustomExpiry: securityNote.isCustomExpiry ? 1 : 0,
       expiry: securityNote.expiry,
       description: securityNote.description,
+      senderKeyId: securityNote.senderKeyId,
       createdAt: new Date(),
       status: "NEW",
       id: v4(),

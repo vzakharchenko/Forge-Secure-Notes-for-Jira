@@ -10,6 +10,7 @@ import migration from "../../database/migration";
 import { Container } from "inversify";
 import { FORGE_INJECTION_TOKENS } from "../../constants";
 import { diContainer, useDiContainer } from "../../core/decorators";
+import { MigrationRunner } from "@forge/sql/out/migration";
 
 const MIGRATION_BINDINGS = [
   { name: FORGE_INJECTION_TOKENS.KVSSchemaMigrationService, bind: KVSSchemaMigrationService },
@@ -29,7 +30,9 @@ class ApplySchemaMigrationTrigger implements SchedulerTrigger {
     if (await kvsSchemaMigrationService.isLatestVersion()) {
       return getHttpResponse(200, "NOT NEEDED");
     } else {
-      const response = await applySchemaMigrations(migration);
+      const response = await applySchemaMigrations(async (migrationRunner: MigrationRunner) =>
+        migration(migrationRunner),
+      );
       await kvsSchemaMigrationService.setLatestVersion();
       return response;
     }

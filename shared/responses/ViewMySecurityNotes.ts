@@ -4,6 +4,7 @@ export type UserViewInfoType = {
   accountId: string;
   displayName: string;
   avatarUrl: string;
+  email: string;
 };
 
 export interface ViewMySecurityNotes extends ErrorResponse {
@@ -21,6 +22,7 @@ export interface ViewMySecurityNotes extends ErrorResponse {
   createdAt: Date;
   viewedAt?: Date;
   deletedAt?: Date;
-  description?: string;
+  description: string;
+  senderKeyId?: string;
   count?: number;
 }
