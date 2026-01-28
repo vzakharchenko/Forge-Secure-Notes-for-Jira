@@ -5,6 +5,7 @@ import * as DbUtils from "../../../src/database/DbUtils";
 
 // Mock dependencies
 const mockRovoIntegration = {
+  rovoSettingBuilder: vi.fn(),
   rovoRawSettingBuilder: vi.fn(),
   dynamicIsolatedQuery: vi.fn(),
 };
@@ -38,6 +39,7 @@ describe("RovoService", () => {
     } as unknown as JiraUserService;
     service = new RovoService(mockJiraUserService);
     vi.clearAllMocks();
+    mockRovoIntegration.rovoSettingBuilder.mockReturnValue(mockBuilder);
     mockRovoIntegration.rovoRawSettingBuilder.mockReturnValue(mockBuilder);
     // Reset mock builder methods
     Object.keys(mockBuilder).forEach((key) => {
@@ -146,7 +148,7 @@ describe("RovoService", () => {
       const result = await service.runSecurityNotesQuery(mockEvent, mockContext);
 
       expect(result).toEqual(mockResult);
-      expect(mockRovoIntegration.rovoRawSettingBuilder).toHaveBeenCalled();
+      expect(mockRovoIntegration.rovoSettingBuilder).toHaveBeenCalled();
       expect(mockRovoIntegration.dynamicIsolatedQuery).toHaveBeenCalledWith(
         mockEvent.sql,
         expect.any(Object),

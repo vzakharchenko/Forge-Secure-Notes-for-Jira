@@ -64,7 +64,9 @@ describe("JiraUserService", () => {
       };
 
       const mockResponse = {
+        ok: true,
         json: vi.fn().mockResolvedValue(mockUser),
+        text: vi.fn().mockResolvedValue(""),
       };
       mockRequestJira.mockResolvedValue(mockResponse);
 
@@ -380,7 +382,7 @@ describe("JiraUserService", () => {
       expect(mockAsUser).toHaveBeenCalledTimes(1);
       expect(mockRequestJira).toHaveBeenCalledTimes(1);
       expect(mockRequestJira).toHaveBeenCalledWith(`/rest/servicedeskapi/request/${key}`);
-      expect(consoleSpy).toHaveBeenCalledWith("ServiceDeskApi error Service Desk API error");
+      expect(consoleSpy).toHaveBeenCalledWith("Service Desk API error");
 
       consoleSpy.mockRestore();
     });
@@ -401,6 +403,68 @@ describe("JiraUserService", () => {
       expect(consoleSpy).toHaveBeenCalledWith(error);
 
       consoleSpy.mockRestore();
+    });
+  });
+
+  describe("getUserEmail", () => {
+    it("should return user email when request succeeds", async () => {
+      const accountId = "12345";
+      const mockUserEmail = {
+        accountId: accountId,
+        email: "user@example.com",
+      };
+
+      const mockResponse = {
+        ok: true,
+        json: vi.fn().mockResolvedValue(mockUserEmail),
+        text: vi.fn().mockResolvedValue(""),
+      };
+      mockRequestJira.mockResolvedValue(mockResponse);
+
+      const result = await jiraUserService.getUserEmail(accountId);
+
+      expect(result).toEqual(mockUserEmail);
+      expect(mockAsApp).toHaveBeenCalledTimes(1);
+      expect(mockRequestJira).toHaveBeenCalledTimes(1);
+      expect(mockRequestJira).toHaveBeenCalledWith(`/rest/api/3/user/email?accountId=${accountId}`);
+    });
+
+    it("should return undefined when request fails", async () => {
+      const accountId = "12345";
+      const error = new Error("Request failed");
+      mockRequestJira.mockRejectedValue(error);
+
+      const consoleSpy = vi.spyOn(console, "error").mockImplementation(() => {});
+
+      const result = await jiraUserService.getUserEmail(accountId);
+
+      expect(result).toBeUndefined();
+      expect(mockAsApp).toHaveBeenCalledTimes(1);
+      expect(mockRequestJira).toHaveBeenCalledTimes(1);
+      expect(mockRequestJira).toHaveBeenCalledWith(`/rest/api/3/user/email?accountId=${accountId}`);
+      expect(consoleSpy).toHaveBeenCalledWith(error);
+
+      consoleSpy.mockRestore();
+    });
+
+    it("should handle empty email response", async () => {
+      const accountId = "12345";
+      const mockUserEmail = {
+        accountId: accountId,
+        email: "",
+      };
+
+      const mockResponse = {
+        ok: true,
+        json: vi.fn().mockResolvedValue(mockUserEmail),
+        text: vi.fn().mockResolvedValue(""),
+      };
+      mockRequestJira.mockResolvedValue(mockResponse);
+
+      const result = await jiraUserService.getUserEmail(accountId);
+
+      expect(result).toEqual(mockUserEmail);
+      expect(mockRequestJira).toHaveBeenCalledWith(`/rest/api/3/user/email?accountId=${accountId}`);
     });
   });
 });

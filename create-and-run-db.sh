@@ -50,6 +50,7 @@ CREATE TABLE IF NOT EXISTS security_notes (
   id varbinary(16) NOT NULL DEFAULT (uuid_to_bin(uuid())),
   target_user_id varchar(255) NOT NULL,
   target_user_name varchar(255) NOT NULL,
+  target_email varchar(255) NOT NULL,
   expiry varchar(100) NOT NULL,
   is_custom_expiry tinyint NOT NULL,
   encryption_key_hash varchar(255) NOT NULL,
@@ -64,12 +65,14 @@ CREATE TABLE IF NOT EXISTS security_notes (
   viewed_at datetime DEFAULT NULL,
   target_avatar_url varchar(255) NOT NULL,
   created_user_name varchar(255) NOT NULL,
+  created_email varchar(255) NOT NULL,
   created_avatar_url varchar(255) NOT NULL,
   description varchar(255) NOT NULL,
   issue_id varchar(255) DEFAULT NULL,
   issue_key varchar(255) DEFAULT NULL,
   project_id varchar(255) DEFAULT NULL,
   project_key varchar(255) DEFAULT NULL,
+  sender_key_id varbinary(16),
   PRIMARY KEY (id) /*T![clustered_index] CLUSTERED */
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
 SET foreign_key_checks = 1

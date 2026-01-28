@@ -2,6 +2,7 @@
 import React from "react";
 import { view } from "@forge/bridge";
 import { Request } from "./constants";
+import { v4 as uuid } from "uuid";
 
 // helpers
 import { schema } from "./schema";
@@ -72,7 +73,15 @@ const SecureNoteFormContainer = ({
     if (Object.keys(validationErrors).length > 0) {
       throw { data: { validationErrors } };
     }
-
+    const senderKeyId = uuid();
+    noteData.senderKeyId = senderKeyId;
+    if (sessionStorage) {
+      const encryptedKeyForLocalBrowserStorage = await encryptMessage(
+        encryptionKey,
+        await calculateHash(noteData.description, accountId, SALT_ITERATIONS),
+      );
+      sessionStorage.setItem(senderKeyId, JSON.stringify(encryptedKeyForLocalBrowserStorage));
+    }
     await view.close(noteData);
   };
 

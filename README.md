@@ -36,12 +36,15 @@ While Jira excels at task tracking and collaboration, it lacks a secure, ephemer
 
 - 🔐 Create encrypted notes on Jira issues
 - 🕒 Choose an expiration: 1 hour, 1 day, 7 days, 10 days
-- 🔑 Generate a one-time decryption key (created by user, never stored on backend - only the user knows the key)
+- 🔑 Generate a one-time decryption key (created by user, never stored on backend - only the sender and recipient know the key)
+  - The sender can copy the key or send it via email, but **only from the same browser** where the note was created
 - 📥 View received notes (with key)
-- 📤 View and delete sent notes
+- 📤 View and delete sent notes — sender can copy the key again or send it via email (only from the same browser where the note was created)
 - 🧨 Note self-destructs after reading or upon expiry
 - ⏳ Expiration is enforced automatically using a Forge `scheduledTrigger`
-- 👤 Only the designated Atlassian account can decrypt the Secure Note
+- 👤 **Only the authorized recipient can decrypt** — neither sender nor administrators can read the note content
+- 📧 **Email key sharing** — send decryption key to recipient via email (Gmail/mailto) while maintaining Zero Trust architecture
+  - ⚠️ **Never share keys through Jira** — use separate channels (Slack, email, phone) to maintain Zero Trust
 - 📧 **Email Notifications**: Automatic email notifications are sent:
   - When a secure note is created and shared with you
   - When a secure note expires and is automatically deleted
@@ -160,6 +163,9 @@ The application requires specific Forge scopes to function properly. Each scope 
   - Only the user who creates the key knows it
   - Backend stores only `encryption_key_hash` (hash of the key) for validation purposes
   - The actual encryption key is required for decryption and must be shared out-of-band
+  - **Sender key storage**: When creating a secure note, the encryption key is stored in the sender's browser `sessionStorage` in encrypted form, allowing the sender to retrieve and copy the key again later
+    - ⚠️ **Important**: This is **local browser storage only** — if the storage is cleared, or if the ticket is opened in a different browser or on a different machine, this capability will not be available
+    - The key is encrypted before being stored in `sessionStorage` using a hash derived from the note description and sender's account ID
 - **Split data model for decryption:**
   - Half of the decryption data is with the user: **encryption key** (known only to the user)
   - Other half is in metadata: **IV** (Initialization Vector) and **salt** stored in `@forge/sql`
@@ -176,6 +182,15 @@ The application requires specific Forge scopes to function properly. Each scope 
     - Key is useless without the correct account — even if an attacker obtains the key, they cannot use it under another account
     - Key is useless without encrypted data — both components are needed
     - Authorization is mandatory — Forge guarantees that `accountId` belongs to the authenticated user
+  - **Access control:**
+    - **Only the authorized recipient can decrypt**: The encryption key is issued only to the recipient, and only the authenticated recipient can read secure notes
+    - **Sender cannot decrypt**: Even though the sender has the key stored locally, they cannot decrypt the note because authorization checks verify that only the `targetUserId` (recipient) can access the encrypted content
+    - **Administrators cannot decrypt**: Administrators can see metadata (who created, when, status) but cannot decrypt the actual note content — only the recipient can
+    - **Key safety**: If the key accidentally falls into the wrong hands, it's not a security issue — the key by itself is useless without:
+      - The correct recipient's account (authorization check)
+      - The encrypted data stored in Atlassian Cloud
+      - Both components together are required for decryption
+  - **Purpose of the key**: The encryption key exists to ensure that **Atlassian Cloud does not have sufficient information** to decrypt secure notes. Even if Atlassian infrastructure is compromised, they cannot decrypt notes without the key, which is never transmitted to or stored on their servers
 
   **Implementation example:**
 
@@ -197,6 +212,14 @@ The application requires specific Forge scopes to function properly. Each scope 
 - Encrypted content stored in `@forge/kvs.setSecret`
 - Metadata (IV, salt, encryption_key_hash) stored in `@forge/sql`
 - Out-of-band key exchange required (key must be shared separately via secure channel)
+  - ⚠️ **CRITICAL**: The decryption key **must NOT** be shared through Jira (comments, descriptions, issue fields) or any Atlassian Cloud channels
+  - **Why**: If the key passes through Jira or Atlassian Cloud infrastructure, Atlassian will have all the data needed to decrypt the secret, which **violates Zero Trust architecture**
+  - **Correct approach**: Share the key through separate, independent channels such as Slack, Teams, direct email (not through Jira), phone call, or other secure communication methods outside of Atlassian infrastructure
+- **Email key sharing**: The app provides functionality to send the decryption key to the recipient via email (Gmail compose or mailto link)
+  - ⚠️ **Important**: Always verify the recipient's email address before sending — the app cannot verify email addresses automatically
+  - This feature maintains Zero Trust architecture and "Runs on Atlassian" badge compliance — the email is composed entirely client-side in your browser and sent directly through your email client (Gmail, Outlook, etc.)
+  - **No backend involvement**: The email does **not** pass through the app's backend, Atlassian Cloud, or Jira infrastructure — it goes directly from your browser to your email provider
+  - The decryption key is never transmitted to or stored on Atlassian servers — it only exists in the email composed in your browser and sent through your email client
 - Automatic content deletion after viewing
 
 ### 🔒 Logging & Privacy
@@ -367,21 +390,43 @@ forge tunnel
    - **Your Secure Note**: Enter the secret message content (max 10KB recommended)
    - **Set Note Expiry**: Choose expiration time (1 hour, 1 day, 7 days, 10 days, or custom date)
 5. Click "Generate New Key" to create an encryption key
-6. Copy the encryption key and share it securely (via Slack, email, etc.)
-7. Click "Create & Encrypt Note"
-8. **Email Notification**: The recipient(s) will automatically receive an email notification with:
+6. **Key Storage**: The encryption key is automatically stored in your browser's `sessionStorage` (encrypted) for easy retrieval later
+   - ⚠️ **Important**: This is local browser storage — if you clear storage or open the ticket in a different browser/machine, you won't be able to retrieve the key from storage
+   - You can copy the key again from the sent notes panel if needed
+   - 🔒 **Security Note**: The key stored in your browser is **useless by itself** — even if you (the sender) or anyone else has the key, it cannot decrypt the note without the **authorized recipient's account**. The key only works in combination with the recipient's authorization — only the designated recipient can use the key to decrypt the note
+7. **Share the Key**: Copy the encryption key and share it securely with the recipient:
+   - ⚠️ **CRITICAL SECURITY WARNING**: **DO NOT** share the key through Jira comments, issue descriptions, or any Atlassian Cloud channels. This would violate Zero Trust architecture because Atlassian Cloud would have all the data needed to decrypt the secret.
+   - **Correct sharing methods**:
+     - **Option 1**: Copy manually and share via Slack, Teams, phone call, or another secure channel **outside of Atlassian infrastructure**
+     - **Option 2**: Use the "Send over Gmail" or "Send over email" button to compose an email with the key pre-filled
+       - ⚠️ **Always verify the recipient's email address** before sending — the app cannot verify email addresses automatically
+       - The email is composed entirely client-side in your browser and sent directly through your email client (Gmail, Outlook, etc.)
+       - **No backend involvement**: The email does **not** pass through the app's backend, Atlassian Cloud, or Jira infrastructure — it goes directly from your browser to your email provider
+       - This maintains Zero Trust architecture and "Runs on Atlassian" badge compliance
+8. Click "Create & Encrypt Note"
+9. **Email Notification**: The recipient(s) will automatically receive an email notification with:
    - A direct link to access the secure note
    - The expiration date and time
-   - Instructions on how to obtain the decryption key
-9. The note will be automatically updated in the panel in real-time using @forge/realtime
+   - Instructions on how to obtain the decryption key (you must share it separately)
+10. The note will be automatically updated in the panel in real-time using @forge/realtime
 
 ### Viewing a Secure Note
 
 1. Open the secure note link (from email notification or issue panel)
-2. Enter the decryption key
-3. View the message content
-4. Use "Copy and Close" to save the content and destroy the note
-5. The note will be automatically destroyed after viewing or when expired
+2. Enter the decryption key (shared by the sender via secure channel **outside of Jira/Atlassian Cloud** — e.g., Slack, Teams, direct email, phone call)
+   - ⚠️ **Important**: The key should **never** be shared through Jira comments, descriptions, or Atlassian Cloud channels, as this violates Zero Trust architecture
+3. **Authorization Check**: The system verifies that you are the authorized recipient — only the designated recipient's account can decrypt the note
+   - ⚠️ **Access Control**: Neither the sender nor administrators can decrypt the note — only the authorized recipient
+   - If you're not the recipient, the decryption will fail even with the correct key
+4. View the message content
+5. Use "Copy and Close" to save the content and destroy the note
+6. The note will be automatically destroyed after viewing or when expired
+
+**Important Security Notes:**
+
+- **Only the recipient can decrypt**: The encryption key is issued to the recipient, and authorization checks ensure only the authenticated recipient can access the note
+- **Key safety**: If the key accidentally falls into wrong hands, it's not a security issue — the key alone is useless without the correct recipient's account authorization
+- **Purpose**: The key ensures Atlassian Cloud cannot decrypt notes even if their infrastructure is compromised — they don't have sufficient information without the key
 
 ### Email Notifications
 

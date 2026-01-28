@@ -34,3 +34,8 @@ export interface CustomerRequest {
     web: string;
   };
 }
+
+export interface UserEmail {
+  accountId: string;
+  email: string;
+}

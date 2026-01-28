@@ -415,7 +415,9 @@ modules:
         - Show top users by number of security notes
       actions:
         - run-security-notes-query
-#  webtrigger:
+  webtrigger:
+    - key: apply-schema
+      function: runSchemaMigration
 #    - key: fetch-schema
 #      function: fetchSchema
 #    - key: drop-schema-migration
@@ -479,4 +481,5 @@ permissions:
     - "read:app-global-channel:realtime"
     - "read:request:jira-service-management"
     - "read:user:jira"
+    - "read:email-address:jira"
 
