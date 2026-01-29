@@ -1,5 +1,5 @@
 // libs
-import React from "react";
+import React, { useState } from "react";
 import { view } from "@forge/bridge";
 import { Request } from "./constants";
 import { v4 as uuid } from "uuid";
@@ -35,6 +35,8 @@ const SecureNoteFormContainer = ({
   accountId: string;
   customerRequest?: CustomerRequest;
 }) => {
+  const [isCopyKey, setIsCopyKey] = useState(false);
+
   const handleSubmit = async (data: SecureNoteFormFields) => {
     const { targetUsers, description, note, expiryOption, expiryDate, encryptionKey } = data;
     const expiry = expiryOption === "custom" ? expiryDate : expiryOption;
@@ -73,14 +75,16 @@ const SecureNoteFormContainer = ({
     if (Object.keys(validationErrors).length > 0) {
       throw { data: { validationErrors } };
     }
-    const senderKeyId = uuid();
-    noteData.senderKeyId = senderKeyId;
-    if (sessionStorage) {
-      const encryptedKeyForLocalBrowserStorage = await encryptMessage(
-        encryptionKey,
-        await calculateHash(noteData.description, accountId, SALT_ITERATIONS),
-      );
-      sessionStorage.setItem(senderKeyId, JSON.stringify(encryptedKeyForLocalBrowserStorage));
+    if (!isCopyKey) {
+      const senderKeyId = uuid();
+      noteData.senderKeyId = senderKeyId;
+      if (sessionStorage) {
+        const encryptedKeyForLocalBrowserStorage = await encryptMessage(
+          encryptionKey,
+          await calculateHash(noteData.description, accountId, SALT_ITERATIONS),
+        );
+        sessionStorage.setItem(senderKeyId, JSON.stringify(encryptedKeyForLocalBrowserStorage));
+      }
     }
     await view.close(noteData);
   };
@@ -98,7 +102,11 @@ const SecureNoteFormContainer = ({
       shouldDisableSubmitOnDirty={false}
       footerAlign="end"
     >
-      <SecureNoteForm accountId={accountId} customerRequest={customerRequest} />
+      <SecureNoteForm
+        accountId={accountId}
+        customerRequest={customerRequest}
+        onCopy={() => setIsCopyKey(true)}
+      />
     </FormContainer>
   );
 };
