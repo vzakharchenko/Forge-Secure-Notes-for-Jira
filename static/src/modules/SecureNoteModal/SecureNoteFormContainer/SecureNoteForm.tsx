@@ -38,8 +38,10 @@ const stackStyles = xcss({
 const SecureNoteForm = ({
   accountId,
   customerRequest,
+  onCopy,
 }: {
   accountId: string;
+  onCopy: () => void;
   customerRequest?: CustomerRequest;
 }) => {
   const { setFieldValue } = useFormContext();
@@ -73,6 +75,7 @@ const SecureNoteForm = ({
       title: "Key was copied successfully",
       description: "You can sent over slack, telegram, etc.",
     });
+    onCopy();
   };
 
   const onExpiryChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -127,6 +130,7 @@ const SecureNoteForm = ({
           label="Decryption key"
           isReadOnly
           isRequired
+          onClick={onCopy}
           elemAfterInput={
             <>
               <IconButton
