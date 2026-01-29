@@ -88,23 +88,26 @@ jobs:
         run: npm install -g @forge/cli && forge settings set usage-analytics true
 
       - name: Forge Deploy (development)
+        env:
+          FORGE_EMAIL: ${{ secrets.FORGE_EMAIL }}
+          FORGE_API_TOKEN: ${{ secrets.FORGE_API_TOKEN }}
+          ANALYTICS_API_KEY: ${{ secrets.ANALYTICS_API_KEY }}
         run: |
-          export FORGE_EMAIL=${{ secrets.FORGE_EMAIL }} && 
-          export FORGE_API_TOKEN=${{ secrets.FORGE_API_TOKEN }} && 
-          forge  variables set ANALYTICS_API_KEY ${{ secrets.ANALYTICS_API_KEY }} -e development && 
+          forge variables set ANALYTICS_API_KEY "$ANALYTICS_API_KEY" -e development
           forge deploy --non-interactive -e development
 
       - name: Check Forge eligibility (development)
-        run: |
-          export FORGE_EMAIL=${{ secrets.FORGE_EMAIL }} && \
-          export FORGE_API_TOKEN=${{ secrets.FORGE_API_TOKEN }} && \
-          ./check-forge-eligibility.sh -e development
+        env:
+          FORGE_EMAIL: ${{ secrets.FORGE_EMAIL }}
+          FORGE_API_TOKEN: ${{ secrets.FORGE_API_TOKEN }}
+        run: ./check-forge-eligibility.sh -e development
 
       - name: Forge Install (development)
-        run: |
-          export FORGE_EMAIL=${{ secrets.FORGE_EMAIL }} && \
-          export FORGE_API_TOKEN=${{ secrets.FORGE_API_TOKEN }} && \
-          forge install -e development -s ${{ secrets.FORGE_HOSTNAME }} -p Jira --confirm-scopes --non-interactive --upgrade
+        env:
+          FORGE_EMAIL: ${{ secrets.FORGE_EMAIL }}
+          FORGE_API_TOKEN: ${{ secrets.FORGE_API_TOKEN }}
+          FORGE_HOSTNAME: ${{ secrets.FORGE_HOSTNAME }}
+        run: forge install -e development -s "$FORGE_HOSTNAME" -p Jira --confirm-scopes --non-interactive --upgrade
 
   build-staging:
     environment: "secure notes"
@@ -169,23 +172,26 @@ jobs:
         run: npm install -g @forge/cli && forge settings set usage-analytics true
 
       - name: Forge Deploy (staging)
+        env:
+          FORGE_EMAIL: ${{ secrets.FORGE_EMAIL }}
+          FORGE_API_TOKEN: ${{ secrets.FORGE_API_TOKEN }}
+          ANALYTICS_API_KEY: ${{ secrets.ANALYTICS_API_KEY }}
         run: |
-          export FORGE_EMAIL=${{ secrets.FORGE_EMAIL }} && 
-          export FORGE_API_TOKEN=${{ secrets.FORGE_API_TOKEN }} && 
-          forge  variables set ANALYTICS_API_KEY ${{ secrets.ANALYTICS_API_KEY }} -e development && 
+          forge variables set ANALYTICS_API_KEY "$ANALYTICS_API_KEY" -e development
           forge deploy --non-interactive -e staging
 
       - name: Check Forge eligibility (staging)
-        run: |
-          export FORGE_EMAIL=${{ secrets.FORGE_EMAIL }} && \
-          export FORGE_API_TOKEN=${{ secrets.FORGE_API_TOKEN }} && \
-          ./check-forge-eligibility.sh -e staging
+        env:
+          FORGE_EMAIL: ${{ secrets.FORGE_EMAIL }}
+          FORGE_API_TOKEN: ${{ secrets.FORGE_API_TOKEN }}
+        run: ./check-forge-eligibility.sh -e staging
 
 #      - name: Forge Install (staging)
-#        run: |
-#          export FORGE_EMAIL=${{ secrets.FORGE_EMAIL }} && \
-#          export FORGE_API_TOKEN=${{ secrets.FORGE_API_TOKEN }} && \
-#          forge install -e development -s ${{ secrets.FORGE_HOSTNAME }} -p Jira --confirm-scopes --non-interactive --upgrade
+#        env:
+#          FORGE_EMAIL: ${{ secrets.FORGE_EMAIL }}
+#          FORGE_API_TOKEN: ${{ secrets.FORGE_API_TOKEN }}
+#          FORGE_HOSTNAME: ${{ secrets.FORGE_HOSTNAME }}
+#        run: forge install -e development -s "$FORGE_HOSTNAME" -p Jira --confirm-scopes --non-interactive --upgrade
 
   build-production:
     if: (github.event_name == 'release' && github.event.action == 'published')
@@ -244,20 +250,23 @@ jobs:
         run: npm install -g @forge/cli && forge settings set usage-analytics true
 
       - name: Forge Deploy (production)
+        env:
+          FORGE_EMAIL: ${{ secrets.FORGE_EMAIL }}
+          FORGE_API_TOKEN: ${{ secrets.FORGE_API_TOKEN }}
+          ANALYTICS_API_KEY: ${{ secrets.ANALYTICS_API_KEY }}
         run: |
-          export FORGE_EMAIL=${{ secrets.FORGE_EMAIL }} && 
-          export FORGE_API_TOKEN=${{ secrets.FORGE_API_TOKEN }} && 
-          forge  variables set ANALYTICS_API_KEY ${{ secrets.ANALYTICS_API_KEY }} -e production && \
+          forge variables set ANALYTICS_API_KEY "$ANALYTICS_API_KEY" -e production
           forge deploy --non-interactive -e production
 
       - name: Check Forge eligibility (production)
-        run: |
-          export FORGE_EMAIL=${{ secrets.FORGE_EMAIL }} && \
-          export FORGE_API_TOKEN=${{ secrets.FORGE_API_TOKEN }} && \
-          ./check-forge-eligibility.sh -e production
+        env:
+          FORGE_EMAIL: ${{ secrets.FORGE_EMAIL }}
+          FORGE_API_TOKEN: ${{ secrets.FORGE_API_TOKEN }}
+        run: ./check-forge-eligibility.sh -e production
 
 #      - name: Forge Install (production)
-#        run: |
-#          export FORGE_EMAIL=${{ secrets.FORGE_EMAIL }} && \
-#          export FORGE_API_TOKEN=${{ secrets.FORGE_API_TOKEN }} && \
-#          forge install -e production -s ${{ secrets.FORGE_HOSTNAME }} -p Jira --confirm-scopes --non-interactive --upgrade
+#        env:
+#          FORGE_EMAIL: ${{ secrets.FORGE_EMAIL }}
+#          FORGE_API_TOKEN: ${{ secrets.FORGE_API_TOKEN }}
+#          FORGE_HOSTNAME: ${{ secrets.FORGE_HOSTNAME }}
+#        run: forge install -e production -s "$FORGE_HOSTNAME" -p Jira --confirm-scopes --non-interactive --upgrade
