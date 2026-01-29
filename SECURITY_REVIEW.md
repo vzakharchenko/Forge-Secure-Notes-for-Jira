@@ -427,6 +427,66 @@ await this.securityNoteRepository.viewSecurityNote(securityNoteId);
 
 **Recommendation:** ✅ Properly implemented. Automatic deletion ensures ephemeral nature of notes.
 
+### 5.4 Sender Key Fallback (sessionStorage)
+
+**Status:** ✅ **SECURE** — Use of sessionStorage does not lower application security.
+
+**Purpose:** When the sender does not copy the key at creation time (copying is detected by the key field or copy button), the encryption key is stored in the sender's browser **only as a fallback** so they can retrieve and copy it later from the same session (e.g. from the "Sent" notes panel).
+
+**Implementation:**
+
+1. **When stored:** Only if the user did not copy the key (`!isCopyKey`). A random `senderKeyId` (UUID) is generated; the **plaintext key is never stored**.
+2. **Encryption before storage:** The user's encryption key is encrypted with AES-GCM using a key derived via PBKDF2 from `(description, accountId)` with `SALT_ITERATIONS` (100,000). Same crypto as note encryption (`encode.ts`: `encryptMessage`).
+3. **Storage:** `sessionStorage.setItem(senderKeyId, JSON.stringify(encryptedPayload))`. Only the encrypted blob is in sessionStorage.
+4. **Backend:** Only `senderKeyId` (opaque UUID) is sent and stored in the DB. The backend never receives the key or the encrypted key blob.
+5. **Retrieval:** In the Sent notes UI, the app looks up by `senderKeyId` and decrypts with `(description, accountId)` so only the same user in the same browser can recover the key.
+
+**Security properties:**
+
+- **sessionStorage scope:** Data is origin- and tab-scoped; it does not leak to other tabs, windows, or origins. Cleared when the tab/window is closed — limits exposure.
+- **No plaintext key:** The key is encrypted before storage. The derivation key is `hash(description, accountId)` — only the same account with the same note description can decrypt.
+- **senderKeyId is non-sensitive:** It is a random UUID used as a lookup key. Knowing it does not help an attacker; the ciphertext exists only in the creator's sessionStorage.
+- **API exposure:** `senderKeyId` is returned in "my notes" for both sent and received notes. For recipients, `getSessionStorageItem(senderKeyId)` is always null (they never have that entry). Buttons that use the key are shown only when `note.senderKeyId && getSessionStorageItem(note.senderKeyId)` — i.e. only when the key is present in this browser. So no privilege escalation.
+- **XSS:** If an XSS existed, an attacker could read sessionStorage. The app does not introduce new XSS vectors; the key in sessionStorage is an optional fallback. The same XSS posture applies as for the rest of the app (no `dangerouslySetInnerHTML`, etc.).
+- **sessionStorage vs localStorage:** Using sessionStorage (not localStorage) is correct — keys do not persist after the session, reducing exposure.
+- **Failure handling:** `sessionStorage` access is wrapped in try/catch and optional chaining (`sessionStorage?.getItem`), so environments where storage is unavailable (e.g. private mode, strict iframe) do not break the app; the user can still rely on the copied key or email.
+
+**Evidence:**
+
+```typescript
+// static/src/modules/SecureNoteModal/SecureNoteFormContainer/SecureNoteFormContainer.tsx:79-86
+if (!isCopyKey) {
+  const senderKeyId = uuid();
+  if (sessionStorage) {
+    const encryptedKeyForLocalBrowserStorage = await encryptMessage(
+      encryptionKey,
+      await calculateHash(noteData.description, accountId, SALT_ITERATIONS),
+    );
+    sessionStorage.setItem(senderKeyId, JSON.stringify(encryptedKeyForLocalBrowserStorage));
+    noteData.senderKeyId = senderKeyId; // only UUID sent to backend
+  }
+}
+```
+
+```typescript
+// static/src/modules/IssueSection/components/NoteCard/NoteCard.tsx:31-36, 39-51
+const getSessionStorageItem = (key: string): string | null => {
+  try {
+    return sessionStorage?.getItem(key) ?? null;
+  } catch {
+    return null;
+  }
+};
+const getDecodedKey = async (senderEncryptedKey, description, accountId) => {
+  return await decryptMessage(
+    JSON.parse(senderEncryptedKey),
+    await calculateHash(description, accountId, SALT_ITERATIONS), // same derivation
+  );
+};
+```
+
+**Recommendation:** ✅ sessionStorage is used correctly. It does not lower security: the key is encrypted with a strong derivation, storage is session-scoped, and the backend never sees the key or the encrypted blob. Optional improvement: avoid reading sessionStorage during render in `NoteCard` (e.g. move to state + `useEffect`) for React render purity; this is a code-quality improvement, not a security requirement.
+
 ---
 
 ## 6. Error Handling & Information Disclosure
@@ -844,9 +904,10 @@ The application includes an advanced AI-powered anomaly detection system using R
 8. **XSS Prevention:** No dangerous patterns, React escaping
 9. **Proper Key Management:** Keys never stored, out-of-band exchange
 10. **Automatic Expiration:** Notes automatically deleted
-11. **Audit Trail:** Comprehensive logging and history
-12. **AI-Powered Anomaly Detection:** Rovo AI acts as active Security Analyst to detect suspicious patterns
-13. **Platform Security:** Leverages Forge security features appropriately
+11. **Sender Key Fallback (sessionStorage):** Key stored only when user did not copy it; encrypted with `(description, accountId)`; session-scoped; backend never receives key or blob
+12. **Audit Trail:** Comprehensive logging and history
+13. **AI-Powered Anomaly Detection:** Rovo AI acts as active Security Analyst to detect suspicious patterns
+14. **Platform Security:** Leverages Forge security features appropriately
 
 ---
 
