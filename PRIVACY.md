@@ -30,7 +30,7 @@ The App processes Secure Notes exclusively in the user's browser.
 - The App stores only the **encrypted blob**.
 - Encryption keys are **never stored** on the backend, logged, transmitted to servers, or recoverable by the App.
 - **Key Access**: Only the sender and recipient know the encryption key. The key is never stored on Atlassian servers or transmitted through Atlassian infrastructure.
-- **Sender Key Management**: The sender can copy the key or send it via email, but **only from the same browser** where the note was created. This capability is limited to the browser session and is not available if storage is cleared or if accessed from a different browser or machine.
+- **Sender Key Management**: The sender copies the key or sends it via email at creation time. Copying is detected by clicking the key field or the copy button. **sessionStorage** is used only when the sender forgot to copy the key — so they can retrieve it later from the same browser. This fallback is limited to the browser session and is not available if storage is cleared or if accessed from a different browser or machine.
 - **Key Sharing Restrictions**: The decryption key **must NOT** be shared through Jira (comments, descriptions, issue fields) or any Atlassian Cloud channels, as this would violate Zero Trust architecture by giving Atlassian all the data needed to decrypt the secret. Keys should be shared through separate, independent channels such as Slack, Teams, direct email (not through Jira), phone calls, or other secure communication methods outside of Atlassian infrastructure.
 
 The Developer **cannot** decrypt, read, or restore encrypted content under any circumstances.
@@ -42,7 +42,6 @@ The Developer **cannot** decrypt, read, or restore encrypted content under any c
 - **Key is useless without the correct account**: The encryption key hash is calculated using the recipient's `accountId` as part of the cryptographic salt. This means:
   - Even if an encryption key is compromised, it cannot be used under a different account because the hash calculation depends on the specific `accountId`.
   - The key is cryptographically bound to the recipient's account identity.
-  - If the key accidentally falls into the wrong hands, it's not a security issue — the key by itself is useless without the correct recipient's account authorization and the encrypted data stored in Atlassian Cloud.
 - **Key is useless without encrypted data**: Both the encryption key (shared out-of-band) and the encrypted content (stored securely) are required for decryption.
 - **Purpose of the key**: The encryption key exists to ensure that **Atlassian Cloud does not have sufficient information** to decrypt secure notes. Even if Atlassian infrastructure is compromised, they cannot decrypt notes without the key, which is never transmitted to or stored on their servers.
 
