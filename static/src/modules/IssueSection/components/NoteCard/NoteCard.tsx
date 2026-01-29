@@ -20,13 +20,41 @@ import EmailIcon from "@atlaskit/icon/core/email";
 
 import { calculateHash, decryptMessage } from "@src/shared/utils/encode";
 import { SALT_ITERATIONS } from "@shared/Types";
-import { showSuccessFlag } from "@src/shared/utils/flags";
+import { showSuccessFlag, showWarningFlag } from "@src/shared/utils/flags";
 import { buildGmailComposeUrl } from "@src/shared/utils/gmailUtils";
 import { buildMailtoUrl } from "@src/shared/utils/emailAppUtils";
 import { IconProps } from "@atlaskit/icon/dist/types/types";
 
 // assets
 import gmailIconSrc from "@src/img/gmail.png";
+
+const getSessionStorageItem = (key: string): string | null => {
+  try {
+    return sessionStorage?.getItem(key) ?? null;
+  } catch {
+    return null;
+  }
+};
+
+const getDecodedKey = async (
+  senderEncryptedKey: string,
+  description: string,
+  accountId: string,
+): Promise<string | null> => {
+  try {
+    return await decryptMessage(
+      JSON.parse(senderEncryptedKey),
+      await calculateHash(description, accountId, SALT_ITERATIONS),
+    );
+  } catch {
+    return null;
+  }
+};
+
+const KEY_NOT_VALID_FLAG = {
+  title: "Key is not valid",
+  description: "The decryption key could not be retrieved or is not valid for this note.",
+};
 
 const baseContainerStyles = xcss({
   backgroundColor: "elevation.surface.raised",
@@ -132,7 +160,7 @@ const NoteCard = ({
             )}
             {variant === "sent" && (
               <Flex gap="space.050" alignItems="center">
-                {note.senderKeyId && sessionStorage && sessionStorage.getItem(note.senderKeyId) && (
+                {note.senderKeyId && getSessionStorageItem(note.senderKeyId) && (
                   <Box>
                     <IconButton
                       label="Copy Key"
@@ -141,13 +169,20 @@ const NoteCard = ({
                       isTooltipDisabled={false}
                       onClick={async (e) => {
                         e.stopPropagation();
-                        const senderEncryptedKey = sessionStorage.getItem(
-                          note.senderKeyId ?? "",
-                        ) as string;
-                        const decodedKey = await decryptMessage(
-                          JSON.parse(senderEncryptedKey),
-                          await calculateHash(note.description, accountId, SALT_ITERATIONS),
+                        const senderEncryptedKey = getSessionStorageItem(note.senderKeyId ?? "");
+                        if (!senderEncryptedKey) {
+                          showWarningFlag(KEY_NOT_VALID_FLAG);
+                          return;
+                        }
+                        const decodedKey = await getDecodedKey(
+                          senderEncryptedKey,
+                          note.description,
+                          accountId,
                         );
+                        if (!decodedKey) {
+                          showWarningFlag(KEY_NOT_VALID_FLAG);
+                          return;
+                        }
                         navigator.clipboard.writeText(decodedKey);
                         showSuccessFlag({
                           title: "Key was copied successfully",
@@ -163,13 +198,20 @@ const NoteCard = ({
                       isTooltipDisabled={false}
                       onClick={async (e) => {
                         e.stopPropagation();
-                        const senderEncryptedKey = sessionStorage.getItem(
-                          note.senderKeyId ?? "",
-                        ) as string;
-                        const decodedKey = await decryptMessage(
-                          JSON.parse(senderEncryptedKey),
-                          await calculateHash(note.description, accountId, SALT_ITERATIONS),
+                        const senderEncryptedKey = getSessionStorageItem(note.senderKeyId ?? "");
+                        if (!senderEncryptedKey) {
+                          showWarningFlag(KEY_NOT_VALID_FLAG);
+                          return;
+                        }
+                        const decodedKey = await getDecodedKey(
+                          senderEncryptedKey,
+                          note.description,
+                          accountId,
                         );
+                        if (!decodedKey) {
+                          showWarningFlag(KEY_NOT_VALID_FLAG);
+                          return;
+                        }
 
                         const recipientEmail = note.targetUser.email;
                         const gmailUrl = buildGmailComposeUrl({
@@ -195,13 +237,20 @@ const NoteCard = ({
                       isTooltipDisabled={false}
                       onClick={async (e) => {
                         e.stopPropagation();
-                        const senderEncryptedKey = sessionStorage.getItem(
-                          note.senderKeyId ?? "",
-                        ) as string;
-                        const decodedKey = await decryptMessage(
-                          JSON.parse(senderEncryptedKey),
-                          await calculateHash(note.description, accountId, SALT_ITERATIONS),
+                        const senderEncryptedKey = getSessionStorageItem(note.senderKeyId ?? "");
+                        if (!senderEncryptedKey) {
+                          showWarningFlag(KEY_NOT_VALID_FLAG);
+                          return;
+                        }
+                        const decodedKey = await getDecodedKey(
+                          senderEncryptedKey,
+                          note.description,
+                          accountId,
                         );
+                        if (!decodedKey) {
+                          showWarningFlag(KEY_NOT_VALID_FLAG);
+                          return;
+                        }
                         const recipientEmail = note.targetUser.email;
                         const emailUrl = buildMailtoUrl({
                           note,

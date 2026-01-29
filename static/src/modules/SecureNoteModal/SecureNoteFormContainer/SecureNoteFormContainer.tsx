@@ -76,14 +76,22 @@ const SecureNoteFormContainer = ({
       throw { data: { validationErrors } };
     }
     if (!isCopyKey) {
-      const senderKeyId = uuid();
-      noteData.senderKeyId = senderKeyId;
-      if (sessionStorage) {
-        const encryptedKeyForLocalBrowserStorage = await encryptMessage(
-          encryptionKey,
-          await calculateHash(noteData.description, accountId, SALT_ITERATIONS),
+      try {
+        const senderKeyId = uuid();
+        if (sessionStorage) {
+          const encryptedKeyForLocalBrowserStorage = await encryptMessage(
+            encryptionKey,
+            await calculateHash(noteData.description, accountId, SALT_ITERATIONS),
+          );
+          sessionStorage.setItem(senderKeyId, JSON.stringify(encryptedKeyForLocalBrowserStorage));
+          noteData.senderKeyId = senderKeyId;
+        }
+      } catch (e) {
+        console.warn(
+          "Secure note created, but the decryption key could not be saved to this session. " +
+            "The user will need to use the copied key to open the note. Reason:",
+          e,
         );
-        sessionStorage.setItem(senderKeyId, JSON.stringify(encryptedKeyForLocalBrowserStorage));
       }
     }
     await view.close(noteData);
