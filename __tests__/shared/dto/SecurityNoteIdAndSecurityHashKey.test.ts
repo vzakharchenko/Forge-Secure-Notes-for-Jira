@@ -5,7 +5,7 @@ import { SecurityNoteIdAndSecurityHashKey } from "../../../shared/dto";
 describe("SecurityNoteIdAndSecurityHashKey", () => {
   it("should pass validation with valid id and keyHash", async () => {
     const note = new SecurityNoteIdAndSecurityHashKey();
-    note.id = "note-123";
+    note.id = "550e8400-e29b-41d4-a716-446655440000";
     note.keyHash = "hash-123";
 
     const errors = await validate(note);
@@ -24,7 +24,7 @@ describe("SecurityNoteIdAndSecurityHashKey", () => {
 
   it("should fail validation with empty keyHash", async () => {
     const note = new SecurityNoteIdAndSecurityHashKey();
-    note.id = "note-123";
+    note.id = "550e8400-e29b-41d4-a716-446655440000";
     note.keyHash = "";
 
     const errors = await validate(note);
@@ -44,7 +44,7 @@ describe("SecurityNoteIdAndSecurityHashKey", () => {
 
   it("should fail validation with too short keyHash", async () => {
     const note = new SecurityNoteIdAndSecurityHashKey();
-    note.id = "note-123";
+    note.id = "550e8400-e29b-41d4-a716-446655440000";
     note.keyHash = "ab";
 
     const errors = await validate(note);

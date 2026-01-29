@@ -25,9 +25,10 @@ describe("OpenSecurityNoteController", () => {
   });
 
   describe("response", () => {
+    const validNoteId = "550e8400-e29b-41d4-a716-446655440000";
     it("should call isValidLink with payload id and return result", async () => {
       const mockRequest: Request = {
-        payload: { id: "note-id-123" } as SecurityNoteId,
+        payload: { id: validNoteId } as SecurityNoteId,
       } as Request;
       const mockResult: OpenSecurityNote = {
         valid: true,
@@ -38,7 +39,7 @@ describe("OpenSecurityNoteController", () => {
       const result = await controller.response(mockRequest);
 
       expect(result).toEqual(mockResult);
-      expect(mockSecurityNoteService.isValidLink).toHaveBeenCalledWith("note-id-123");
+      expect(mockSecurityNoteService.isValidLink).toHaveBeenCalledWith(validNoteId);
     });
   });
 });

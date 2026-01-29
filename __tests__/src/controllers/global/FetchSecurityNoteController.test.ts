@@ -25,15 +25,16 @@ describe("FetchSecurityNoteController", () => {
   });
 
   describe("response", () => {
+    const validNoteId = "550e8400-e29b-41d4-a716-446655440000";
     it("should call getSecuredData and return result when data exists", async () => {
       const mockRequest: Request = {
         payload: {
-          id: "note-id-123",
+          id: validNoteId,
           keyHash: "key-hash-123",
         } as SecurityNoteIdAndSecurityHashKey,
       } as Request;
       const mockResult: SecurityNoteData = {
-        id: "note-id-123",
+        id: validNoteId,
         iv: "iv-123",
         salt: "salt-123",
         encryptedData: "encrypted-data",
@@ -46,7 +47,7 @@ describe("FetchSecurityNoteController", () => {
 
       expect(result).toEqual(mockResult);
       expect(mockSecurityNoteService.getSecuredData).toHaveBeenCalledWith(
-        "note-id-123",
+        validNoteId,
         "key-hash-123",
       );
     });
@@ -54,7 +55,7 @@ describe("FetchSecurityNoteController", () => {
     it("should return PERMISSION_ERROR_OBJECT when data does not exist", async () => {
       const mockRequest: Request = {
         payload: {
-          id: "note-id-123",
+          id: validNoteId,
           keyHash: "key-hash-123",
         } as SecurityNoteIdAndSecurityHashKey,
       } as Request;
@@ -64,7 +65,7 @@ describe("FetchSecurityNoteController", () => {
 
       expect(result).toEqual(PERMISSION_ERROR_OBJECT);
       expect(mockSecurityNoteService.getSecuredData).toHaveBeenCalledWith(
-        "note-id-123",
+        validNoteId,
         "key-hash-123",
       );
     });

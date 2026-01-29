@@ -32,6 +32,7 @@ describe("DeleteSecurityNoteController", () => {
     });
   });
 
+  const validNoteId = "550e8400-e29b-41d4-a716-446655440000";
   describe("response", () => {
     it("should delete security note, publish event and return result", async () => {
       const mockIssueContext: IssueContext = {
@@ -60,7 +61,7 @@ describe("DeleteSecurityNoteController", () => {
       };
       const mockRequest: Request = {
         payload: {
-          id: "note-id-123",
+          id: validNoteId,
         } as SecurityNoteId,
       } as Request;
 
@@ -84,7 +85,7 @@ describe("DeleteSecurityNoteController", () => {
       const result = await controller.response(mockRequest);
 
       expect(result).toEqual({ result: mockNotes });
-      expect(mockSecurityNoteService.deleteSecurityNote).toHaveBeenCalledWith("note-id-123");
+      expect(mockSecurityNoteService.deleteSecurityNote).toHaveBeenCalledWith(validNoteId);
       expect(publishGlobal).toHaveBeenCalledWith(SHARED_EVENT_NAME, "issue-123");
       expect(mockSecurityNoteService.getMySecurityNoteIssue).toHaveBeenCalledTimes(1);
     });
@@ -103,7 +104,7 @@ describe("DeleteSecurityNoteController", () => {
 
       const mockRequest: Request = {
         payload: {
-          id: "note-id-123",
+          id: validNoteId,
         } as SecurityNoteId,
       } as Request;
 

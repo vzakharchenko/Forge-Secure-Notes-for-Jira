@@ -1,7 +1,7 @@
-import { IsNotEmpty, Length } from "class-validator";
+import { IsNotEmpty, IsUUID } from "class-validator";
 
 export class SecurityNoteId {
-  @Length(3, 255)
   @IsNotEmpty()
+  @IsUUID("4")
   id!: string;
 }

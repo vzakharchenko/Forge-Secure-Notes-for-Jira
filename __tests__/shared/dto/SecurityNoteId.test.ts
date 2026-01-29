@@ -5,7 +5,7 @@ import { SecurityNoteId } from "../../../shared/dto";
 describe("SecurityNoteId", () => {
   it("should pass validation with valid id", async () => {
     const noteId = new SecurityNoteId();
-    noteId.id = "note-123";
+    noteId.id = "550e8400-e29b-41d4-a716-446655440000";
 
     const errors = await validate(noteId);
     expect(errors.length).toBe(0);
