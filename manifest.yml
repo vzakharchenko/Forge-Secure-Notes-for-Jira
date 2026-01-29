@@ -415,9 +415,9 @@ modules:
         - Show top users by number of security notes
       actions:
         - run-security-notes-query
-  webtrigger:
-    - key: apply-schema
-      function: runSchemaMigration
+#  webtrigger:
+#    - key: apply-schema
+#      function: runSchemaMigration
 #    - key: fetch-schema
 #      function: fetchSchema
 #    - key: drop-schema-migration

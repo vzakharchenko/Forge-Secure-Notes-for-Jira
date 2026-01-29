@@ -37,9 +37,9 @@ While Jira excels at task tracking and collaboration, it lacks a secure, ephemer
 - 🔐 Create encrypted notes on Jira issues
 - 🕒 Choose an expiration: 1 hour, 1 day, 7 days, 10 days
 - 🔑 Generate a one-time decryption key (created by user, never stored on backend - only the sender and recipient know the key)
-  - The sender can copy the key or send it via email, but **only from the same browser** where the note was created
+  - The sender copies the key or sends it via email at creation time; **sessionStorage** is used only if the sender forgot to copy the key — to retrieve it later from the same browser (copying is detected by clicking the key field or the copy button)
 - 📥 View received notes (with key)
-- 📤 View and delete sent notes — sender can copy the key again or send it via email (only from the same browser where the note was created)
+- 📤 View and delete sent notes — sender can copy the key again or send it via email (from the same browser if the key was stored in sessionStorage when they forgot to copy it)
 - 🧨 Note self-destructs after reading or upon expiry
 - ⏳ Expiration is enforced automatically using a Forge `scheduledTrigger`
 - 👤 **Only the authorized recipient can decrypt** — neither sender nor administrators can read the note content
@@ -163,7 +163,7 @@ The application requires specific Forge scopes to function properly. Each scope 
   - Only the user who creates the key knows it
   - Backend stores only `encryption_key_hash` (hash of the key) for validation purposes
   - The actual encryption key is required for decryption and must be shared out-of-band
-  - **Sender key storage**: When creating a secure note, the encryption key is stored in the sender's browser `sessionStorage` in encrypted form, allowing the sender to retrieve and copy the key again later
+  - **Sender key storage (fallback)**: The encryption key is stored in the sender's browser `sessionStorage` (encrypted) **only as a fallback** — when the sender forgot to copy the key at creation time (copying is detected by clicking the key field or the copy button), they can retrieve and copy it later from the same browser
     - ⚠️ **Important**: This is **local browser storage only** — if the storage is cleared, or if the ticket is opened in a different browser or on a different machine, this capability will not be available
     - The key is encrypted before being stored in `sessionStorage` using a hash derived from the note description and sender's account ID
 - **Split data model for decryption:**
@@ -390,9 +390,9 @@ forge tunnel
    - **Your Secure Note**: Enter the secret message content (max 10KB recommended)
    - **Set Note Expiry**: Choose expiration time (1 hour, 1 day, 7 days, 10 days, or custom date)
 5. Click "Generate New Key" to create an encryption key
-6. **Key Storage**: The encryption key is automatically stored in your browser's `sessionStorage` (encrypted) for easy retrieval later
-   - ⚠️ **Important**: This is local browser storage — if you clear storage or open the ticket in a different browser/machine, you won't be able to retrieve the key from storage
-   - You can copy the key again from the sent notes panel if needed
+6. **Key Storage (fallback)**: If you forget to copy the key at creation time (copying is detected by clicking the key field or the copy button), it is stored in your browser's `sessionStorage` (encrypted) so you can retrieve and copy it later from the same browser
+   - ⚠️ **Important**: This is local browser storage only — if you clear storage or open the ticket in a different browser/machine, you won't be able to retrieve the key from storage
+   - Prefer copying the key (click the key field or copy button) or sending it via email right after creation; use the sent notes panel to copy the key again if it was stored in sessionStorage
    - 🔒 **Security Note**: The key stored in your browser is **useless by itself** — even if you (the sender) or anyone else has the key, it cannot decrypt the note without the **authorized recipient's account**. The key only works in combination with the recipient's authorization — only the designated recipient can use the key to decrypt the note
 7. **Share the Key**: Copy the encryption key and share it securely with the recipient:
    - ⚠️ **CRITICAL SECURITY WARNING**: **DO NOT** share the key through Jira comments, issue descriptions, or any Atlassian Cloud channels. This would violate Zero Trust architecture because Atlassian Cloud would have all the data needed to decrypt the secret.

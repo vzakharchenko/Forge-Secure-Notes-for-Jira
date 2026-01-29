@@ -153,9 +153,10 @@ const SecureNoteForm = ({
       </Box>
       <SectionMessage appearance="warning">
         <Text>
-          IMPORTANT: This key is shown only ONCE. Copy it and share securely with the recipient via
-          a separate channel (e.g., secure chat, voice). This app will NOT store or be able to
-          recover this key.
+          IMPORTANT: This key is shown only here. Copy it (click the key field or the Copy button)
+          and share securely with the recipient via a separate channel (e.g., secure chat, email).
+          If you do not copy it, the key will be stored in this browser only while the session is
+          active (while the tab is open), so you can retrieve it later from the sent notes panel.
         </Text>
       </SectionMessage>
     </Stack>
