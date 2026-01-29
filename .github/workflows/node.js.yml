@@ -94,6 +94,12 @@ jobs:
           forge  variables set ANALYTICS_API_KEY ${{ secrets.ANALYTICS_API_KEY }} -e development && 
           forge deploy --non-interactive -e development
 
+      - name: Check Forge eligibility (development)
+        run: |
+          export FORGE_EMAIL=${{ secrets.FORGE_EMAIL }} && \
+          export FORGE_API_TOKEN=${{ secrets.FORGE_API_TOKEN }} && \
+          ./check-forge-eligibility.sh -e development
+
       - name: Forge Install (development)
         run: |
           export FORGE_EMAIL=${{ secrets.FORGE_EMAIL }} && \
@@ -167,13 +173,19 @@ jobs:
           export FORGE_EMAIL=${{ secrets.FORGE_EMAIL }} && 
           export FORGE_API_TOKEN=${{ secrets.FORGE_API_TOKEN }} && 
           forge  variables set ANALYTICS_API_KEY ${{ secrets.ANALYTICS_API_KEY }} -e development && 
-          forge deploy --non-interactive -e development
+          forge deploy --non-interactive -e staging
 
-      - name: Forge Install (staging)
+      - name: Check Forge eligibility (staging)
         run: |
           export FORGE_EMAIL=${{ secrets.FORGE_EMAIL }} && \
           export FORGE_API_TOKEN=${{ secrets.FORGE_API_TOKEN }} && \
-          forge install -e development -s ${{ secrets.FORGE_HOSTNAME }} -p Jira --confirm-scopes --non-interactive --upgrade
+          ./check-forge-eligibility.sh -e staging
+
+#      - name: Forge Install (staging)
+#        run: |
+#          export FORGE_EMAIL=${{ secrets.FORGE_EMAIL }} && \
+#          export FORGE_API_TOKEN=${{ secrets.FORGE_API_TOKEN }} && \
+#          forge install -e development -s ${{ secrets.FORGE_HOSTNAME }} -p Jira --confirm-scopes --non-interactive --upgrade
 
   build-production:
     if: (github.event_name == 'release' && github.event.action == 'published')
@@ -237,6 +249,12 @@ jobs:
           export FORGE_API_TOKEN=${{ secrets.FORGE_API_TOKEN }} && 
           forge  variables set ANALYTICS_API_KEY ${{ secrets.ANALYTICS_API_KEY }} -e production && \
           forge deploy --non-interactive -e production
+
+      - name: Check Forge eligibility (production)
+        run: |
+          export FORGE_EMAIL=${{ secrets.FORGE_EMAIL }} && \
+          export FORGE_API_TOKEN=${{ secrets.FORGE_API_TOKEN }} && \
+          ./check-forge-eligibility.sh -e production
 
 #      - name: Forge Install (production)
 #        run: |
