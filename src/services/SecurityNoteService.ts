@@ -1,6 +1,6 @@
 import { SecurityNoteStatus, SHARED_EVENT_NAME } from "../../shared/Types";
 import { getAppContext, withAppContext } from "../controllers";
-import { NewSecurityNote } from "../../shared/dto";
+import { NewCustomAppSecurityNote, NewSecurityNote } from "../../shared/dto";
 import { InferInsertModel, InferSelectModel } from "drizzle-orm";
 import {
   calculateSaltHash,
@@ -27,6 +27,7 @@ import { CurrentUser, JiraUserService } from "../jira";
 import { SecurityNoteRepository, securityNotes } from "../database";
 import { BootstrapService } from "./BootstrapService";
 import { SecurityStorage } from "../storage";
+import { AppEventService } from "./AppEventService";
 
 @injectable()
 export class SecurityNoteService {
@@ -39,6 +40,8 @@ export class SecurityNoteService {
     private readonly bootstrapService: BootstrapService,
     @inject(FORGE_INJECTION_TOKENS.SecurityStorage)
     private readonly securityStorage: SecurityStorage,
+    @inject(FORGE_INJECTION_TOKENS.AppEventService)
+    private readonly appEventService: AppEventService,
   ) {}
 
   private mapSecurityNotesToView(
@@ -148,6 +151,7 @@ export class SecurityNoteService {
   async expireSecurityNotes(): Promise<void> {
     const notes = await this.securityNoteRepository.getAllExpiredNotes();
     if (notes?.length) {
+      let appNotes = false;
       for (const note of notes) {
         await this.securityStorage.deletePayload(note.id);
         try {
@@ -161,6 +165,9 @@ export class SecurityNoteService {
         } catch (e) {
           // eslint-disable-next-line no-console
           console.error(e);
+        }
+        if (note.customAppId) {
+          await this.appEventService.sendExpirationEvent();
         }
       }
       await this.securityNoteRepository.expireSecurityNote(notes.map((n) => n.id));
@@ -425,6 +432,62 @@ export class SecurityNoteService {
           data.expiryDate as Date,
         );
       }),
+    );
+  }
+
+  @withAppContext()
+  async createCustomAppSecurityNote(
+    securityNote: NewCustomAppSecurityNote,
+  ): Promise<ViewMySecurityNotes[]> {
+    const appContext = getAppContext()!;
+    const accountId = appContext.accountId;
+    const context = appContext.context as IssueContext;
+    context.extension.issue = {
+      key: null as unknown as string,
+      id: null as unknown as string,
+      typeId: null as unknown as string,
+      type: null as unknown as string,
+    };
+    const currentUser = await this.jiraUserService.getCurrentUser();
+
+    let datas = await Promise.all(
+      securityNote.targetUsers.map((targetUser) =>
+        this.buildSecurityNoteData(targetUser, securityNote, context, currentUser, accountId),
+      ),
+    );
+
+    datas = datas.map((d) => {
+      d.customAppId = securityNote.customAppId;
+      d.customEnvId = securityNote.customEnvId;
+      return d;
+    });
+
+    await this.securityNoteRepository.createSecurityNote(
+      datas as Partial<InferInsertModel<typeof securityNotes>>[],
+    );
+
+    await Promise.all(
+      datas.map(async (data) => {
+        await this.securityStorage.savePayload(String(data.id), securityNote.encryptedPayload);
+        if (data.issueKey) {
+          const noteLink = this.buildNoteLink(context, String(data.id));
+          await this.sendNotificationSafely(
+            context.extension.issue.key,
+            String(data.targetUserId),
+            currentUser?.displayName ?? accountId,
+            noteLink,
+            data.expiryDate as Date,
+          );
+        } else {
+          console.debug("Notification skipped, because without issueKey");
+        }
+      }),
+    );
+
+    return this.mapSecurityNotesToView(
+      datas as (InferSelectModel<typeof securityNotes> & {
+        count: number;
+      })[],
     );
   }
 

@@ -1,0 +1,49 @@
+@startuml
+skinparam style strictuml
+skinparam monochrome true
+skinparam shadowing false
+skinparam sequenceMessageAlign center
+
+participant "Third-Party UI" as TPUI
+participant "Third-Party BE" as TPBE
+participant "Secure Notes UI" as SNUI
+participant "Secure Notes BE" as SNBE
+database "Forge SQL / KVS" as DB
+
+== 1. Creation Phase (The Handshake) ==
+
+TPUI -> SNUI : Deep Link Redirect\n(targetAccountId, appId, state, returnUrl)
+Note over SNUI : User enters secret.\nEncryption key generated locally.
+SNUI -> SNBE : Encrypted Payload (KVS) + Metadata (SQL)
+SNBE -> DB : Store Secret & Metadata (Status: ACTIVE)
+DB --> SNBE : noteId
+SNBE --> SNUI : Success Confirmation
+SNUI -> TPUI : Callback Redirect\n(event:created, noteId, expirationTime, state)
+TPUI -> TPBE : Store noteId, expirationTime, state
+
+== 2. Lifecycle & Expiration (Background) ==
+
+SNBE -> SNBE : Scheduled Trigger (Every 5 mins)
+SNBE -> DB : Query notes (expiry < NOW)
+DB --> SNBE : List of Expired Entries
+SNBE -> DB : Set Status: **Custom APP EXPIRED** & Wipe Secret from KVS
+SNBE -> SNBE : Publish App Event: **SECURE_NOTE_EXPIRED**
+
+== 3. Status Sync (Verification Model) ==
+
+TPBE -> SNBE : Listen for Event: **SECURE_NOTE_EXPIRED**
+SNBE -> TPBE : Signal: "Custom App Expiration available"
+Note over TPBE : Check local DB for all notes where\n**expirationTime < NOW**
+TPBE -> TPBE : Mark those notes as EXPIRED at App Level
+
+== 4. Consumption Phase (Burn-after-reading) ==
+
+TPUI -> SNUI : Open Read-Link (noteId, state)
+Note over SNUI : Recipient enters Decryption Key.
+SNUI -> SNBE : Auth Request (Web Crypto verification)
+SNBE -> DB : Verify AccountId & Delete Payload (Atomic)
+SNBE --> SNUI : Encrypted Data (for local decryption)
+SNUI -> SNUI : **Decrypt note in browser**
+SNUI -> TPUI : Callback Redirect\n(event:viewed, noteId, state)
+TPUI -> TPBE : Mark as **VIEWED** in app level
+@enduml

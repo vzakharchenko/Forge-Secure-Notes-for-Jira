@@ -17,3 +17,4 @@ export { RovoService } from "./RovoService";
 
 export { ContextService } from "./ContextService";
 export { AsyncService } from "./AsyncService";
+export { AppEventService } from "./AppEventService";

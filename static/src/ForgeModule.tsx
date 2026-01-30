@@ -72,7 +72,11 @@ const ForgeModule = () => {
 
   if (context.extension.modal && context.extension.modal.modalType === "newSecureNote") {
     return (
-      <SecureNoteModal accountId={context!.accountId ?? ""} customerRequest={customerRequest} />
+      <SecureNoteModal
+        accountId={context!.accountId ?? ""}
+        targetAccountId={context.extension.modal.accountId}
+        customerRequest={customerRequest}
+      />
     );
   }
 

@@ -1,1 +1,1 @@
-export const MIGRATION_VERSION = 5;
+export const MIGRATION_VERSION = 7;

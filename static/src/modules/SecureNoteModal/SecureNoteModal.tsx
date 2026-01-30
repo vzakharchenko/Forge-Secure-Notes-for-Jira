@@ -8,14 +8,20 @@ import { CustomerRequest } from "../../shared/models/customerRequest";
 
 const SecureNoteModal = ({
   accountId,
+  targetAccountId,
   customerRequest,
 }: {
   accountId: string;
+  targetAccountId?: string;
   customerRequest?: CustomerRequest;
 }) => {
   return (
     <Box padding="space.500">
-      <SecureNoteFormContainer accountId={accountId} customerRequest={customerRequest} />
+      <SecureNoteFormContainer
+        accountId={accountId}
+        targetAccountId={targetAccountId}
+        customerRequest={customerRequest}
+      />
     </Box>
   );
 };

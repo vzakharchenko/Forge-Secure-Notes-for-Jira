@@ -8,12 +8,14 @@ import {
   IssueAuditController,
   ProjectAuditController,
   BootStrapController,
+  CreateAppSecurityNoteController,
 } from "../../controllers";
 
 import { FORGE_INJECTION_TOKENS } from "../../constants";
 import { withContainer } from "../../core/decorators";
 import {
   AnalyticService,
+  AppEventService,
   BootstrapService,
   ContextService,
   KVSSchemaMigrationService,
@@ -26,6 +28,10 @@ import { SecurityStorage } from "../../storage";
 const GLOBAL_BINDINGS = [
   { name: FORGE_INJECTION_TOKENS.AuditUserController, bind: AuditUserController },
   { name: FORGE_INJECTION_TOKENS.AuditUsersController, bind: AuditUsersController },
+  {
+    name: FORGE_INJECTION_TOKENS.CreateAppSecurityNoteController,
+    bind: CreateAppSecurityNoteController,
+  },
   { name: FORGE_INJECTION_TOKENS.BootStrapController, bind: BootStrapController },
   { name: FORGE_INJECTION_TOKENS.FetchSecurityNoteController, bind: FetchSecurityNoteController },
   { name: FORGE_INJECTION_TOKENS.IssueAuditController, bind: IssueAuditController },
@@ -41,6 +47,7 @@ const GLOBAL_BINDINGS = [
   { name: FORGE_INJECTION_TOKENS.KVSSchemaMigrationService, bind: KVSSchemaMigrationService },
   { name: FORGE_INJECTION_TOKENS.ContextService, bind: ContextService },
   { name: FORGE_INJECTION_TOKENS.AnalyticService, bind: AnalyticService },
+  { name: FORGE_INJECTION_TOKENS.AppEventService, bind: AppEventService },
 ] as const;
 
 export const global = withContainer(...GLOBAL_BINDINGS)((container, resolver: Resolver) => {
@@ -67,5 +74,8 @@ export const global = withContainer(...GLOBAL_BINDINGS)((container, resolver: Re
     .register(resolver, container);
   container
     .get<BootStrapController>(FORGE_INJECTION_TOKENS.BootStrapController)
+    .register(resolver, container);
+  container
+    .get<CreateAppSecurityNoteController>(FORGE_INJECTION_TOKENS.CreateAppSecurityNoteController)
     .register(resolver, container);
 });

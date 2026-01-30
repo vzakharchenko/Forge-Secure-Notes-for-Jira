@@ -36,6 +36,8 @@ export const securityNotes = mysqlTable(
     issueKey: varchar("issue_key", { length: 255 }),
     projectId: varchar("project_id", { length: 255 }),
     projectKey: varchar("project_key", { length: 255 }),
+    customAppId: varchar("custom_app_id", { length: 255 }),
+    customEnvId: varchar("custom_env_id", { length: 255 }),
     senderKeyId: uuidBinary("sender_key_id"),
   },
   (table) => [primaryKey({ columns: [table.id], name: "security_notes_id" })],

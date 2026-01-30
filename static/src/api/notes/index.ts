@@ -5,7 +5,7 @@ import api from "@src/api/api";
 import { ResolverNames } from "@shared/ResolverNames";
 import { PromisedServerResponse } from "@src/shared/models/remoteClient";
 import { NewSecurityNote } from "@shared/dto/NewSecurityNote";
-import { SecurityNoteIdAndSecurityHashKey } from "@shared/dto";
+import { NewCustomAppSecurityNote, SecurityNoteIdAndSecurityHashKey } from "@shared/dto";
 import { AuditUser, OpenSecurityNote, SecurityNoteData } from "@shared/responses";
 
 export const getSecureNotes = (): PromisedServerResponse<AuditUser> =>
@@ -13,6 +13,11 @@ export const getSecureNotes = (): PromisedServerResponse<AuditUser> =>
 
 export const createSecureNote = (noteData: NewSecurityNote): PromisedServerResponse<AuditUser> =>
   api.post(ResolverNames.CREATE_SECURITY_NOTE, noteData);
+
+export const createAppSecureNote = (
+  noteData: NewCustomAppSecurityNote,
+): PromisedServerResponse<AuditUser> =>
+  api.post(ResolverNames.CREATE_CUSTOM_APP_SECURITY_NOTE, noteData);
 
 export const deleteSecureNote = (noteId: string): PromisedServerResponse<AuditUser> =>
   api.post(ResolverNames.DELETE_SECURITY_NOTE, { id: noteId });

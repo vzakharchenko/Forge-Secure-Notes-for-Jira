@@ -4,7 +4,7 @@ import {
   SchedulerTrigger,
   SchedulerTriggerResponse,
 } from "../../core";
-import { KVSSchemaMigrationService } from "../../services";
+import { AppEventService, KVSSchemaMigrationService } from "../../services";
 import { applySchemaMigrations, getHttpResponse } from "forge-sql-orm";
 import migration from "../../database/migration";
 import { Container } from "inversify";
@@ -14,6 +14,7 @@ import { MigrationRunner } from "@forge/sql/out/migration";
 
 const MIGRATION_BINDINGS = [
   { name: FORGE_INJECTION_TOKENS.KVSSchemaMigrationService, bind: KVSSchemaMigrationService },
+  { name: FORGE_INJECTION_TOKENS.AppEventService, bind: AppEventService },
 ] as const;
 
 @schedulerTrigger
@@ -22,10 +23,13 @@ class ApplySchemaMigrationTrigger implements SchedulerTrigger {
   private readonly _container!: Container;
 
   @useDiContainer("_container")
-  @exceptionHandlerTrigger("SlowQuery Trigger Error")
+  @exceptionHandlerTrigger("Apply Schema Trigger Error")
   async handler(): Promise<SchedulerTriggerResponse<string>> {
     const kvsSchemaMigrationService = this._container.get<KVSSchemaMigrationService>(
       FORGE_INJECTION_TOKENS.KVSSchemaMigrationService,
+    );
+    const appEventService = this._container.get<AppEventService>(
+      FORGE_INJECTION_TOKENS.AppEventService,
     );
     if (await kvsSchemaMigrationService.isLatestVersion()) {
       return getHttpResponse(200, "NOT NEEDED");
@@ -34,6 +38,7 @@ class ApplySchemaMigrationTrigger implements SchedulerTrigger {
         migration(migrationRunner),
       );
       await kvsSchemaMigrationService.setLatestVersion();
+      appEventService.sendPresentEvent();
       return response;
     }
   }

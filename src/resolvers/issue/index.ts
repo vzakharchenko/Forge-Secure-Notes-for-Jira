@@ -11,6 +11,7 @@ import { FORGE_INJECTION_TOKENS } from "../../constants";
 import { withContainer } from "../../core/decorators";
 import {
   AnalyticService,
+  AppEventService,
   BootstrapService,
   ContextService,
   KVSSchemaMigrationService,
@@ -35,6 +36,7 @@ const ISSUE_BINDINGS = [
   { name: FORGE_INJECTION_TOKENS.KVSSchemaMigrationService, bind: KVSSchemaMigrationService },
   { name: FORGE_INJECTION_TOKENS.ContextService, bind: ContextService },
   { name: FORGE_INJECTION_TOKENS.AnalyticService, bind: AnalyticService },
+  { name: FORGE_INJECTION_TOKENS.AppEventService, bind: AppEventService },
 ] as const;
 
 export const issue = withContainer(...ISSUE_BINDINGS)((container, resolver: Resolver) => {

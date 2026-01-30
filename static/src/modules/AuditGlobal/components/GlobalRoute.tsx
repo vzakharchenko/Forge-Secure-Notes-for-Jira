@@ -11,6 +11,8 @@ import MyIssueHistoryPage from "@src/modules/AuditGlobal/components/Pages/MyIssu
 import MyProjectHistoryPage from "@src/modules/AuditGlobal/components/Pages/MyProjectHistoryPage";
 import UserHistoryPage from "@src/modules/AuditGlobal/components/Pages/UserHistoryPage";
 import LinkPage from "@src/modules/AuditGlobal/components/Pages/LinkPage/LinkPage";
+import CustomAppCreatePage from "./Pages/CustomAppPage/CustomAppCreatePage";
+import CustomAppViewPage from "./Pages/CustomAppPage/CustomAppViewPage";
 
 const GlobalRoute = (props: { timezone: string }) => {
   const navigate = useNavigate();
@@ -31,6 +33,8 @@ const GlobalRoute = (props: { timezone: string }) => {
       />
       <Route path="/userHistory" element={<UserHistoryPage timezone={props.timezone} />} />
       <Route path={GLOBAL_ROUTES.record.route} element={<LinkPage />} />
+      <Route path={GLOBAL_ROUTES.viewCustomAppRecord.route} element={<CustomAppViewPage />} />
+      <Route path={GLOBAL_ROUTES.newCustomAppRecord.route} element={<CustomAppCreatePage />} />
       <Route
         path="*"
         element={

@@ -1,3 +1,5 @@
+import { AppEventService } from "../services";
+
 export const FORGE_INJECTION_TOKENS = {
   AnalyticService: Symbol.for("AnalyticService"),
   BootstrapService: Symbol.for("BootstrapService"),
@@ -7,6 +9,7 @@ export const FORGE_INJECTION_TOKENS = {
   SecurityNoteService: Symbol.for("SecurityNoteService"),
   AuditUserController: Symbol.for("AuditUserController"),
   AuditUsersController: Symbol.for("AuditUsersController"),
+  CreateAppSecurityNoteController: Symbol.for("CreateAppSecurityNoteController"),
   BootStrapController: Symbol.for("BootStrapController"),
   FetchSecurityNoteController: Symbol.for("FetchSecurityNoteController"),
   IssueAuditController: Symbol.for("IssueAuditController"),
@@ -24,4 +27,5 @@ export const FORGE_INJECTION_TOKENS = {
   SecurityStorage: Symbol.for("SecurityStorage"),
   JiraUserService: Symbol.for("JiraUserService"),
   AsyncService: Symbol.for("AsyncService"),
+  AppEventService: Symbol.for("AppEventService"),
 };

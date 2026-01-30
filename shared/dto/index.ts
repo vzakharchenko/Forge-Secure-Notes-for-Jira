@@ -1,5 +1,6 @@
 export { SecurityNoteId } from "./SecurityNoteId";
 export { NewSecurityNote } from "./NewSecurityNote";
+export { NewCustomAppSecurityNote } from "./NewCustomAppSecurityNote";
 export { SecurityNoteIdAndSecurityHashKey } from "./SecurityNoteIdAndSecurityHashKey";
 export { IssueIdWithPagination } from "./IssueIdWithPagination";
 export { SecurityAccountId } from "./SecurityAccountId";

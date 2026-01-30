@@ -1,5 +1,5 @@
 // libs
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { view } from "@forge/bridge";
 import { Request } from "./constants";
 import { v4 as uuid } from "uuid";
@@ -23,6 +23,8 @@ import FormContainer from "@src/components/forms/FormContainer/FormContainer";
 import SecureNoteForm from "./SecureNoteForm";
 import { CustomerRequest } from "../../../shared/models/customerRequest";
 import { SALT_ITERATIONS } from "@shared/Types";
+import { getRequestByKey, getUserById } from "../../../api/jira/user";
+import PageLoading from "@src/components/loaders/PageLoading/PageLoading";
 
 const BASE_ITERATION = 200_000;
 const ENCRYPTION_ITERATIONS = 1000;
@@ -30,9 +32,11 @@ const VERIFICATION_ITERATIONS = 1000;
 
 const SecureNoteFormContainer = ({
   accountId,
+  targetAccountId,
   customerRequest,
 }: {
   accountId: string;
+  targetAccountId?: string;
   customerRequest?: CustomerRequest;
 }) => {
   const [isCopyKey, setIsCopyKey] = useState(false);
@@ -112,6 +116,7 @@ const SecureNoteFormContainer = ({
     >
       <SecureNoteForm
         accountId={accountId}
+        targetAccountId={targetAccountId}
         customerRequest={customerRequest}
         onCopy={() => setIsCopyKey(true)}
       />

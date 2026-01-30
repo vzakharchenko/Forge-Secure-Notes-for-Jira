@@ -24,5 +24,7 @@ export interface ViewMySecurityNotes extends ErrorResponse {
   deletedAt?: Date;
   description: string;
   senderKeyId?: string;
+  customAppId?: string;
+  customEnvId?: string;
   count?: number;
 }

@@ -29,6 +29,8 @@ import CopyIcon from "@atlaskit/icon/core/copy";
 import RefreshIcon from "@atlaskit/icon/core/refresh";
 import { requestToLookup } from "../../../shared/utils/portal";
 import { CustomerRequest } from "../../../shared/models/customerRequest";
+import { getUserById } from "../../../api/jira/user";
+import { JiraUserApi } from "../../../shared/models/user";
 
 const stackStyles = xcss({
   marginTop: "space.100",
@@ -37,10 +39,12 @@ const stackStyles = xcss({
 
 const SecureNoteForm = ({
   accountId,
+  targetAccountId,
   customerRequest,
   onCopy,
 }: {
   accountId: string;
+  targetAccountId?: string;
   onCopy: () => void;
   customerRequest?: CustomerRequest;
 }) => {
@@ -56,6 +60,24 @@ const SecureNoteForm = ({
       const options = requestToLookup(customerRequest);
       setFieldValue("targetUsers", [options]);
       setFieldValue("description", customerRequest.summary);
+    }
+    if (targetAccountId) {
+      const initFunc = async () => {
+        if (!targetAccountId) {
+          return;
+        }
+        const user = await getUserById(targetAccountId);
+        setFieldValue("targetUsers", [
+          {
+            accountId: user.accountId,
+            displayName: user.displayName,
+            avatarUrl: user?.avatarUrls["32x32"],
+          },
+        ]);
+      };
+      if (targetAccountId) {
+        initFunc().catch(console.error);
+      }
     }
   }, []);
 
@@ -95,7 +117,7 @@ const SecureNoteForm = ({
           defaultOptions
           isScrollable
           isRequired
-          isDisabled={!!customerRequest}
+          isDisabled={!!customerRequest || !!targetAccountId}
         />
         <FormInput
           name="description"

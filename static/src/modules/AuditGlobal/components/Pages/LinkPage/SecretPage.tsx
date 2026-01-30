@@ -21,11 +21,11 @@ import NotFoundClosedImage from "@src/img/404.png";
 const SecretPage = ({
   recordId,
   navigate,
-  actionViewed,
+  closeNavigate,
 }: {
   recordId?: string;
   navigate: () => void;
-  actionViewed: () => void;
+  closeNavigate?: () => void;
 }) => {
   const [isValid, setIsValid] = useState<boolean | null>(null);
   const [isClosed, setIsClosed] = useState(false);
@@ -78,11 +78,16 @@ const SecretPage = ({
     );
   }
   if (isClosed) {
-    return <ViewedContent actionView={actionViewed} />;
+    return <ViewedContent actionView={navigate} />;
   }
 
   if (decryptedContent) {
-    return <DecryptedContent decryptedContent={decryptedContent} setIsClosed={setIsClosed} />;
+    return (
+      <DecryptedContent
+        decryptedContent={decryptedContent}
+        setIsClosed={closeNavigate ?? setIsClosed}
+      />
+    );
   }
 
   return (

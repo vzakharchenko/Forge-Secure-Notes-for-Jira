@@ -73,6 +73,8 @@ CREATE TABLE IF NOT EXISTS security_notes (
   project_id varchar(255) DEFAULT NULL,
   project_key varchar(255) DEFAULT NULL,
   sender_key_id varbinary(16),
+  custom_app_id varchar(255) DEFAULT NULL,
+  custom_env_id varchar(255) DEFAULT NULL,
   PRIMARY KEY (id) /*T![clustered_index] CLUSTERED */
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
 SET foreign_key_checks = 1

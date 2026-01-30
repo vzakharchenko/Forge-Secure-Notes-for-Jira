@@ -1,6 +1,6 @@
 import { Modal } from "@forge/bridge";
 
-export async function showNewIssueModal(callback: (payload: any) => any) {
+export async function showNewIssueModal(callback: (payload: any) => any, accountId?: string) {
   try {
     const modal = new Modal({
       resource: "main",
@@ -8,6 +8,7 @@ export async function showNewIssueModal(callback: (payload: any) => any) {
       size: "large",
       context: {
         modalType: "newSecureNote",
+        accountId,
       },
     });
 

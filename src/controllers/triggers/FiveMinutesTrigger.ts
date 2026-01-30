@@ -5,7 +5,12 @@ import {
   SchedulerTriggerRequest,
   SchedulerTriggerResponse,
 } from "../../core";
-import { SecurityNoteService, AnalyticService, BootstrapService } from "../../services";
+import {
+  SecurityNoteService,
+  AnalyticService,
+  BootstrapService,
+  AppEventService,
+} from "../../services";
 import { clearCacheSchedulerTrigger } from "forge-sql-orm";
 import { FORGE_SQL_ORM, SecurityNoteRepository } from "../../database";
 import { Container } from "inversify";
@@ -21,6 +26,7 @@ const FIVE_MINUTES_BINDINGS = [
   { name: FORGE_INJECTION_TOKENS.SecurityNoteRepository, bind: SecurityNoteRepository },
   { name: FORGE_INJECTION_TOKENS.SecurityStorage, bind: SecurityStorage },
   { name: FORGE_INJECTION_TOKENS.BootstrapService, bind: BootstrapService },
+  { name: FORGE_INJECTION_TOKENS.AppEventService, bind: AppEventService },
 ] as const;
 
 @schedulerTrigger

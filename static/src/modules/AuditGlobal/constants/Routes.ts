@@ -5,6 +5,12 @@ export const GLOBAL_ROUTES = {
   record: {
     route: "view/:recordId",
   },
+  viewCustomAppRecord: {
+    route: "custom/:appId/:envId/view/:recordId",
+  },
+  newCustomAppRecord: {
+    route: "custom/:appId/:envId/create",
+  },
   myHistory: {
     route: "/myHistory",
   },

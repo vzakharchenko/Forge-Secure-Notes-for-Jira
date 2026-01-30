@@ -1,0 +1,60 @@
+modules:
+  jira:globalPage:
+    - key: integration page
+      resource: main
+      resolver:
+        function: resolver
+      title: Custom App (Secure Note Jira)
+  scheduledTrigger:
+    - key: scheduled-schema-migration
+      function: runSchemaMigration
+      interval: hour
+  trigger:
+    - key: post-install-schema-migration
+      function: runSchemaMigration
+      events:
+        - avi:forge:installed:app
+  consumer:
+    - key: print-degradation-queries
+      queue: degradationQueue
+      function: handlerAsyncDegradation
+  #  webtrigger:
+  #    - key: invoke-schema-migration
+  #      function: runSchemaMigration
+  #      security:
+  #        egress:
+  #          allowDataEgress: false
+  #          allowedResponses:
+  #            - statusCode: 200
+  #              body: '{"body": "Migrations successfully executed"}'
+  #    - key: drop-schema-migration
+  #      function: dropMigrations
+  #    - key: fetch-schema
+  #      function: fetchSchema
+  sql:
+    - key: main
+      engine: mysql
+  function:
+    - key: resolver
+      handler: index.handler
+    - key: runSchemaMigration
+      handler: index.handlerMigration
+    - key: dropMigrations
+      handler: index.dropMigrations
+    - key: fetchSchema
+      handler: index.fetchMigrations
+    - key: handlerAsyncDegradation
+      handler: index.handlerAsyncDegradation
+resources:
+  - key: main
+    path: static/build-static
+    tunnel:
+      port: 3040
+app:
+  runtime:
+    name: nodejs24.x
+  id: ari:cloud:ecosystem::app/c5777d24-4243-4381-a210-679518e6eb68
+permissions:
+  content:
+    styles:
+      - "unsafe-inline"

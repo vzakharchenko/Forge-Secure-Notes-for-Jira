@@ -6,3 +6,4 @@ export { IssueProjectsController } from "./IssueProjectsController";
 export { IssueAuditController } from "./IssueAuditController";
 export { ProjectAuditController } from "./ProjectAuditController";
 export { BootStrapController } from "./BootStrapController";
+export { CreateAppSecurityNoteController } from "./CreateAppSecurityNoteController";
