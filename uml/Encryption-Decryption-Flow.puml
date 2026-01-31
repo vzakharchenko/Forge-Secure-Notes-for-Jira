@@ -1,0 +1,91 @@
+@startuml encryption-and-decryption
+!theme plain
+title Encryption and Decryption Flow
+
+skinparam sequenceMessageAlign center
+skinparam responseMessageBelowArrow true
+
+actor "User\n(sender)" as sender
+actor "User\n(recipient)" as recipient
+box "Browser (Client Side)" #LightBlue
+  participant "UI\n(SecureNoteFormContainer\n/ DecryptionFormContainer)" as form
+  participant "encode.ts\n(Web Crypto API)" as encode
+end box
+box "Atlassian Cloud (Runs On Atlassian)" #LightYellow
+  participant "Backend\n(Controller + Service)" as backend
+  database "SQL\n(metadata)" as sql
+  database "KVS\n(encrypted payload)" as kvs
+end box
+
+== Encryption (create note) ==
+sender -> form: note text, description, target users
+sender -> form: **encryption key** (from other channel)
+form -> encode: salt = PBKDF2(description, accountId)
+encode --> form: salt
+form -> encode: baseKey = PBKDF2(encryptionKey, salt, 200k)
+encode --> form: baseKey
+form -> encode: keyForEncryption, keyForServer = PBKDF2(baseKey, purpose, 1k)
+encode --> form: keys
+form -> encode: encryptMessage(note, keyForEncryption)
+note right of encode
+  AES-GCM: random salt (16), iv (12)
+  PBKDF2 → key, AES-GCM encrypt
+  → { encrypted, iv, salt }
+end note
+encode --> form: { encrypted, iv, salt }
+form -> backend: encryptionKeyHash, encryptedPayload, iv, salt, ...
+backend -> sql: store iv, salt, encryption_key_hash, metadata
+backend -> kvs: setSecret(noteId, encryptedPayload)
+sql --> backend: OK
+kvs --> backend: OK
+backend --> form: OK
+
+note over sender, recipient
+  **Encryption key** is shared **out-of-band**
+  (e.g. Slack, email, in person).
+  Never sent through the app.
+end note
+
+== Decryption (open via link) ==
+recipient -> form: open link (recordId)
+form -> backend: openSecureNoteLink(recordId)
+backend -> sql: get note (targetUserId, createdBy, description)
+sql --> backend: sn
+backend -> backend: **Access check:** accountId === targetUserId?
+backend --> form: **OpenSecurityNote** { valid, **sourceAccountId**? }
+note right of backend
+  **First part of the secret for decryption**
+  (**sourceAccountId** from OpenSecurityNote).
+  Only returned if recipient has access.
+  Used as salt for key derivation on client.
+end note
+
+recipient -> form: **decryption key** (from other channel)
+form -> encode: baseKey = PBKDF2(decryptionKey, **sourceAccountId**, 200k)
+encode --> form: baseKey
+form -> encode: keyForEncryption, keyForServer = PBKDF2(baseKey, purpose, 1k)
+encode --> form: keys
+
+form -> backend: getSecureNote({ id, keyHash: keyForServer })
+note right of form
+  Only **keyHash** is sent (not the key).
+end note
+backend -> sql: get note (encryption_key_hash, iv, salt, targetUserId)
+sql --> backend: sn
+backend -> backend: **1) Access check:** accountId === targetUserId?
+backend -> backend: **2) Key validation:** verifyHashConstantTime(encryption_key_hash, calculatedHash)
+backend -> kvs: getSecret(noteId)
+kvs --> backend: encryptedPayload
+backend --> form: **Second part of the secret:** { iv, salt, encryptedData }
+
+form -> encode: decryptMessage({ encrypted, iv, salt }, keyForEncryption)
+note right of encode
+  **Decryption** uses:
+  • **sourceAccountId** (OpenSecurityNote) + key → keyForEncryption
+  • iv, salt, encryptedData (getSecureNote)
+  → plaintext
+end note
+encode --> form: plaintext
+form -> recipient: display note content
+
+@enduml

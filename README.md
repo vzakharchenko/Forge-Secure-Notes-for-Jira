@@ -156,6 +156,10 @@ The application requires specific Forge scopes to function properly. Each scope 
 
 ### Security Design
 
+The diagram below shows the end-to-end flow: creating a note (key and encryption on the client; backend stores only the key hash and encrypted payload) and opening a note (backend returns metadata and ciphertext after access check; decryption on the client using the key shared out-of-band).
+
+![Encryption and Decryption Flow](uml/Encryption-Decryption-Flow.png)
+
 - **Client-side encryption** using Web Crypto API
 - **AES-GCM** with 32-byte key derived via PBKDF2
 - **Encryption key security:**
