@@ -112,6 +112,12 @@ The application requires specific Forge scopes to function properly. Each scope 
   - **Usage**: Used by `JiraUserService.getUserById()` to fetch recipient user details (display name, avatar) when creating secure notes
   - **Required for**: Populating recipient information in secure note creation, showing user avatars and names in the UI
 
+- **`read:email-address:jira`**:
+  - **Purpose**: Read email addresses of Jira users
+  - **Usage**: Used by `JiraUserService.getUserEmail()` to fetch creator and recipient email addresses (e.g. for audit metadata and email key sharing)
+  - **Required for**: Storing created/target email in security note metadata, pre-filling recipient email when sending the decryption key via email
+  - **Zero Trust**: Read-only scope (no ingress). The decryption key is **never** transmitted through the app or Atlassian infrastructure — email is composed client-side and sent via the user's email client. The app only reads email addresses for metadata and UI convenience; Zero Trust architecture is not violated.
+
 - **`read:permission:jira`**:
   - **Purpose**: Check user permissions in Jira
   - **Usage**: Used by `JiraUserService.isJiraAdmin()` and `getMyPermissions()` to determine if a user has admin privileges
