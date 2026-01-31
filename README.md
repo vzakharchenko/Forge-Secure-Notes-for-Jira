@@ -181,26 +181,11 @@ The diagram below shows the end-to-end flow: creating a note (key and encryption
   - Other half is in metadata: **IV** (Initialization Vector) and **salt** stored in `@forge/sql`
   - Both parts are required to decrypt the content
 - **Double protection: Key + Authorization**
-  - **Authorization is mandatory**: Forge guarantees that `accountId` belongs to the authenticated user. The backend verifies that the authenticated user's `accountId` matches the `targetUserId` (recipient) before allowing decryption
-  - **Key is useless without the correct account**: The encryption key hash is calculated using PBKDF2 with the recipient's `accountId` as the salt. This means:
-    - Even if an attacker obtains the encryption key, they cannot use it under a different account because the hash calculation depends on the specific `accountId`
-    - The key is bound to the recipient's account identity
-  - **Key is useless without encrypted data**: Both components are required:
-    - The encryption key (shared out-of-band)
-    - The encrypted content (stored in `@forge/kvs`)
-  - **Security guarantees:**
-    - Key is useless without the correct account — even if an attacker obtains the key, they cannot use it under another account
-    - Key is useless without encrypted data — both components are needed
-    - Authorization is mandatory — Forge guarantees that `accountId` belongs to the authenticated user
-  - **Access control:**
-    - **Only the authorized recipient can decrypt**: The encryption key is issued only to the recipient, and only the authenticated recipient can read secure notes
-    - **Sender cannot decrypt**: Even though the sender has the key stored locally, they cannot decrypt the note because authorization checks verify that only the `targetUserId` (recipient) can access the encrypted content
-    - **Administrators cannot decrypt**: Administrators can see metadata (who created, when, status) but cannot decrypt the actual note content — only the recipient can
-    - **Key safety**: If the key accidentally falls into the wrong hands, it's not a security issue — the key by itself is useless without:
-      - The correct recipient's account (authorization check)
-      - The encrypted data stored in Atlassian Cloud
-      - Both components together are required for decryption
-  - **Purpose of the key**: The encryption key exists to ensure that **Atlassian Cloud does not have sufficient information** to decrypt secure notes. Even if Atlassian infrastructure is compromised, they cannot decrypt notes without the key, which is never transmitted to or stored on their servers
+  - **Who can and cannot decrypt**: Only the authenticated recipient (the user designated as `targetUserId`) with the correct decryption key can read the content. The **sender**, **Jira Admin**, and **Atlassian Cloud developer** cannot decrypt the note.
+  - **Authorization**: Forge authenticates the user and guarantees that `accountId` belongs to that user. The backend returns decryption data only when `accountId === targetUserId`.
+  - **Key bound to the recipient's account**: The backend stores a hash of the key derived with PBKDF2 using the recipient's `accountId` as salt. The same key yields a different hash per recipient. The backend returns the encrypted payload only when the supplied key hash matches the stored one for that recipient.
+  - **Key + encrypted data both required**: Decryption needs the key (shared out-of-band) and the encrypted content (IV, salt, ciphertext) from `@forge/kvs`. The backend returns the encrypted payload only after authorization and key-hash verification. The key is never sent to or stored on Atlassian servers; only the hash and the encrypted blob are stored.
+  - **Purpose of the key**: Atlassian Cloud does not have the decryption key. Without it, the stored data cannot be decrypted.
 
   **Implementation example:**
 
@@ -222,9 +207,8 @@ The diagram below shows the end-to-end flow: creating a note (key and encryption
 - Encrypted content stored in `@forge/kvs.setSecret`
 - Metadata (IV, salt, encryption_key_hash) stored in `@forge/sql`
 - Out-of-band key exchange required (key must be shared separately via secure channel)
-  - ⚠️ **CRITICAL**: The decryption key **must NOT** be shared through Jira (comments, descriptions, issue fields) or any Atlassian Cloud channels
-  - **Why**: If the key passes through Jira or Atlassian Cloud infrastructure, Atlassian will have all the data needed to decrypt the secret, which **violates Zero Trust architecture**
-  - **Correct approach**: Share the key through separate, independent channels such as Slack, Teams, direct email (not through Jira), phone call, or other secure communication methods outside of Atlassian infrastructure
+  - **WARNING**: If you share the decryption key through issues, comments, or descriptions in Jira/Atlassian Cloud, you violate Zero Trust architecture (Atlassian would then have everything needed to recover the secret).
+  - **Correct approach**: Share the key through separate, independent channels such as Slack, Teams, direct email (not through Jira), phone call, or other secure communication methods outside of Atlassian infrastructure.
 - **Email key sharing**: The app provides functionality to send the decryption key to the recipient via email (Gmail compose or mailto link)
   - ⚠️ **Important**: Always verify the recipient's email address before sending — the app cannot verify email addresses automatically
   - This feature maintains Zero Trust architecture and "Runs on Atlassian" badge compliance — the email is composed entirely client-side in your browser and sent directly through your email client (Gmail, Outlook, etc.)
