@@ -174,7 +174,7 @@ The diagram below shows the end-to-end flow: creating a note (key and encryption
   - Backend stores only `encryption_key_hash` (hash of the key) for validation purposes
   - The actual encryption key is required for decryption and must be shared out-of-band
   - **Sender key storage (fallback)**: The encryption key is stored in the sender's browser `sessionStorage` (encrypted) **only as a fallback** — when the sender forgot to copy the key at creation time (copying is detected by clicking the key field or the copy button), they can retrieve and copy it later from the same browser
-    - ⚠️ **Important**: This is **local browser storage only** — if the storage is cleared, or if the ticket is opened in a different browser or on a different machine, this capability will not be available
+    - ⚠️ **Important**: This is **local browser storage only** — if the storage is cleared, or if the issue is opened in a different browser or on a different machine, this capability will not be available
     - The key is encrypted before being stored in `sessionStorage` using a hash derived from the note description and sender's account ID
 - **Split data model for decryption:**
   - Half of the decryption data is with the user: **encryption key** (known only to the user)
@@ -385,7 +385,7 @@ forge tunnel
    - **Set Note Expiry**: Choose expiration time (1 hour, 1 day, 7 days, 10 days, or custom date)
 5. Click "Generate New Key" to create an encryption key
 6. **Key Storage (fallback)**: If you forget to copy the key at creation time (copying is detected by clicking the key field or the copy button), it is stored in your browser's `sessionStorage` (encrypted) so you can retrieve and copy it later from the same browser
-   - ⚠️ **Important**: This is local browser storage only — if you clear storage or open the ticket in a different browser/machine, you won't be able to retrieve the key from storage
+   - ⚠️ **Important**: This is local browser storage only — if you clear storage or open the issue in a different browser/machine, you won't be able to retrieve the key from storage
    - Prefer copying the key (click the key field or copy button) or sending it via email right after creation; use the sent notes panel to copy the key again if it was stored in sessionStorage
    - 🔒 **Security Note**: The key stored in your browser is **useless by itself** — even if you (the sender) or anyone else has the key, it cannot decrypt the note without the **authorized recipient's account**. The key only works in combination with the recipient's authorization — only the designated recipient can use the key to decrypt the note
 7. **Share the Key**: Copy the encryption key and share it securely with the recipient:
