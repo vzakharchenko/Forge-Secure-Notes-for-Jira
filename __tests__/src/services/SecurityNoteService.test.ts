@@ -76,7 +76,6 @@ describe("SecurityNoteService", () => {
     mockJiraUserService = {
       getCurrentUser: vi.fn(),
       getUserById: vi.fn(),
-      getUserEmail: vi.fn(),
     } as unknown as JiraUserService;
 
     mockBootstrapService = {
@@ -624,10 +623,6 @@ describe("SecurityNoteService", () => {
         avatarUrls: { "32x32": "target-avatar" },
         emailAddress: "target@example.com",
       } as any);
-      vi.mocked(mockJiraUserService.getUserEmail).mockResolvedValue({
-        accountId: "target-123",
-        email: "target@example.com",
-      } as any);
       vi.mocked(coreUtils.calculateSaltHash).mockResolvedValue("hash-value");
       vi.mocked(mockSecurityNoteRepository.createSecurityNote).mockResolvedValue(undefined);
       vi.mocked(mockSecurityStorage.savePayload).mockResolvedValue(undefined);
@@ -667,10 +662,6 @@ describe("SecurityNoteService", () => {
       vi.mocked(getAppContext).mockReturnValue(mockContext as any);
       vi.mocked(mockJiraUserService.getCurrentUser).mockResolvedValue(undefined);
       vi.mocked(mockJiraUserService.getUserById).mockResolvedValue(undefined);
-      vi.mocked(mockJiraUserService.getUserEmail).mockResolvedValue({
-        accountId: "target-123",
-        email: "target@example.com",
-      } as any);
       vi.mocked(coreUtils.calculateSaltHash).mockResolvedValue("hash-value");
       vi.mocked(mockSecurityNoteRepository.createSecurityNote).mockResolvedValue(undefined);
       vi.mocked(mockSecurityStorage.savePayload).mockResolvedValue(undefined);
@@ -720,10 +711,6 @@ describe("SecurityNoteService", () => {
         avatarUrls: { "32x32": "target-avatar" },
         emailAddress: "target@example.com",
       } as any);
-      vi.mocked(mockJiraUserService.getUserEmail).mockResolvedValue({
-        accountId: "target-123",
-        email: "target@example.com",
-      } as any);
       vi.mocked(coreUtils.calculateSaltHash).mockResolvedValue("hash-value");
       vi.mocked(mockSecurityNoteRepository.createSecurityNote).mockResolvedValue(undefined);
       vi.mocked(mockSecurityStorage.savePayload).mockResolvedValue(undefined);
@@ -772,10 +759,6 @@ describe("SecurityNoteService", () => {
         displayName: "Target User",
         avatarUrls: { "32x32": "target-avatar" },
         emailAddress: "target@example.com",
-      } as any);
-      vi.mocked(mockJiraUserService.getUserEmail).mockResolvedValue({
-        accountId: "target-123",
-        email: "target@example.com",
       } as any);
       vi.mocked(coreUtils.calculateSaltHash).mockResolvedValue("hash-value");
       vi.mocked(mockSecurityNoteRepository.createSecurityNote).mockResolvedValue(undefined);
@@ -833,15 +816,6 @@ describe("SecurityNoteService", () => {
           avatarUrls: { "32x32": "target-avatar-2" },
           emailAddress: "target2@example.com",
         } as any);
-      vi.mocked(mockJiraUserService.getUserEmail)
-        .mockResolvedValueOnce({
-          accountId: "target-123",
-          email: "target1@example.com",
-        } as any)
-        .mockResolvedValueOnce({
-          accountId: "target-456",
-          email: "target2@example.com",
-        } as any);
       vi.mocked(coreUtils.calculateSaltHash).mockResolvedValue("hash-value");
       vi.mocked(mockSecurityNoteRepository.createSecurityNote).mockResolvedValue(undefined);
       vi.mocked(mockSecurityStorage.savePayload).mockResolvedValue(undefined);
@@ -898,10 +872,6 @@ describe("SecurityNoteService", () => {
         avatarUrls: { "32x32": "target-avatar" },
         emailAddress: "target@example.com",
       } as any);
-      vi.mocked(mockJiraUserService.getUserEmail).mockResolvedValue({
-        accountId: "target-123",
-        email: "target@example.com",
-      } as any);
       vi.mocked(coreUtils.calculateSaltHash).mockResolvedValue("hash-value");
       vi.mocked(mockSecurityNoteRepository.createSecurityNote).mockResolvedValue(undefined);
       vi.mocked(mockSecurityStorage.savePayload).mockResolvedValue(undefined);
@@ -950,10 +920,6 @@ describe("SecurityNoteService", () => {
         avatarUrls: { "32x32": "target-avatar" },
         emailAddress: "target@example.com",
       } as any);
-      vi.mocked(mockJiraUserService.getUserEmail).mockResolvedValue({
-        accountId: "target-123",
-        email: "target@example.com",
-      } as any);
       vi.mocked(coreUtils.calculateSaltHash).mockResolvedValue("hash-value");
       vi.mocked(mockSecurityNoteRepository.createSecurityNote).mockResolvedValue(undefined);
       vi.mocked(mockSecurityStorage.savePayload).mockResolvedValue(undefined);
@@ -979,7 +945,7 @@ describe("SecurityNoteService", () => {
       expect(createCall[0].projectKey).toBeUndefined();
     });
 
-    it("should use getUserEmail to set target email when user info is available", async () => {
+    it("should set target email from getUserById emailAddress when user info is available", async () => {
       const mockContext = {
         accountId: "user-123",
         context: {
@@ -1000,11 +966,7 @@ describe("SecurityNoteService", () => {
       vi.mocked(mockJiraUserService.getUserById).mockResolvedValue({
         displayName: "Target User",
         avatarUrls: { "32x32": "target-avatar" },
-        emailAddress: "fallback@example.com",
-      } as any);
-      vi.mocked(mockJiraUserService.getUserEmail).mockResolvedValue({
-        accountId: "target-123",
-        email: "target@example.com",
+        emailAddress: "target@example.com",
       } as any);
       vi.mocked(coreUtils.calculateSaltHash).mockResolvedValue("hash-value");
       vi.mocked(mockSecurityNoteRepository.createSecurityNote).mockResolvedValue(undefined);
@@ -1025,12 +987,11 @@ describe("SecurityNoteService", () => {
 
       await service.createSecurityNote(securityNote as any);
 
-      expect(mockJiraUserService.getUserEmail).toHaveBeenCalledWith("target-123");
       const createCall = vi.mocked(mockSecurityNoteRepository.createSecurityNote).mock.calls[0][0];
       expect(createCall[0].targetEmail).toBe("target@example.com");
     });
 
-    it("should use getUserEmail email when getUserById returns undefined", async () => {
+    it("should set target email to empty when getUserById returns undefined", async () => {
       const mockContext = {
         accountId: "user-123",
         context: {
@@ -1049,10 +1010,6 @@ describe("SecurityNoteService", () => {
         emailAddress: "creator@example.com",
       } as any);
       vi.mocked(mockJiraUserService.getUserById).mockResolvedValue(undefined);
-      vi.mocked(mockJiraUserService.getUserEmail).mockResolvedValue({
-        accountId: "target-123",
-        email: "target@example.com",
-      } as any);
       vi.mocked(coreUtils.calculateSaltHash).mockResolvedValue("hash-value");
       vi.mocked(mockSecurityNoteRepository.createSecurityNote).mockResolvedValue(undefined);
       vi.mocked(mockSecurityStorage.savePayload).mockResolvedValue(undefined);
@@ -1072,58 +1029,9 @@ describe("SecurityNoteService", () => {
 
       await service.createSecurityNote(securityNote as any);
 
-      expect(mockJiraUserService.getUserEmail).toHaveBeenCalledWith("target-123");
       const createCall = vi.mocked(mockSecurityNoteRepository.createSecurityNote).mock.calls[0][0];
-      expect(createCall[0].targetEmail).toBe("target@example.com");
+      expect(createCall[0].targetEmail).toBe("");
       expect(createCall[0].targetAvatarUrl).toBe("");
-    });
-
-    it("should use fallback email from getUserById when getUserEmail returns undefined", async () => {
-      const mockContext = {
-        accountId: "user-123",
-        context: {
-          extension: {
-            issue: { key: "TEST-1", id: "issue-123" },
-            project: { id: "project-123", key: "PROJ" },
-          },
-          localId: "ari:cloud:ecosystem::app/abc123/def456",
-          siteUrl: "https://example.atlassian.net",
-        },
-      };
-      vi.mocked(getAppContext).mockReturnValue(mockContext as any);
-      vi.mocked(mockJiraUserService.getCurrentUser).mockResolvedValue({
-        displayName: "Test User",
-        avatarUrls: { "32x32": "avatar-url" },
-        emailAddress: "creator@example.com",
-      } as any);
-      vi.mocked(mockJiraUserService.getUserById).mockResolvedValue({
-        displayName: "Target User",
-        avatarUrls: { "32x32": "target-avatar" },
-        emailAddress: "fallback@example.com",
-      } as any);
-      vi.mocked(mockJiraUserService.getUserEmail).mockResolvedValue(undefined);
-      vi.mocked(coreUtils.calculateSaltHash).mockResolvedValue("hash-value");
-      vi.mocked(mockSecurityNoteRepository.createSecurityNote).mockResolvedValue(undefined);
-      vi.mocked(mockSecurityStorage.savePayload).mockResolvedValue(undefined);
-      vi.mocked(coreUtils.sendIssueNotification).mockResolvedValue(undefined);
-      mockV4.mockReturnValue("note-id-123");
-
-      const securityNote = {
-        targetUsers: [{ accountId: "target-123", userName: "Target User" }],
-        encryptionKeyHash: "key-hash",
-        iv: "iv-value",
-        salt: "salt-value",
-        isCustomExpiry: false,
-        expiry: "1h",
-        description: "Test note",
-        encryptedPayload: "encrypted-data",
-      };
-
-      await service.createSecurityNote(securityNote as any);
-
-      expect(mockJiraUserService.getUserEmail).toHaveBeenCalledWith("target-123");
-      const createCall = vi.mocked(mockSecurityNoteRepository.createSecurityNote).mock.calls[0][0];
-      expect(createCall[0].targetEmail).toBe("fallback@example.com");
     });
   });
 

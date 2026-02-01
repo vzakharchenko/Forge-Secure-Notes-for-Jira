@@ -1,6 +1,5 @@
 // libs
 import React from "react";
-import { router } from "@forge/bridge";
 
 // helpers
 import { formatDateWithTimezoneAndFormat } from "@src/shared/utils/date";
@@ -16,17 +15,10 @@ import Lozenge from "@atlaskit/lozenge";
 import DeleteIcon from "@atlaskit/icon/core/delete";
 import ArrowUpRightIcon from "@atlaskit/icon/core/arrow-up-right";
 import CopyIcon from "@atlaskit/icon/core/copy";
-import EmailIcon from "@atlaskit/icon/core/email";
 
 import { calculateHash, decryptMessage } from "@src/shared/utils/encode";
 import { SALT_ITERATIONS } from "@shared/Types";
 import { showSuccessFlag, showWarningFlag } from "@src/shared/utils/flags";
-import { buildGmailComposeUrl } from "@src/shared/utils/gmailUtils";
-import { buildMailtoUrl } from "@src/shared/utils/emailAppUtils";
-import { IconProps } from "@atlaskit/icon/dist/types/types";
-
-// assets
-import gmailIconSrc from "@src/img/gmail.png";
 
 const getSessionStorageItem = (key: string): string | null => {
   try {
@@ -69,25 +61,6 @@ const baseContainerStyles = xcss({
     backgroundColor: "elevation.surface.hovered",
   },
 });
-
-/**
- * Custom Gmail icon component for IconButton
- */
-export const GmailIcon = (props: IconProps) => {
-  const { ...restProps } = props;
-  return (
-    <svg
-      width="16"
-      height="16"
-      viewBox="0 0 16 16"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-      {...restProps}
-    >
-      <image href={gmailIconSrc} width="16" height="16" preserveAspectRatio="xMidYMid meet" />
-    </svg>
-  );
-};
 
 const clickableContainerStyles = xcss({
   cursor: "pointer",
@@ -187,84 +160,6 @@ const NoteCard = ({
                         showSuccessFlag({
                           title: "Key was copied successfully",
                           description: "You can sent over slack, telegram, etc.",
-                        });
-                      }}
-                    />
-
-                    <IconButton
-                      label="Send over Gmail"
-                      icon={GmailIcon}
-                      appearance="subtle"
-                      isTooltipDisabled={false}
-                      onClick={async (e) => {
-                        e.stopPropagation();
-                        const senderEncryptedKey = getSessionStorageItem(note.senderKeyId ?? "");
-                        if (!senderEncryptedKey) {
-                          showWarningFlag(KEY_NOT_VALID_FLAG);
-                          return;
-                        }
-                        const decodedKey = await getDecodedKey(
-                          senderEncryptedKey,
-                          note.description,
-                          accountId,
-                        );
-                        if (!decodedKey) {
-                          showWarningFlag(KEY_NOT_VALID_FLAG);
-                          return;
-                        }
-
-                        const recipientEmail = note.targetUser.email;
-                        const gmailUrl = buildGmailComposeUrl({
-                          note,
-                          decodedKey,
-                          recipientEmail,
-                        });
-
-                        // Open Gmail in new tab
-                        router.open(gmailUrl);
-
-                        showSuccessFlag({
-                          title: "Gmail opened",
-                          description:
-                            "Email composer opened with the decryption key. Please verify the recipient email address.",
-                        });
-                      }}
-                    />
-                    <IconButton
-                      label="Send over email"
-                      icon={EmailIcon}
-                      appearance="subtle"
-                      isTooltipDisabled={false}
-                      onClick={async (e) => {
-                        e.stopPropagation();
-                        const senderEncryptedKey = getSessionStorageItem(note.senderKeyId ?? "");
-                        if (!senderEncryptedKey) {
-                          showWarningFlag(KEY_NOT_VALID_FLAG);
-                          return;
-                        }
-                        const decodedKey = await getDecodedKey(
-                          senderEncryptedKey,
-                          note.description,
-                          accountId,
-                        );
-                        if (!decodedKey) {
-                          showWarningFlag(KEY_NOT_VALID_FLAG);
-                          return;
-                        }
-                        const recipientEmail = note.targetUser.email;
-                        const emailUrl = buildMailtoUrl({
-                          note,
-                          decodedKey,
-                          recipientEmail,
-                        });
-
-                        // Open Email in default email client
-                        router.open(emailUrl);
-
-                        showSuccessFlag({
-                          title: "Email client opened",
-                          description:
-                            "Email composer opened with the decryption key. Please verify the recipient email address.",
                         });
                       }}
                     />
