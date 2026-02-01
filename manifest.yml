@@ -481,5 +481,3 @@ permissions:
     - "read:app-global-channel:realtime"
     - "read:request:jira-service-management"
     - "read:user:jira"
-    - "read:email-address:jira"
-

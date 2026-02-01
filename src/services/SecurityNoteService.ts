@@ -299,7 +299,7 @@ export class SecurityNoteService {
     if (currentUser) {
       data.createdUserName = currentUser.displayName;
       data.createdAvatarUrl = currentUser.avatarUrls["32x32"];
-      data.createdEmail = currentUser.emailAddress;
+      data.createdEmail = currentUser.emailAddress ?? "";
     } else {
       data.createdUserName = accountId;
       data.createdAvatarUrl = "";
@@ -312,14 +312,13 @@ export class SecurityNoteService {
   ): Promise<void> {
     const targetUserId = String(data.targetUserId);
     const targetUserInfo = await this.jiraUserService.getUserById(targetUserId);
-    const userEmail = await this.jiraUserService.getUserEmail(targetUserId);
     if (targetUserInfo) {
       data.targetUserName = targetUserInfo.displayName;
       data.targetAvatarUrl = targetUserInfo.avatarUrls["32x32"];
-      data.targetEmail = userEmail?.email ?? targetUserInfo.emailAddress;
+      data.targetEmail = targetUserInfo.emailAddress ?? "";
     } else {
       data.targetAvatarUrl = "";
-      data.targetEmail = userEmail?.email ?? "";
+      data.targetEmail = "";
     }
   }
 
