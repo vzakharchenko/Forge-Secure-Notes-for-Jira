@@ -19,7 +19,7 @@ end box
 
 == Encryption (create note) ==
 sender -> form: note text, description, target users
-sender -> form: **encryption key** (from other channel)
+form -> form: **encryption key** generated automatically (UI)
 form -> encode: salt = PBKDF2(description, accountId)
 encode --> form: salt
 form -> encode: baseKey = PBKDF2(encryptionKey, salt, 200k)
@@ -41,9 +41,9 @@ kvs --> backend: OK
 backend --> form: OK
 
 note over sender, recipient
-  **Encryption key** is shared **out-of-band**
-  (e.g. Slack, email, in person).
-  Never sent through the app.
+  **Encryption key** is created by UI automatically.
+  Sender copies it and shares **out-of-band**
+  (e.g. Slack, email, in person). Never sent through the app.
 end note
 
 == Decryption (open via link) ==
