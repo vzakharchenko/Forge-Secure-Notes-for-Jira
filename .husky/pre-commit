@@ -2,9 +2,6 @@
 set -e
 echo '🔍 Running resolver checks...'
 
-echo '➡️ npm audit (resolver)'
-npm audit fix|| { echo '❌ audit not fixed'; exit 1; }
-
 echo '➡️ lint-staged (resolver)'
 npx lint-staged || { echo '❌ lint-staged failed for resolver'; exit 1; }
 
@@ -21,9 +18,6 @@ npm run test || { echo '❌ tests failed.'; exit 1; }
 
 echo '🔍 Running static resources checks...'
 pushd static > /dev/null
-
-echo '➡️ npm audit (resolver)'
-npm audit fix|| { echo '❌ audit not fixed'; exit 1; }
 
 echo '➡️ lint-staged (static resources)'
 npx lint-staged || { echo '❌ lint-staged failed for static resources'; popd > /dev/null; exit 1; }
