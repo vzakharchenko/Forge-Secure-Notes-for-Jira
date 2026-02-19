@@ -456,6 +456,8 @@ app:
     name: nodejs24.x
     architecture: arm64
   id: ari:cloud:ecosystem::app/cf1ed986-09dd-4b7d-a803-1c73489817cd
+  licensing:
+    enabled: true
   storage:
     entities:
       - name: cache
