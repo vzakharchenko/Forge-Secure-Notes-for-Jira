@@ -25,7 +25,7 @@ jobs:
           cache: npm
 
       - name: Install
-        run: cd web-site && npm ci
+        run: cd web-site && npm ci --ignore-scripts
 
       - name: Build
         run: cd web-site && npm run build

@@ -36,7 +36,7 @@ jobs:
           cache: 'npm'
 
       - name: Backend install
-        run: npm ci
+        run: npm ci --ignore-scripts
       - name: Install oxc binding (Linux)
         if: runner.os == 'Linux'
         run: npm i -D @oxc-resolver/binding-linux-x64-gnu@latest
@@ -63,13 +63,13 @@ jobs:
         if: github.actor != 'dependabot[bot]'
       - name: SonarQube Scan
         if: github.actor != 'dependabot[bot]'
-        uses: SonarSource/sonarqube-scan-action@v7
+        uses: SonarSource/sonarqube-scan-action@a31c9398be7ace6bbfaf30c0bd5d415f843d45e9
         env:
           SONAR_TOKEN: ${{ secrets.SONARCLOUD_TOKEN }}
       - name: Site install & build
         run: |
           cd web-site
-          npm ci
+          npm ci --ignore-scripts
           npm run knip
           npm run lint
           npm run build
@@ -77,7 +77,7 @@ jobs:
       - name: Frontend install & build
         run: |
           cd static
-          npm ci
+          npm ci --ignore-scripts
           npm run knip
           npm run lint
           npm run build
@@ -126,7 +126,7 @@ jobs:
           cache: 'npm'
 
       - name: Backend install
-        run: npm ci
+        run: npm ci --ignore-scripts
       - name: Install oxc binding (Linux)
         if: runner.os == 'Linux'
         run: npm i -D @oxc-resolver/binding-linux-x64-gnu@latest
@@ -153,14 +153,14 @@ jobs:
         if: github.actor != 'dependabot[bot]'
       - name: SonarQube Scan
         if: github.actor != 'dependabot[bot]'
-        uses: SonarSource/sonarqube-scan-action@v7
+        uses: SonarSource/sonarqube-scan-action@a31c9398be7ace6bbfaf30c0bd5d415f843d45e9
         env:
           SONAR_TOKEN: ${{ secrets.SONARCLOUD_TOKEN }}
 
       - name: Frontend install & build
         run: |
           cd static
-          npm ci
+          npm ci --ignore-scripts
           npm run knip
           npm run lint
           npm run build
@@ -210,7 +210,7 @@ jobs:
           cache: 'npm'
 
       - name: Backend install
-        run: npm ci
+        run: npm ci --ignore-scripts
       - name: Install oxc binding (Linux)
         if: runner.os == 'Linux'
         run: npm i -D @oxc-resolver/binding-linux-x64-gnu@latest
@@ -238,7 +238,7 @@ jobs:
       - name: Frontend install & build
         run: |
           cd static
-          npm ci
+          npm ci --ignore-scripts
           npm run knip
           npm run lint
           npm run build
