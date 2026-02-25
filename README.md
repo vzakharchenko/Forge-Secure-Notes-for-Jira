@@ -3,7 +3,7 @@
 [![Node.js CI](https://github.com/vzakharchenko/Forge-Secure-Notes-for-Jira/actions/workflows/node.js.yml/badge.svg)](https://github.com/vzakharchenko/Forge-Secure-Notes-for-Jira/actions/workflows/node.js.yml)
 [![Snyk Vulnerabilities](https://snyk.io/test/github/vzakharchenko/Forge-Secure-Notes-for-Jira/badge.svg)](https://snyk.io/test/github/vzakharchenko/Forge-Secure-Notes-for-Jira)
 [![DeepScan grade](https://deepscan.io/api/teams/26652/projects/30673/branches/987394/badge/grade.svg)](https://deepscan.io/dashboard#view=project&tid=26652&pid=30673&bid=987394)
-[![Coverage Status](https://coveralls.io/repos/github/vzakharchenko/Forge-Secure-Notes-for-Jira/badge.svg)](https://coveralls.io/github/vzakharchenko/Forge-Secure-Notes-for-Jira)
+[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=vzakharchenko_Forge-Secure-Notes-for-Jira&metric=coverage)](https://sonarcloud.io/summary/new_code?id=vzakharchenko_Forge-Secure-Notes-for-Jira)
 
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=vzakharchenko_Forge-Secure-Notes-for-Jira&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=vzakharchenko_Forge-Secure-Notes-for-Jira)
 [![Bugs](https://sonarcloud.io/api/project_badges/measure?project=vzakharchenko_Forge-Secure-Notes-for-Jira&metric=bugs)](https://sonarcloud.io/summary/new_code?id=vzakharchenko_Forge-Secure-Notes-for-Jira)
