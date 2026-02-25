@@ -7,7 +7,7 @@ import migrationV5 from "./migrationV5";
 
 export type MigrationType = (migrationRunner: MigrationRunner) => MigrationRunner;
 
-export default (migrationRunner: MigrationRunner): MigrationRunner => {
+const runMigrations = (migrationRunner: MigrationRunner): MigrationRunner => {
   migrationV1(migrationRunner);
   migrationV2(migrationRunner);
   migrationV3(migrationRunner);
@@ -15,3 +15,5 @@ export default (migrationRunner: MigrationRunner): MigrationRunner => {
   migrationV5(migrationRunner);
   return migrationRunner;
 };
+
+export default runMigrations;

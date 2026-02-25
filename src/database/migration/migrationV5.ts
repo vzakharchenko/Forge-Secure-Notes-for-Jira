@@ -1,6 +1,6 @@
 import { MigrationRunner } from "@forge/sql/out/migration";
 
-export default (migrationRunner: MigrationRunner): MigrationRunner => {
+const migrationV5 = (migrationRunner: MigrationRunner): MigrationRunner => {
   migrationRunner.enqueue(
     "v5_MIGRATION0_NULLABLE",
     "ALTER TABLE `security_notes` ADD COLUMN IF NOT EXISTS `created_email` varchar(255) NULL ;",
@@ -32,3 +32,5 @@ export default (migrationRunner: MigrationRunner): MigrationRunner => {
   );
   return migrationRunner;
 };
+
+export default migrationV5;
