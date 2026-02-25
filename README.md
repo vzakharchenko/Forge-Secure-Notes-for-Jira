@@ -17,6 +17,8 @@ Share sensitive information securely within Jira issues. Create one-time, expiri
 
 This project was submitted to **Codegeist 2025: Atlassian Williams Racing Edition** hackathon on Devpost.
 
+🏆 **WINNER — 1st Place**
+
 🔗 **[View on Devpost](https://devpost.com/software/secure-notes-for-jira-coegvb)**
 
 ## 🧠 About the Project
