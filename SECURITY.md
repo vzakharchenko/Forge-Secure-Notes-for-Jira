@@ -17,7 +17,7 @@ We actively support security updates for the latest stable release.
 
 If you believe you have found a security vulnerability in Forge Secure Notes, please report it to us as follows:
 
-1.  **Email:** Send the details to `vaszakharchenko@gmail.com`.
+1.  **Email:** Send the details to `vzakharchenko@trust-logic.net`.
 2.  **Subject:** Please use the subject line: `[SECURITY] Vulnerability Report - Forge Secure Notes`.
 3.  **Content:** Please include:
     - A description of the vulnerability.
