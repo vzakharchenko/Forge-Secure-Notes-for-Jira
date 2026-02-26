@@ -1,7 +1,7 @@
 import { IsInt, IsNotEmpty, Length, Max, Min } from "class-validator";
 
 export class ProjectWithPagination {
-  @Length(3, 255)
+  @Length(1, 255)
   @IsNotEmpty()
   projectId!: string;
 
