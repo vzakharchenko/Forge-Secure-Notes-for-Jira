@@ -11,7 +11,7 @@
     "@forge/realtime": "^0.3.2",
     "@forge/resolver": "1.7.1",
     "@forge/sql": "^3.0.18",
-    "class-validator": "^0.14.3",
+    "class-validator": "^0.15.1",
     "drizzle-orm": "^0.45.1",
     "forge-sql-orm": "^2.1.24",
     "inversify": "^7.11.0",
@@ -38,9 +38,9 @@
   "devDependencies": {
     "@eslint/js": "^9.39.2",
     "@types/luxon": "^3.7.1",
-    "@types/node": "^25.3.0",
-    "@typescript-eslint/eslint-plugin": "^8.56.0",
-    "@typescript-eslint/parser": "^8.56.0",
+    "@types/node": "^25.3.1",
+    "@typescript-eslint/eslint-plugin": "^8.56.1",
+    "@typescript-eslint/parser": "^8.56.1",
     "@vitest/coverage-v8": "^4.0.18",
     "@vitest/ui": "^4.0.18",
     "eslint": "^9.39.2",
@@ -49,7 +49,7 @@
     "eslint-plugin-vitest": "^0.5.4",
     "forge-sql-orm-cli": "^2.1.24",
     "husky": "^9.1.7",
-    "knip": "^5.84.1",
+    "knip": "^5.85.0",
     "prettier": "^3.8.1",
     "reflect-metadata": "^0.2.2",
     "typescript": "^5.9.3",
@@ -59,7 +59,10 @@
     "package-json": "npm:package-json@latest",
     "esbuild": "npm:esbuild@latest",
     "parse-url": "npm:parsed-url@latest",
-    "gry": "npm:gry@latest"
+    "gry": "npm:gry@latest",
+    "rollup": "npm:rollup@4.59.0",
+    "minimatch": "npm:minimatch@latest",
+    "ajv": "npm:ajv@6.14.0"
   },
   "lint-staged": {
     "*.{ts,tsx,css,scss,md}": [
