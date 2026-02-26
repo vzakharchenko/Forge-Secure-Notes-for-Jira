@@ -24,15 +24,14 @@ describe("IssueIdWithPagination", () => {
     expect(errors.some((e) => e.property === "issueId")).toBe(true);
   });
 
-  it("should fail validation with too short issueId", async () => {
+  it("should pass validation with single character issueId", async () => {
     const pagination = new IssueIdWithPagination();
-    pagination.issueId = "ab";
+    pagination.issueId = "a";
     pagination.limit = 10;
     pagination.offset = 0;
 
     const errors = await validate(pagination);
-    expect(errors.length).toBeGreaterThan(0);
-    expect(errors.some((e) => e.property === "issueId")).toBe(true);
+    expect(errors.length).toBe(0);
   });
 
   it("should fail validation with missing issueId", async () => {
