@@ -1,3 +1,11 @@
 {
-  "reject": ["react", "react-dom", "@types/react", "@types/react-dom", "tailwindcss", "vite","@vitejs/plugin-react"]
+  "reject": [
+    "react",
+    "react-dom",
+    "@types/react",
+    "@types/react-dom",
+    "tailwindcss",
+    "vite",
+    "@vitejs/plugin-react"
+  ]
 }
