@@ -1,3 +1,7 @@
 {
-  "reject": ["eslint","@eslint/js"]
+  "reject": [
+    "eslint",
+    "@eslint/js",
+    "inversify"
+  ]
 }

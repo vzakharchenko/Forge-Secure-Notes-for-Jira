@@ -250,9 +250,7 @@ export class SecurityNoteService {
   }
 
   addHours(date: Date, hours: number): Date {
-    const result = new Date(date);
-    result.setHours(result.getHours() + hours);
-    return result;
+    return new Date(date.getTime() + hours * 60 * 60 * 1000);
   }
 
   getExpire(expire: string): Date {
