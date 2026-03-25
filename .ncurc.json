@@ -2,6 +2,7 @@
   "reject": [
     "eslint",
     "@eslint/js",
-    "inversify"
+    "inversify",
+    "typescript"
   ]
 }
