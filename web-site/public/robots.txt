@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://vzakharchenko.github.io/Forge-Secure-Notes-for-Jira/sitemap.xml

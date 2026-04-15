@@ -21,7 +21,7 @@ export const JSMIntegration: React.FC = () => {
           <div>
             <SectionBadge label="🎯 Primary Feature" variant="light" />
 
-            <h2 className="text-5xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-slate-900 via-blue-800 to-indigo-800 bg-clip-text text-transparent">
+            <h2 className="text-5xl md:text-6xl font-bold pb-6 bg-gradient-to-r from-slate-900 via-blue-800 to-indigo-800 bg-clip-text text-transparent">
               Seamless Jira Service Management Portal Integration
             </h2>
 

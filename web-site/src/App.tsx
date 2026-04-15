@@ -1,10 +1,5 @@
-// libs
 import React from "react";
-
-// styles
 import "./App.css";
-
-// components
 import {
   Accomplishments,
   Accordion,
@@ -19,7 +14,6 @@ import {
 } from "./components";
 
 const App = () => {
-  // @ts-ignore
   return (
     <div className="min-h-screen bg-white">
       <Hero />

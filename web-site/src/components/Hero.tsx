@@ -19,7 +19,7 @@ export const Hero: React.FC = () => {
           <div className="mb-8 flex justify-center">
             <div className="w-24 h-24 bg-white/10 backdrop-blur-sm rounded-2xl flex items-center justify-center border border-white/20 shadow-2xl">
               <img
-                src="/app.png"
+                src="./app.png"
                 alt="Secure Notes for Jira Logo"
                 className="w-20 h-20 object-contain"
                 onError={(e) => {

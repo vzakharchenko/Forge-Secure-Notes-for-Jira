@@ -46,6 +46,14 @@ export const Screenshots: React.FC = () => {
 
         {/* Video Section */}
         <div className="mb-20">
+          <div className="text-center mb-8">
+            <h3 className="text-2xl font-bold text-slate-900 mb-3">Full Product Walkthrough</h3>
+            <p className="text-slate-600 max-w-2xl mx-auto">
+              Watch how to create encrypted notes, share encryption keys out-of-band, decrypt
+              content as a recipient, and use the compliance audit dashboard — all within your
+              existing Jira workflow.
+            </p>
+          </div>
           <div className="aspect-video bg-gradient-to-br from-slate-200 to-slate-300 rounded-2xl overflow-hidden shadow-2xl max-w-5xl mx-auto border-4 border-white">
             <iframe
               width="100%"
