@@ -70,6 +70,9 @@
       "eslint --fix"
     ]
   },
+  "override": {
+    "brace-expansion": "npm:brace-expansion@latest"
+  },
   "husky": {
     "hooks": {
       "pre-commit": "cd .husky && ./pre-commit"
