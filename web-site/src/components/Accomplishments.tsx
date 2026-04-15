@@ -1,4 +1,8 @@
+// libs
 import React from "react";
+
+// constants
+import { SNYK_LINK, SONAR_LINK } from "@src/shared/constants";
 
 const accomplishments = [
   {
@@ -38,7 +42,7 @@ const accomplishments = [
   },
 ];
 
-export const Accomplishments: React.FC = () => {
+export const Accomplishments = () => {
   return (
     <section className="py-24 px-4 bg-gradient-to-b from-white to-slate-50">
       <div className="container mx-auto max-w-7xl">
@@ -72,7 +76,7 @@ export const Accomplishments: React.FC = () => {
         <div className="text-center">
           <div className="inline-flex flex-wrap gap-4 justify-center">
             <a
-              href="https://snyk.io/test/github/vzakharchenko/Forge-Secure-Notes-for-Jira"
+              href={SNYK_LINK}
               target="_blank"
               rel="noopener noreferrer"
               className="group px-6 py-3 bg-slate-900 text-white rounded-xl hover:bg-slate-800 transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105 transform font-semibold"
@@ -85,7 +89,7 @@ export const Accomplishments: React.FC = () => {
               </span>
             </a>
             <a
-              href="https://sonarcloud.io/summary/new_code?id=vzakharchenko_Forge-Secure-Notes-for-Jira"
+              href={SONAR_LINK}
               target="_blank"
               rel="noopener noreferrer"
               className="group px-6 py-3 bg-slate-900 text-white rounded-xl hover:bg-slate-800 transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105 transform font-semibold"

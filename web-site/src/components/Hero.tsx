@@ -1,6 +1,10 @@
+// libs
 import React from "react";
 
-export const Hero: React.FC = () => {
+// constants
+import { GITHUB_LINK, MARKETPLACE_LINK } from "@src/shared/constants";
+
+export const Hero = () => {
   return (
     <section className="relative min-h-[90vh] flex items-center justify-center overflow-hidden bg-gradient-to-br from-slate-900 via-blue-900 to-indigo-900">
       {/* Animated background elements */}
@@ -63,7 +67,7 @@ export const Hero: React.FC = () => {
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-12">
             <a
-              href="https://marketplace.atlassian.com"
+              href={MARKETPLACE_LINK}
               target="_blank"
               rel="noopener noreferrer"
               className="group px-8 py-4 bg-white text-blue-900 font-semibold rounded-xl hover:bg-blue-50 transition-all duration-300 shadow-2xl hover:shadow-blue-500/50 hover:scale-105 transform"
@@ -76,7 +80,7 @@ export const Hero: React.FC = () => {
               </span>
             </a>
             <a
-              href="https://github.com/vzakharchenko/Forge-Secure-Notes-for-Jira"
+              href={GITHUB_LINK}
               target="_blank"
               rel="noopener noreferrer"
               className="px-8 py-4 bg-transparent text-white font-semibold rounded-xl hover:bg-white/10 transition-all duration-300 border-2 border-white/30 hover:border-white/60 backdrop-blur-sm"

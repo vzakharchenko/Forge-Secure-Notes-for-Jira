@@ -1,6 +1,10 @@
+// libs
 import React from "react";
 
-export const CallToAction: React.FC = () => {
+// constants
+import { GITHUB_LINK, MARKETPLACE_LINK } from "@src/shared/constants";
+
+export const CallToAction = () => {
   return (
     <section className="py-24 px-4 relative bg-gradient-to-br from-blue-600 via-indigo-600 to-purple-600 text-white overflow-hidden">
       {/* Background pattern */}
@@ -35,7 +39,7 @@ export const CallToAction: React.FC = () => {
 
         <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-12">
           <a
-            href="https://marketplace.atlassian.com"
+            href={MARKETPLACE_LINK}
             target="_blank"
             rel="noopener noreferrer"
             className="group px-10 py-5 bg-white text-blue-600 font-bold rounded-xl hover:bg-blue-50 transition-all duration-300 shadow-2xl hover:shadow-white/50 hover:scale-105 transform text-lg"
@@ -48,7 +52,7 @@ export const CallToAction: React.FC = () => {
             </span>
           </a>
           <a
-            href="https://github.com/vzakharchenko/Forge-Secure-Notes-for-Jira"
+            href={GITHUB_LINK}
             target="_blank"
             rel="noopener noreferrer"
             className="px-10 py-5 bg-transparent text-white font-bold rounded-xl hover:bg-white/10 transition-all duration-300 border-2 border-white/40 hover:border-white backdrop-blur-sm text-lg"

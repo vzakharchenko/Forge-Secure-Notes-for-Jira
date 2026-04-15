@@ -1,6 +1,16 @@
+// libs
 import React from "react";
 
-export const Footer: React.FC = () => {
+// constants
+import {
+  DEVPOST_LINK,
+  GITHUB_LINK,
+  MARKETPLACE_LINK,
+  PRIVACY_POLICY_LINK,
+  TERMS_OF_USE_LINK,
+} from "@src/shared/constants";
+
+export const Footer = () => {
   return (
     <footer className="bg-slate-900 text-slate-300 py-16 px-4">
       <div className="container mx-auto max-w-7xl">
@@ -17,33 +27,7 @@ export const Footer: React.FC = () => {
             <ul className="space-y-3">
               <li>
                 <a
-                  href="https://github.com/vzakharchenko/Forge-Secure-Notes-for-Jira"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="hover:text-blue-400 transition-colors flex items-center gap-2 group"
-                >
-                  <span>GitHub Repository</span>
-                  <span className="text-sm group-hover:translate-x-1 transition-transform inline-block">
-                    ↗
-                  </span>
-                </a>
-              </li>
-              <li>
-                <a
-                  href="https://devpost.com/software/secure-notes-for-jira-coegvb"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="hover:text-blue-400 transition-colors flex items-center gap-2 group"
-                >
-                  <span>Devpost Submission</span>
-                  <span className="text-sm group-hover:translate-x-1 transition-transform inline-block">
-                    ↗
-                  </span>
-                </a>
-              </li>
-              <li>
-                <a
-                  href="https://marketplace.atlassian.com"
+                  href={MARKETPLACE_LINK}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="hover:text-blue-400 transition-colors flex items-center gap-2 group"
@@ -56,7 +40,33 @@ export const Footer: React.FC = () => {
               </li>
               <li>
                 <a
-                  href="https://github.com/vzakharchenko/Forge-Secure-Notes-for-Jira/blob/master/PRIVACY.md"
+                  href={GITHUB_LINK}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="hover:text-blue-400 transition-colors flex items-center gap-2 group"
+                >
+                  <span>GitHub Repository</span>
+                  <span className="text-sm group-hover:translate-x-1 transition-transform inline-block">
+                    ↗
+                  </span>
+                </a>
+              </li>
+              <li>
+                <a
+                  href={DEVPOST_LINK}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="hover:text-blue-400 transition-colors flex items-center gap-2 group"
+                >
+                  <span>Devpost Submission</span>
+                  <span className="text-sm group-hover:translate-x-1 transition-transform inline-block">
+                    ↗
+                  </span>
+                </a>
+              </li>
+              <li>
+                <a
+                  href={PRIVACY_POLICY_LINK}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="hover:text-blue-400 transition-colors flex items-center gap-2 group"
@@ -69,7 +79,7 @@ export const Footer: React.FC = () => {
               </li>
               <li>
                 <a
-                  href="https://github.com/vzakharchenko/Forge-Secure-Notes-for-Jira/blob/master/TERMS.md"
+                  href={TERMS_OF_USE_LINK}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="hover:text-blue-400 transition-colors flex items-center gap-2 group"
