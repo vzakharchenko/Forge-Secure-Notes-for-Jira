@@ -1,4 +1,5 @@
 import React from "react";
+import { SectionBadge } from "@src/shared/components/SectionBadge";
 
 export const JSMIntegration: React.FC = () => {
   return (
@@ -8,7 +9,7 @@ export const JSMIntegration: React.FC = () => {
         <div
           className="absolute inset-0"
           style={{
-            backgroundImage: `radial-gradient(circle at 2px 2px, blue 1px, transparent 0)`,
+            backgroundImage: `radial-gradient(circle at 2px 2px, white 1px, transparent 0)`,
             backgroundSize: "40px 40px",
           }}
         ></div>
@@ -18,9 +19,7 @@ export const JSMIntegration: React.FC = () => {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           {/* Left side - Content */}
           <div>
-            <div className="inline-block mb-6 px-4 py-2 bg-blue-500/20 backdrop-blur-sm border border-blue-400/30 rounded-full">
-              <span className="text-blue-700 text-sm font-medium">🎯 Primary Feature</span>
-            </div>
+            <SectionBadge label="🎯 Primary Feature" variant="light" />
 
             <h2 className="text-5xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-slate-900 via-blue-800 to-indigo-800 bg-clip-text text-transparent">
               Seamless Jira Service Management Portal Integration
@@ -34,7 +33,7 @@ export const JSMIntegration: React.FC = () => {
 
             <div className="space-y-6 mb-8">
               <div className="flex items-start gap-4">
-                <div className="flex-shrink-0 w-12 h-12 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-xl flex items-center justify-center text-2xl shadow-lg">
+                <div className="flex-shrink-0 w-16 h-16 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-xl flex items-center justify-center text-3xl shadow-lg">
                   ✨
                 </div>
                 <div>
@@ -50,7 +49,7 @@ export const JSMIntegration: React.FC = () => {
               </div>
 
               <div className="flex items-start gap-4">
-                <div className="flex-shrink-0 w-12 h-12 bg-gradient-to-br from-purple-500 to-pink-600 rounded-xl flex items-center justify-center text-2xl shadow-lg">
+                <div className="flex-shrink-0 w-16 h-16 bg-gradient-to-br from-purple-500 to-pink-600 rounded-xl flex items-center justify-center text-3xl shadow-lg">
                   🔄
                 </div>
                 <div>
@@ -64,7 +63,7 @@ export const JSMIntegration: React.FC = () => {
               </div>
 
               <div className="flex items-start gap-4">
-                <div className="flex-shrink-0 w-12 h-12 bg-gradient-to-br from-green-500 to-emerald-600 rounded-xl flex items-center justify-center text-2xl shadow-lg">
+                <div className="flex-shrink-0 w-16 h-16 bg-gradient-to-br from-green-500 to-emerald-600 rounded-xl flex items-center justify-center text-3xl shadow-lg">
                   🛡️
                 </div>
                 <div>
@@ -113,25 +112,25 @@ export const JSMIntegration: React.FC = () => {
 
         {/* Use cases section */}
         <div className="mt-16 grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div className="bg-white p-6 rounded-xl border border-slate-200 shadow-lg hover:shadow-xl transition-shadow">
+          <div className="bg-white p-6 rounded-xl border border-slate-200 shadow-lg hover:shadow-xl transition-all duration-300">
             <div className="text-3xl mb-4">💬</div>
-            <h4 className="text-lg font-bold mb-2 text-slate-900">Customer Support</h4>
+            <h3 className="text-lg font-bold mb-2 text-slate-900">Customer Support</h3>
             <p className="text-slate-600 text-sm">
               Agents can securely share temporary passwords, access codes, or sensitive information
               with customers through portal requests.
             </p>
           </div>
-          <div className="bg-white p-6 rounded-xl border border-slate-200 shadow-lg hover:shadow-xl transition-shadow">
+          <div className="bg-white p-6 rounded-xl border border-slate-200 shadow-lg hover:shadow-xl transition-all duration-300">
             <div className="text-3xl mb-4">🤝</div>
-            <h4 className="text-lg font-bold mb-2 text-slate-900">Internal Communication</h4>
+            <h3 className="text-lg font-bold mb-2 text-slate-900">Internal Communication</h3>
             <p className="text-slate-600 text-sm">
               Team members can exchange confidential information related to customer requests
               without exposing it in public comments.
             </p>
           </div>
-          <div className="bg-white p-6 rounded-xl border border-slate-200 shadow-lg hover:shadow-xl transition-shadow">
+          <div className="bg-white p-6 rounded-xl border border-slate-200 shadow-lg hover:shadow-xl transition-all duration-300">
             <div className="text-3xl mb-4">📋</div>
-            <h4 className="text-lg font-bold mb-2 text-slate-900">Secure Documentation</h4>
+            <h3 className="text-lg font-bold mb-2 text-slate-900">Secure Documentation</h3>
             <p className="text-slate-600 text-sm">
               Store sensitive details about customer requests that shouldn't be visible in public
               ticket comments or descriptions.

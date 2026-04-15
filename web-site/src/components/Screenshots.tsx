@@ -52,8 +52,7 @@ export const Screenshots: React.FC = () => {
               height="100%"
               src="https://www.youtube.com/embed/1FOlNEBFGfY"
               title="Secure Notes for Jira Demo"
-              frameBorder="0"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
               allowFullScreen
               className="w-full h-full"
             ></iframe>
@@ -81,7 +80,7 @@ export const Screenshots: React.FC = () => {
                   <div className="text-center">
                     <div className="text-6xl mb-4">📸</div>
                     <div className="text-lg font-semibold text-slate-700">{screenshot.title}</div>
-                    <div className="text-sm mt-2 text-slate-400">Placeholder</div>
+                    <div className="text-sm mt-2 text-slate-400">Placeholder Image</div>
                   </div>
                 </div>
               </div>

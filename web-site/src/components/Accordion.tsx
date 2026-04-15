@@ -66,7 +66,7 @@ export const Accordion: React.FC = () => {
 
   return (
     <section className="py-24 px-4 bg-gradient-to-b from-white to-slate-50">
-      <div className="container mx-auto max-w-6xl">
+      <div className="container mx-auto max-w-7xl">
         <div className="text-center mb-16">
           <h2 className="text-5xl md:text-6xl font-bold mb-4 bg-gradient-to-r from-slate-900 to-slate-700 bg-clip-text text-transparent">
             Features in Detail

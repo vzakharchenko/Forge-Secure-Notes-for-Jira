@@ -1,7 +1,4 @@
-// libs
 import React from "react";
-
-// constants
 import {
   DEVPOST_LINK,
   GITHUB_LINK,
@@ -10,7 +7,7 @@ import {
   TERMS_OF_USE_LINK,
 } from "@src/shared/constants";
 
-export const Footer = () => {
+export const Footer: React.FC = () => {
   return (
     <footer className="bg-slate-900 text-slate-300 py-16 px-4">
       <div className="container mx-auto max-w-7xl">

@@ -1,7 +1,4 @@
-// libs
 import React from "react";
-
-// constants
 import { SNYK_LINK, SONAR_LINK } from "@src/shared/constants";
 
 const accomplishments = [
@@ -42,9 +39,9 @@ const accomplishments = [
   },
 ];
 
-export const Accomplishments = () => {
+export const Accomplishments: React.FC = () => {
   return (
-    <section className="py-24 px-4 bg-gradient-to-b from-white to-slate-50">
+    <section className="py-24 px-4 bg-gradient-to-b from-slate-50 to-white">
       <div className="container mx-auto max-w-7xl">
         <div className="text-center mb-16">
           <h2 className="text-5xl md:text-6xl font-bold mb-4 bg-gradient-to-r from-slate-900 to-slate-700 bg-clip-text text-transparent">
