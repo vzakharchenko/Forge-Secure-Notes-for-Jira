@@ -4,7 +4,10 @@ import { JSM_PORTAL_INTEGRATION_YOUTUBE_LINK } from "@src/shared/constants";
 
 export const JSMIntegration: React.FC = () => {
   return (
-    <section className="py-24 px-4 bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 relative overflow-hidden">
+    <section
+      id="jsm-portal"
+      className="scroll-mt-28 py-24 px-4 bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 relative overflow-hidden"
+    >
       {/* Background decoration */}
       <div className="absolute inset-0 opacity-5">
         <div
@@ -20,7 +23,7 @@ export const JSMIntegration: React.FC = () => {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           {/* Left side - Content */}
           <div>
-            <SectionBadge label="🎯 Primary Feature" variant="light" />
+            <SectionBadge label="🎯 Primary Feature" variant="light" className="mb-6" />
 
             <h2 className="text-5xl md:text-6xl font-bold pb-6 bg-gradient-to-r from-slate-900 via-blue-800 to-indigo-800 bg-clip-text text-transparent">
               Seamless Jira Service Management Portal Integration

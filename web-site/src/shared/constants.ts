@@ -19,3 +19,14 @@ export const SONAR_LINK =
 export const PRODUCT_DEMO_YOUTUBE_LINK = "https://www.youtube.com/embed/1FOlNEBFGfY";
 
 export const JSM_PORTAL_INTEGRATION_YOUTUBE_LINK = "https://www.youtube.com/embed/WbE65Iwv-hE";
+
+export const SUPPORT_EMAIL = "vzakharchenko@trust-logic.net";
+
+export const NAV_LINKS = [
+  { label: "Features", href: "#features" },
+  { label: "JSM Portal", href: "#jsm-portal" },
+  { label: "Security", href: "#security" },
+  { label: "Demo", href: "#demo" },
+  { label: "How It Works", href: "#how-it-works" },
+  { label: "Quality", href: "#quality" },
+];

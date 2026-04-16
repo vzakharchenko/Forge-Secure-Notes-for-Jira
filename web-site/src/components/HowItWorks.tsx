@@ -73,10 +73,13 @@ export const HowItWorks: React.FC = () => {
   const activeStep = steps.find((s) => s.id === openId);
 
   return (
-    <section className="py-24 px-4 bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50">
+    <section
+      id="how-it-works"
+      className="scroll-mt-28 py-24 px-4 bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50"
+    >
       <div className="container mx-auto max-w-7xl">
         <div className="text-center mb-16">
-          <h2 className="text-5xl md:text-6xl font-bold mb-4 bg-gradient-to-r from-slate-900 to-slate-700 bg-clip-text text-transparent">
+          <h2 className="text-5xl md:text-6xl font-bold mb-4 pb-1 bg-gradient-to-r from-slate-900 to-slate-700 bg-clip-text text-transparent">
             How It Works
           </h2>
           <p className="text-xl text-slate-600 max-w-2xl mx-auto">

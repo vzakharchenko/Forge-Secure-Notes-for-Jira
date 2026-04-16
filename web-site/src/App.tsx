@@ -5,6 +5,7 @@ import {
   CodeQuality,
   Features,
   Footer,
+  Header,
   Hero,
   HowItWorks,
   JSMIntegration,
@@ -15,14 +16,17 @@ import {
 const App = () => {
   return (
     <div className="min-h-screen bg-white">
-      <Hero />
-      <JSMIntegration />
-      <Features />
-      <SecurityModel />
-      <ProductDemo />
-      <HowItWorks />
-      <CodeQuality />
-      <CallToAction />
+      <Header />
+      <main>
+        <Hero />
+        <Features />
+        <JSMIntegration />
+        <SecurityModel />
+        <ProductDemo />
+        <HowItWorks />
+        <CodeQuality />
+        <CallToAction />
+      </main>
       <Footer />
     </div>
   );

@@ -61,10 +61,13 @@ const features = [
 
 export const Features: React.FC = () => {
   return (
-    <section className="py-24 px-4 bg-gradient-to-b from-white to-slate-50">
+    <section
+      id="features"
+      className="scroll-mt-28 py-24 px-4 bg-gradient-to-b from-white to-slate-50"
+    >
       <div className="container mx-auto max-w-7xl">
         <div className="text-center mb-16">
-          <h2 className="text-5xl md:text-6xl font-bold mb-4 bg-gradient-to-r from-slate-900 to-slate-700 bg-clip-text text-transparent">
+          <h2 className="text-5xl md:text-6xl font-bold mb-4 pb-1 bg-gradient-to-r from-slate-900 to-slate-700 bg-clip-text text-transparent">
             Powerful Features
           </h2>
           <p className="text-xl text-slate-600 max-w-2xl mx-auto">

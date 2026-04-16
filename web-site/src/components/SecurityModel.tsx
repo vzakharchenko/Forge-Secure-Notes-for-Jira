@@ -37,7 +37,10 @@ const securityFeatures = [
 
 export const SecurityModel: React.FC = () => {
   return (
-    <section className="py-24 px-4 relative bg-gradient-to-br from-slate-900 via-blue-900 to-indigo-900 text-white overflow-hidden">
+    <section
+      id="security"
+      className="scroll-mt-28 py-24 px-4 relative bg-gradient-to-br from-slate-900 via-blue-900 to-indigo-900 text-white overflow-hidden"
+    >
       {/* Background pattern */}
       <div className="absolute inset-0 opacity-10">
         <div
@@ -51,9 +54,9 @@ export const SecurityModel: React.FC = () => {
 
       <div className="container mx-auto max-w-7xl relative z-10">
         <div className="text-center mb-16">
-          <SectionBadge label="🔒 Security First" />
+          <SectionBadge label="🔒 Security First" className="mb-6" />
           <h2 className="text-5xl md:text-6xl font-bold mb-4">
-            <span className="bg-gradient-to-r from-white to-blue-200 bg-clip-text text-transparent">
+            <span className="block pb-1 bg-gradient-to-r from-white to-blue-200 bg-clip-text text-transparent">
               Three-Layer Security Model
             </span>
           </h2>

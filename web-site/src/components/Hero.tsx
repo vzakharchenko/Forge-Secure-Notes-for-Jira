@@ -5,7 +5,7 @@ import { SectionBadge } from "@src/shared/components/SectionBadge";
 
 export const Hero: React.FC = () => {
   return (
-    <section className="relative min-h-[90vh] flex items-center justify-center overflow-hidden bg-gradient-to-br from-slate-900 via-blue-900 to-indigo-900">
+    <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-to-br from-slate-900 via-blue-900 to-indigo-900">
       {/* Animated background elements */}
       <div className="absolute inset-0 overflow-hidden">
         <div className="absolute -top-40 -right-40 w-80 h-80 bg-blue-500 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-blob"></div>
@@ -14,52 +14,41 @@ export const Hero: React.FC = () => {
       </div>
 
       <div className="container mx-auto max-w-7xl px-4 relative z-10">
-        <div className="text-center">
-          {/* Logo */}
-          <div className="mb-8 flex justify-center">
-            <div className="w-24 h-24 bg-white/10 backdrop-blur-sm rounded-2xl flex items-center justify-center border border-white/20 shadow-2xl">
-              <img
-                src="./app.png"
-                alt="Secure Notes for Jira Logo"
-                className="w-20 h-20 object-contain"
-                onError={(e) => {
-                  const target = e.target as HTMLImageElement;
-                  target.style.display = "none";
-                  const parent = target.parentElement;
-                  if (parent) {
-                    parent.innerHTML = `
-                      <div class="text-5xl">🔐</div>
-                    `;
-                  }
-                }}
-              />
+        <div className="text-center pt-8">
+          {/* Logo with frosted glass + glow */}
+          <div className="flex justify-center mb-8">
+            <div className="relative">
+              <div className="w-36 h-36 md:w-44 md:h-44 bg-white/10 backdrop-blur-sm rounded-3xl flex items-center justify-center border border-white/20 shadow-2xl">
+                <img
+                  src="./app.png"
+                  alt="Secure Notes for Jira"
+                  className="w-28 h-28 md:w-36 md:h-36 object-contain"
+                  onError={(e) => {
+                    (e.target as HTMLImageElement).style.display = "none";
+                  }}
+                />
+              </div>
+              <div className="absolute -inset-4 bg-gradient-to-r from-blue-400 via-indigo-400 to-purple-400 rounded-3xl blur-2xl opacity-25 -z-10"></div>
             </div>
           </div>
 
-          <SectionBadge label="🔒 Zero-Trust Security" />
-
-          <h1 className="text-6xl md:text-7xl lg:text-8xl font-extrabold mb-6 leading-tight">
-            <span className="bg-gradient-to-r from-white via-blue-100 to-indigo-200 bg-clip-text text-transparent">
+          <h1 className="mb-6 leading-tight">
+            <span className="block pb-1 text-5xl md:text-6xl lg:text-7xl font-extrabold bg-gradient-to-r from-white via-blue-100 to-indigo-200 bg-clip-text text-transparent">
               Secure Notes
             </span>
-            <br />
-            <span className="bg-gradient-to-r from-blue-300 via-indigo-300 to-purple-300 bg-clip-text text-transparent">
+            <span className="block pb-1 text-5xl md:text-6xl lg:text-7xl font-extrabold bg-gradient-to-r from-blue-300 via-indigo-300 to-purple-300 bg-clip-text text-transparent">
               for Jira
             </span>
           </h1>
 
-          <p className="text-xl md:text-2xl mb-12 text-blue-100 max-w-3xl mx-auto leading-relaxed font-light">
+          <SectionBadge label="🔒 Zero-Trust Security" className="mb-6" />
+
+          <p className="text-lg md:text-xl text-blue-100 max-w-2xl mx-auto leading-relaxed font-light">
             Share sensitive information securely within Jira issues and JSM portals.{/* */}
+          </p>
+          <p className="text-lg md:text-xl mb-12 text-blue-100 max-w-2xl mx-auto leading-relaxed font-light">
             <span className="text-white font-medium"> Zero-trust encryption</span> with{/* */}
-            <span className="text-white font-medium"> burn-after-reading</span> protection.{/* */}
-            <br />
-            <span className="text-lg text-blue-200 mt-2 block">
-              ✨{" "}
-              <span className="text-white font-medium">
-                Fully integrated with Jira Service Management portals
-              </span>{" "}
-              — seamless experience for customers and agents
-            </span>
+            <span className="text-white font-medium"> burn-after-reading</span> protection.
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-12">

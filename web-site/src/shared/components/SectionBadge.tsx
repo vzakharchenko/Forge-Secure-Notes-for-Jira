@@ -2,6 +2,7 @@ import React from "react";
 
 interface SectionBadgeProps {
   label: string;
+  className?: string;
   variant?: "dark" | "light" | "cta";
 }
 
@@ -11,9 +12,13 @@ const variantClasses: Record<NonNullable<SectionBadgeProps["variant"]>, string> 
   cta: "bg-white/20 border-white/30 text-white",
 };
 
-export const SectionBadge: React.FC<SectionBadgeProps> = ({ label, variant = "dark" }) => (
+export const SectionBadge: React.FC<SectionBadgeProps> = ({
+  label,
+  className = "",
+  variant = "dark",
+}) => (
   <div
-    className={`inline-block mb-6 px-4 py-2 backdrop-blur-sm border rounded-full ${variantClasses[variant]}`}
+    className={`inline-block px-4 py-2 backdrop-blur-sm border rounded-full ${className} ${variantClasses[variant]}`}
   >
     <span className="text-sm font-medium">{label}</span>
   </div>

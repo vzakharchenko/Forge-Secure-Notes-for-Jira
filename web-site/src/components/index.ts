@@ -1,3 +1,4 @@
+export { Header } from "./Header";
 export { Hero } from "./Hero";
 export { JSMIntegration } from "./JSMIntegration";
 export { Features } from "./Features";

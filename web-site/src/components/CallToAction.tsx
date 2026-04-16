@@ -18,11 +18,11 @@ export const CallToAction: React.FC = () => {
       </div>
 
       <div className="container mx-auto max-w-7xl text-center relative z-10">
-        <SectionBadge label="🚀 Ready to Get Started?" variant="cta" />
+        <SectionBadge label="🚀 Ready to Get Started?" variant="cta" className="mb-6" />
 
         <h2 className="text-4xl md:text-5xl lg:text-6xl font-extrabold mb-4 leading-tight">
           <span className="block">Ready to Secure Your</span>
-          <span className="block bg-gradient-to-r from-yellow-200 to-white bg-clip-text text-transparent">
+          <span className="block pb-1 bg-gradient-to-r from-yellow-200 to-white bg-clip-text text-transparent">
             Jira Communication?
           </span>
         </h2>
@@ -65,7 +65,7 @@ export const CallToAction: React.FC = () => {
           </div>
           <div className="flex items-center gap-2">
             <CheckIcon />
-            <span>Built for Codegeist 2025</span>
+            <span>Won Atlassian Codegeist 2025</span>
           </div>
         </div>
       </div>
