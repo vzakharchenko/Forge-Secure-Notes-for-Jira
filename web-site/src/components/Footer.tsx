@@ -20,7 +20,7 @@ export const Footer: React.FC = () => {
   return (
     <footer className="bg-slate-900 text-slate-300 py-16 px-4">
       <div className="container mx-auto max-w-7xl">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-12 mb-12">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12 mb-8 md:mb-12">
           {/* Brand */}
           <div className="md:flex md:justify-center">
             <div>

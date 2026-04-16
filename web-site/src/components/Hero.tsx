@@ -14,15 +14,15 @@ export const Hero: React.FC = () => {
       </div>
 
       <div className="container mx-auto max-w-7xl px-4 relative z-10">
-        <div className="text-center pt-8">
+        <div className="text-center pt-32 sm:pt-28 pb-10 sm:pb-12">
           {/* Logo with frosted glass + glow */}
           <div className="flex justify-center mb-8">
             <div className="relative">
-              <div className="w-36 h-36 md:w-44 md:h-44 bg-white/10 backdrop-blur-sm rounded-3xl flex items-center justify-center border border-white/20 shadow-2xl">
+              <div className="w-24 h-24 sm:w-36 sm:h-36 md:w-44 md:h-44 bg-white/10 backdrop-blur-sm rounded-3xl flex items-center justify-center border border-white/20 shadow-2xl">
                 <img
                   src="./app.png"
                   alt="Secure Notes for Jira"
-                  className="w-28 h-28 md:w-36 md:h-36 object-contain"
+                  className="w-20 h-20 sm:w-28 sm:h-28 md:w-36 md:h-36 object-contain"
                   onError={(e) => {
                     (e.target as HTMLImageElement).style.display = "none";
                   }}
@@ -33,10 +33,10 @@ export const Hero: React.FC = () => {
           </div>
 
           <h1 className="mb-6 leading-tight">
-            <span className="block pb-1 text-4xl md:text-6xl lg:text-7xl font-extrabold bg-gradient-to-r from-white via-blue-100 to-indigo-200 bg-clip-text text-transparent">
+            <span className="block pb-1 text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-extrabold bg-gradient-to-r from-white via-blue-100 to-indigo-200 bg-clip-text text-transparent">
               Secure Notes
             </span>
-            <span className="block pb-1 text-4xl md:text-6xl lg:text-7xl font-extrabold bg-gradient-to-r from-blue-300 via-indigo-300 to-purple-300 bg-clip-text text-transparent">
+            <span className="block pb-1 text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-extrabold bg-gradient-to-r from-blue-300 via-indigo-300 to-purple-300 bg-clip-text text-transparent">
               for Jira
             </span>
           </h1>
@@ -46,12 +46,12 @@ export const Hero: React.FC = () => {
           <p className="text-lg md:text-xl text-blue-100 max-w-2xl mx-auto leading-relaxed font-light">
             Share sensitive information securely within Jira issues and JSM portals.{/* */}
           </p>
-          <p className="text-lg md:text-xl mb-12 text-blue-100 max-w-2xl mx-auto leading-relaxed font-light">
+          <p className="text-lg md:text-xl mb-8 md:mb-12 text-blue-100 max-w-2xl mx-auto leading-relaxed font-light">
             <span className="text-white font-medium"> Zero-trust encryption</span> with{/* */}
             <span className="text-white font-medium"> burn-after-reading</span> protection.
           </p>
 
-          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-12">
+          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-8 md:mb-12">
             <a
               href={MARKETPLACE_LINK}
               target="_blank"

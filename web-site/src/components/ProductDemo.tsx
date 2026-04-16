@@ -8,7 +8,7 @@ export const ProductDemo: React.FC = () => {
       className="scroll-mt-28 py-12 md:py-24 px-4 sm:px-6 bg-gradient-to-b from-slate-50 to-white"
     >
       <div className="container mx-auto max-w-7xl">
-        <div className="text-center mb-16">
+        <div className="text-center mb-10 md:mb-16">
           <h2 className="text-3xl md:text-5xl lg:text-6xl font-bold mb-4 pb-1 bg-gradient-to-r from-slate-900 to-slate-700 bg-clip-text text-transparent">
             See It In Action
           </h2>

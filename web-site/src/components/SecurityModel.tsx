@@ -53,7 +53,7 @@ export const SecurityModel: React.FC = () => {
       </div>
 
       <div className="container mx-auto max-w-7xl relative z-10">
-        <div className="text-center mb-16">
+        <div className="text-center mb-10 md:mb-16">
           <SectionBadge label="🔒 Security First" variant="cta" className="mb-6" />
           <h2 className="text-3xl md:text-5xl lg:text-6xl font-bold mb-4">
             <span className="block pb-1 bg-gradient-to-r from-white to-blue-200 bg-clip-text text-transparent">
@@ -66,15 +66,15 @@ export const SecurityModel: React.FC = () => {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-16">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-10 md:mb-16">
           {securityFeatures.map((feature) => (
             <div
               key={feature.id}
-              className="group relative bg-white/5 backdrop-blur-sm p-8 rounded-2xl border border-white/10 hover:border-white/30 transition-all duration-300 hover:bg-white/5"
+              className="group relative bg-white/5 backdrop-blur-sm p-6 sm:p-8 rounded-2xl border border-white/10 hover:border-white/30 transition-all duration-300 hover:bg-white/5"
             >
-              <div className="flex items-start gap-6">
+              <div className="flex flex-col sm:flex-row items-start gap-6">
                 <div className="flex-shrink-0">
-                  <div className="w-16 h-16 rounded-xl bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center text-3xl shadow-lg group-hover:scale-110 transition-transform duration-300">
+                  <div className="w-12 h-12 sm:w-16 sm:h-16 rounded-xl bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center text-2xl sm:text-3xl shadow-lg group-hover:scale-110 transition-transform duration-300">
                     {feature.icon}
                   </div>
                 </div>
@@ -94,7 +94,7 @@ export const SecurityModel: React.FC = () => {
 
         <div className="space-y-6">
           <div className="text-center">
-            <div className="inline-flex items-center gap-3 bg-gradient-to-r from-blue-600 to-indigo-600 px-8 py-4 rounded-xl shadow-2xl border border-blue-400/30">
+            <div className="inline-flex items-center gap-3 bg-gradient-to-r from-blue-600 to-indigo-600 px-4 sm:px-8 py-4 rounded-xl shadow-2xl border border-blue-400/30">
               <svg className="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20">
                 <path
                   fillRule="evenodd"
@@ -110,7 +110,7 @@ export const SecurityModel: React.FC = () => {
           </div>
 
           <div className="text-center">
-            <div className="inline-block max-w-4xl bg-white/10 backdrop-blur-sm p-8 rounded-2xl border border-white/20 shadow-xl">
+            <div className="block mx-auto max-w-4xl bg-white/10 backdrop-blur-sm p-5 sm:p-8 rounded-2xl border border-white/20 shadow-xl">
               <h3 className="text-xl md:text-2xl font-bold mb-4 text-white">
                 🔐 Double Protection: Out-of-Band Key + Authorization
               </h3>

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 interface Step {
   id: string;
@@ -13,7 +13,7 @@ interface Step {
 const steps: Step[] = [
   {
     id: "1",
-    number: "01",
+    number: "1",
     icon: "📝",
     title: "Create Secure Note",
     description:
@@ -23,7 +23,7 @@ const steps: Step[] = [
   },
   {
     id: "2",
-    number: "02",
+    number: "2",
     icon: "🔑",
     title: "Copy & Share Decryption Key",
     description:
@@ -33,7 +33,7 @@ const steps: Step[] = [
   },
   {
     id: "3",
-    number: "03",
+    number: "3",
     icon: "📧",
     title: "Decrypt the Note",
     description:
@@ -43,7 +43,7 @@ const steps: Step[] = [
   },
   {
     id: "4",
-    number: "04",
+    number: "4",
     icon: "👁️",
     title: "View Decrypted Note",
     description:
@@ -53,7 +53,7 @@ const steps: Step[] = [
   },
   {
     id: "5",
-    number: "05",
+    number: "5",
     icon: "📊",
     title: "Track & Audit",
     description:
@@ -65,6 +65,13 @@ const steps: Step[] = [
 
 export const HowItWorks: React.FC = () => {
   const [openId, setOpenId] = useState<string>(steps[0].id);
+
+  useEffect(() => {
+    steps.forEach((step) => {
+      const img = new Image();
+      img.src = step.image;
+    });
+  }, []);
 
   const toggle = (id: string) => {
     setOpenId((prev) => (prev === id ? "" : id));
@@ -78,7 +85,7 @@ export const HowItWorks: React.FC = () => {
       className="scroll-mt-28 py-12 md:py-24 px-4 sm:px-6 bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50"
     >
       <div className="container mx-auto max-w-7xl">
-        <div className="text-center mb-16">
+        <div className="text-center mb-10 md:mb-16">
           <h2 className="text-3xl md:text-5xl lg:text-6xl font-bold mb-4 pb-1 bg-gradient-to-r from-slate-900 to-slate-700 bg-clip-text text-transparent">
             How It Works
           </h2>
@@ -99,19 +106,18 @@ export const HowItWorks: React.FC = () => {
                 >
                   <button
                     onClick={() => toggle(step.id)}
-                    className="w-full px-6 py-5 text-left flex items-start gap-4 group hover:bg-slate-50 transition-colors"
+                    className="w-full px-6 py-5 text-left flex items-start lg:items-center gap-4 group hover:bg-slate-50 transition-colors"
                     aria-expanded={isOpen}
                   >
                     {/* Step number badge */}
                     <div
-                      className={`flex-shrink-0 w-12 h-12 rounded-xl flex flex-col items-center justify-center text-xs font-bold transition-all duration-300 ${
+                      className={`flex-shrink-0 w-12 h-12 sm:w-16 sm:h-16 rounded-xl flex items-center justify-center font-bold transition-all duration-300 ${
                         isOpen
                           ? "bg-gradient-to-br from-blue-500 to-indigo-600 text-white shadow-lg"
                           : "bg-slate-100 text-slate-500 group-hover:bg-blue-50 group-hover:text-blue-600"
                       }`}
                     >
-                      <span className="text-base leading-none">{step.icon}</span>
-                      <span className="mt-0.5">{step.number}</span>
+                      <span className="text-xl sm:text-2xl">{step.number}</span>
                     </div>
 
                     <div className="flex-1 min-w-0">
@@ -123,7 +129,7 @@ export const HowItWorks: React.FC = () => {
                         {step.title}
                       </h3>
                       {isOpen && (
-                        <p className="text-sm text-slate-600 mt-2 leading-relaxed">
+                        <p className="text-sm text-slate-600 mt-2 leading-relaxed lg:hidden">
                           {step.description}
                         </p>
                       )}

@@ -82,7 +82,7 @@ export const Features: React.FC = () => {
       className="scroll-mt-28 py-12 md:py-24 px-4 sm:px-6 bg-gradient-to-b from-white to-slate-50"
     >
       <div className="container mx-auto max-w-7xl">
-        <div className="text-center mb-16">
+        <div className="text-center mb-10 md:mb-16">
           <h2 className="text-3xl md:text-5xl lg:text-6xl font-bold mb-4 pb-1 bg-gradient-to-r from-slate-900 to-slate-700 bg-clip-text text-transparent">
             Powerful Features
           </h2>
@@ -95,7 +95,7 @@ export const Features: React.FC = () => {
           {features.map((feature) => (
             <div
               key={feature.id}
-              className="group relative bg-white p-8 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 border border-slate-100 hover:border-transparent overflow-hidden"
+              className="group relative bg-white p-6 sm:p-8 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 border border-slate-100 hover:border-transparent overflow-hidden"
             >
               {/* Gradient background on hover */}
               <div
@@ -105,7 +105,7 @@ export const Features: React.FC = () => {
               {/* Icon */}
               <div className="relative mb-6">
                 <div
-                  className={`inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-br ${feature.gradient} text-3xl shadow-lg transform group-hover:scale-110 transition-transform duration-300`}
+                  className={`inline-flex items-center justify-center w-12 h-12 sm:w-16 sm:h-16 rounded-xl bg-gradient-to-br ${feature.gradient} text-2xl sm:text-3xl shadow-lg transform group-hover:scale-110 transition-transform duration-300`}
                 >
                   {feature.icon}
                 </div>

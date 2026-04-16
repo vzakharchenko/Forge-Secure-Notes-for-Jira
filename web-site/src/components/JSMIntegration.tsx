@@ -21,7 +21,7 @@ export const JSMIntegration: React.FC = () => {
 
       <div className="container mx-auto max-w-7xl relative z-10">
         {/* Centered header */}
-        <div className="text-center mb-16">
+        <div className="text-center mb-10 md:mb-16">
           <SectionBadge label="🎯 Primary Feature" variant="light" className="mb-6" />
           <h2 className="text-3xl md:text-5xl lg:text-6xl font-bold mb-4 pb-1 bg-gradient-to-r from-slate-900 via-blue-800 to-indigo-800 bg-clip-text text-transparent">
             Seamless JSM Portal Integration
@@ -38,7 +38,7 @@ export const JSMIntegration: React.FC = () => {
           <div>
             <div className="space-y-6 mb-8">
               <div className="flex items-start gap-4">
-                <div className="flex-shrink-0 w-16 h-16 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-xl flex items-center justify-center text-3xl shadow-lg">
+                <div className="flex-shrink-0 w-12 h-12 sm:w-16 sm:h-16 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-xl flex items-center justify-center text-2xl sm:text-3xl shadow-lg">
                   ✨
                 </div>
                 <div>
@@ -54,7 +54,7 @@ export const JSMIntegration: React.FC = () => {
               </div>
 
               <div className="flex items-start gap-4">
-                <div className="flex-shrink-0 w-16 h-16 bg-gradient-to-br from-purple-500 to-pink-600 rounded-xl flex items-center justify-center text-3xl shadow-lg">
+                <div className="flex-shrink-0 w-12 h-12 sm:w-16 sm:h-16 bg-gradient-to-br from-purple-500 to-pink-600 rounded-xl flex items-center justify-center text-2xl sm:text-3xl shadow-lg">
                   🔄
                 </div>
                 <div>
@@ -68,7 +68,7 @@ export const JSMIntegration: React.FC = () => {
               </div>
 
               <div className="flex items-start gap-4">
-                <div className="flex-shrink-0 w-16 h-16 bg-gradient-to-br from-green-500 to-emerald-600 rounded-xl flex items-center justify-center text-3xl shadow-lg">
+                <div className="flex-shrink-0 w-12 h-12 sm:w-16 sm:h-16 bg-gradient-to-br from-green-500 to-emerald-600 rounded-xl flex items-center justify-center text-2xl sm:text-3xl shadow-lg">
                   🛡️
                 </div>
                 <div>
@@ -116,7 +116,7 @@ export const JSMIntegration: React.FC = () => {
         </div>
 
         {/* Use cases section */}
-        <div className="mt-16 grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="mt-10 md:mt-16 grid grid-cols-1 md:grid-cols-3 gap-6">
           <div className="bg-white p-6 rounded-xl border border-slate-200 shadow-lg hover:shadow-xl transition-all duration-300">
             <div className="text-3xl mb-4">💬</div>
             <h3 className="text-lg font-bold mb-2 text-slate-900">Customer Support</h3>

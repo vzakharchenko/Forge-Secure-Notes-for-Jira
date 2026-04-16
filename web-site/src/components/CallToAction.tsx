@@ -27,7 +27,7 @@ export const CallToAction: React.FC = () => {
           </span>
         </h2>
 
-        <p className="text-lg md:text-xl mb-12 text-blue-100 max-w-3xl mx-auto leading-relaxed">
+        <p className="text-lg md:text-xl mb-8 md:mb-12 text-blue-100 max-w-3xl mx-auto leading-relaxed">
           Start sharing sensitive information securely today.
           <br />
           <span className="text-white font-semibold"> Zero-trust encryption</span>,{/* */}
@@ -35,7 +35,7 @@ export const CallToAction: React.FC = () => {
           <span className="text-white font-semibold"> comprehensive audit trails</span>.
         </p>
 
-        <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-12">
+        <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-8 md:mb-12">
           <a
             href={MARKETPLACE_LINK}
             target="_blank"

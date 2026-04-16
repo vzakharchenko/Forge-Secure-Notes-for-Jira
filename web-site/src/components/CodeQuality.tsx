@@ -56,7 +56,7 @@ export const CodeQuality: React.FC = () => {
       className="scroll-mt-28 py-12 md:py-24 px-4 sm:px-6 bg-gradient-to-b from-slate-50 to-white"
     >
       <div className="container mx-auto max-w-7xl">
-        <div className="text-center mb-16">
+        <div className="text-center mb-10 md:mb-16">
           <h2 className="text-3xl md:text-5xl lg:text-6xl font-bold mb-4 pb-1 bg-gradient-to-r from-slate-900 to-slate-700 bg-clip-text text-transparent">
             Production-Ready Quality
           </h2>
@@ -65,7 +65,7 @@ export const CodeQuality: React.FC = () => {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8 md:mb-12">
           {accomplishments.map((accomplishment) => (
             <div
               key={accomplishment.id}
