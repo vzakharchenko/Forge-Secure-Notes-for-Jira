@@ -33,14 +33,8 @@ async function prerender() {
     const template = fs.readFileSync(templatePath, "utf-8");
 
     // Normalize first so the script is idempotent if run more than once
-    const normalized = template.replace(
-      /<div id="root">[\s\S]*?<\/div>/,
-      '<div id="root"></div>'
-    );
-    const html = normalized.replace(
-      '<div id="root"></div>',
-      `<div id="root">${appHtml}</div>`
-    );
+    const normalized = template.replace(/<div id="root">[\s\S]*?<\/div>/, '<div id="root"></div>');
+    const html = normalized.replace('<div id="root"></div>', `<div id="root">${appHtml}</div>`);
 
     fs.writeFileSync(templatePath, html);
     console.log("✅ Prerendered: /");
