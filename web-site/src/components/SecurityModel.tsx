@@ -35,7 +35,7 @@ const securityFeatures = [
   },
 ];
 
-export const Security: React.FC = () => {
+export const SecurityModel: React.FC = () => {
   return (
     <section className="py-24 px-4 relative bg-gradient-to-br from-slate-900 via-blue-900 to-indigo-900 text-white overflow-hidden">
       {/* Background pattern */}

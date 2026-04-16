@@ -39,7 +39,7 @@ const accomplishments = [
   },
 ];
 
-export const Accomplishments: React.FC = () => {
+export const CodeQuality: React.FC = () => {
   return (
     <section className="py-24 px-4 bg-gradient-to-b from-slate-50 to-white">
       <div className="container mx-auto max-w-7xl">

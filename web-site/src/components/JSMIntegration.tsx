@@ -1,5 +1,6 @@
 import React from "react";
 import { SectionBadge } from "@src/shared/components/SectionBadge";
+import { JSM_PORTAL_INTEGRATION_YOUTUBE_LINK } from "@src/shared/constants";
 
 export const JSMIntegration: React.FC = () => {
   return (
@@ -98,7 +99,7 @@ export const JSMIntegration: React.FC = () => {
               <div className="aspect-video bg-slate-900 rounded-lg overflow-hidden">
                 <iframe
                   className="w-full h-full"
-                  src="https://www.youtube.com/embed/WbE65Iwv-hE"
+                  src={JSM_PORTAL_INTEGRATION_YOUTUBE_LINK}
                   title="Secure Notes for Jira - JSM Portal Integration"
                   allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                   allowFullScreen

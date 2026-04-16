@@ -96,13 +96,13 @@ export const Footer: React.FC = () => {
                 <span className="w-2 h-2 bg-blue-500 rounded-full"></span>React + Vite
               </li>
               <li className="flex items-center gap-2">
-                <span className="w-2 h-2 bg-blue-500 rounded-full"></span>Atlassian Forge
-              </li>
-              <li className="flex items-center gap-2">
                 <span className="w-2 h-2 bg-blue-500 rounded-full"></span>TypeScript
               </li>
               <li className="flex items-center gap-2">
-                <span className="w-2 h-2 bg-blue-500 rounded-full"></span>Drizzle ORM
+                <span className="w-2 h-2 bg-blue-500 rounded-full"></span>Atlassian Forge
+              </li>
+              <li className="flex items-center gap-2">
+                <span className="w-2 h-2 bg-blue-500 rounded-full"></span>Forge SQL ORM
               </li>
             </ul>
           </div>

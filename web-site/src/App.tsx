@@ -1,16 +1,15 @@
 import React from "react";
 import "./App.css";
 import {
-  Accomplishments,
-  Accordion,
   CallToAction,
+  CodeQuality,
   Features,
   Footer,
   Hero,
   HowItWorks,
   JSMIntegration,
-  Screenshots,
-  Security,
+  ProductDemo,
+  SecurityModel,
 } from "./components";
 
 const App = () => {
@@ -19,11 +18,10 @@ const App = () => {
       <Hero />
       <JSMIntegration />
       <Features />
-      <Security />
+      <SecurityModel />
+      <ProductDemo />
       <HowItWorks />
-      <Screenshots />
-      <Accordion />
-      <Accomplishments />
+      <CodeQuality />
       <CallToAction />
       <Footer />
     </div>

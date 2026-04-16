@@ -14,7 +14,7 @@ const features = [
     icon: "🔐",
     title: "End-to-End Encryption",
     description:
-      "AES-GCM encryption performed entirely in the browser. Your secrets never leave your device unencrypted.",
+      "AES-GCM encryption runs entirely in the browser. Atlassian stores only ciphertext — they never see the plaintext or the key.",
     gradient: "from-blue-500 to-cyan-500",
   },
   {
@@ -38,7 +38,7 @@ const features = [
     icon: "👥",
     title: "Multiple Recipients",
     description:
-      "Share secure notes with one or multiple users. Each recipient has independent access tracking.",
+      "Share one encrypted note with multiple recipients simultaneously. Each gets their own access link and independent tracking — burn-after-reading applies per recipient.",
     gradient: "from-green-500 to-emerald-500",
   },
   {
@@ -46,7 +46,7 @@ const features = [
     icon: "📊",
     title: "Audit & Compliance",
     description:
-      "Comprehensive audit dashboard with CSV export. Track all activity without exposing secrets.",
+      "Four audit views — by note, issue, project, and user (admin). Full status timeline per note (Created → Viewed → Deleted/Expired), CSV export, and a one-click Rovo AI button on every page.",
     gradient: "from-indigo-500 to-blue-500",
   },
   {
@@ -54,7 +54,7 @@ const features = [
     icon: "🤖",
     title: "Rovo AI Analytics",
     description:
-      "Natural language queries about your secure notes. Get insights with AI-powered analytics.",
+      'Ask plain-English questions like "Show notes shared with me last week". Read-only queries with automatic row-level security — encryption keys and sensitive fields are never exposed.',
     gradient: "from-violet-500 to-purple-500",
   },
 ];
