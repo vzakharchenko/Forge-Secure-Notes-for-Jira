@@ -33,10 +33,10 @@ export const Hero: React.FC = () => {
           </div>
 
           <h1 className="mb-6 leading-tight">
-            <span className="block pb-1 text-5xl md:text-6xl lg:text-7xl font-extrabold bg-gradient-to-r from-white via-blue-100 to-indigo-200 bg-clip-text text-transparent">
+            <span className="block pb-1 text-4xl md:text-6xl lg:text-7xl font-extrabold bg-gradient-to-r from-white via-blue-100 to-indigo-200 bg-clip-text text-transparent">
               Secure Notes
             </span>
-            <span className="block pb-1 text-5xl md:text-6xl lg:text-7xl font-extrabold bg-gradient-to-r from-blue-300 via-indigo-300 to-purple-300 bg-clip-text text-transparent">
+            <span className="block pb-1 text-4xl md:text-6xl lg:text-7xl font-extrabold bg-gradient-to-r from-blue-300 via-indigo-300 to-purple-300 bg-clip-text text-transparent">
               for Jira
             </span>
           </h1>

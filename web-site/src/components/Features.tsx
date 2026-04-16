@@ -67,10 +67,10 @@ export const Features: React.FC = () => {
     >
       <div className="container mx-auto max-w-7xl">
         <div className="text-center mb-16">
-          <h2 className="text-5xl md:text-6xl font-bold mb-4 pb-1 bg-gradient-to-r from-slate-900 to-slate-700 bg-clip-text text-transparent">
+          <h2 className="text-3xl md:text-5xl lg:text-6xl font-bold mb-4 pb-1 bg-gradient-to-r from-slate-900 to-slate-700 bg-clip-text text-transparent">
             Powerful Features
           </h2>
-          <p className="text-xl text-slate-600 max-w-2xl mx-auto">
+          <p className="text-lg md:text-xl text-slate-600 max-w-2xl mx-auto">
             Everything you need for secure, confidential communication in Jira
           </p>
         </div>
@@ -96,7 +96,7 @@ export const Features: React.FC = () => {
               </div>
 
               {/* Content */}
-              <h3 className="text-2xl font-bold mb-3 text-slate-900 group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-slate-900 group-hover:to-slate-700 transition-all duration-300">
+              <h3 className="text-xl md:text-2xl font-bold mb-3 text-slate-900 group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-slate-900 group-hover:to-slate-700 transition-all duration-300">
                 {feature.title}
               </h3>
               <p className="text-slate-600 leading-relaxed relative z-10">{feature.description}</p>

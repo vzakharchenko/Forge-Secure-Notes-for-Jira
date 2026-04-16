@@ -55,12 +55,12 @@ export const SecurityModel: React.FC = () => {
       <div className="container mx-auto max-w-7xl relative z-10">
         <div className="text-center mb-16">
           <SectionBadge label="🔒 Security First" className="mb-6" />
-          <h2 className="text-5xl md:text-6xl font-bold mb-4">
+          <h2 className="text-3xl md:text-5xl lg:text-6xl font-bold mb-4">
             <span className="block pb-1 bg-gradient-to-r from-white to-blue-200 bg-clip-text text-transparent">
               Three-Layer Security Model
             </span>
           </h2>
-          <p className="text-xl text-blue-200 max-w-3xl mx-auto leading-relaxed">
+          <p className="text-lg md:text-xl text-blue-200 max-w-3xl mx-auto leading-relaxed">
             Together, these layers ensure confidentiality even if infrastructure or metadata is
             exposed.
           </p>
@@ -79,7 +79,7 @@ export const SecurityModel: React.FC = () => {
                   </div>
                 </div>
                 <div className="flex-1">
-                  <h3 className="text-2xl font-bold mb-3 text-white group-hover:text-blue-300 transition-colors">
+                  <h3 className="text-xl md:text-2xl font-bold mb-3 text-white group-hover:text-blue-300 transition-colors">
                     {feature.title}
                   </h3>
                   <p className="text-blue-100 leading-relaxed">{feature.description}</p>
@@ -111,7 +111,7 @@ export const SecurityModel: React.FC = () => {
 
           <div className="text-center">
             <div className="inline-block max-w-4xl bg-white/10 backdrop-blur-sm p-8 rounded-2xl border border-white/20 shadow-xl">
-              <h3 className="text-2xl font-bold mb-4 text-white">
+              <h3 className="text-xl md:text-2xl font-bold mb-4 text-white">
                 🔐 Double Protection: Out-of-Band Key + Authorization
               </h3>
               <div className="text-left space-y-4 text-blue-100">

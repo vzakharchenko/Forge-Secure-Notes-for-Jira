@@ -20,14 +20,14 @@ export const CallToAction: React.FC = () => {
       <div className="container mx-auto max-w-7xl text-center relative z-10">
         <SectionBadge label="🚀 Ready to Get Started?" variant="cta" className="mb-6" />
 
-        <h2 className="text-4xl md:text-5xl lg:text-6xl font-extrabold mb-4 leading-tight">
+        <h2 className="text-3xl md:text-5xl lg:text-6xl font-extrabold mb-4 leading-tight">
           <span className="block">Ready to Secure Your</span>
           <span className="block pb-1 bg-gradient-to-r from-yellow-200 to-white bg-clip-text text-transparent">
             Jira Communication?
           </span>
         </h2>
 
-        <p className="text-xl md:text-2xl mb-12 text-blue-100 max-w-3xl mx-auto leading-relaxed">
+        <p className="text-lg md:text-xl mb-12 text-blue-100 max-w-3xl mx-auto leading-relaxed">
           Start sharing sensitive information securely today.{/* */}
           <span className="text-white font-semibold"> Zero-trust encryption</span>,{/* */}
           <span className="text-white font-semibold"> burn-after-reading</span>, and{/* */}

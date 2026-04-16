@@ -25,11 +25,11 @@ export const JSMIntegration: React.FC = () => {
           <div>
             <SectionBadge label="🎯 Primary Feature" variant="light" className="mb-6" />
 
-            <h2 className="text-5xl md:text-6xl font-bold pb-6 bg-gradient-to-r from-slate-900 via-blue-800 to-indigo-800 bg-clip-text text-transparent">
+            <h2 className="text-3xl md:text-5xl lg:text-6xl font-bold pb-6 bg-gradient-to-r from-slate-900 via-blue-800 to-indigo-800 bg-clip-text text-transparent">
               Seamless Jira Service Management Portal Integration
             </h2>
 
-            <p className="text-xl text-slate-700 mb-8 leading-relaxed">
+            <p className="text-lg md:text-xl text-slate-700 mb-8 leading-relaxed">
               Share sensitive information securely with your customers directly in JSM portals. The
               same powerful encryption and security features work seamlessly for both portal
               customers and Jira agents.
