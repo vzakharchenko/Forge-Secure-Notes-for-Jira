@@ -99,7 +99,7 @@ export const JSMIntegration: React.FC = () => {
 
           {/* Right side - Video */}
           <div className="relative">
-            <div className="relative rounded-2xl overflow-hidden shadow-2xl border-4 border-white bg-white p-2">
+            <div className="relative rounded-2xl overflow-hidden shadow-2xl border-2 border-white bg-white p-1">
               <div className="aspect-video bg-slate-900 rounded-lg overflow-hidden">
                 <iframe
                   className="w-full h-full"

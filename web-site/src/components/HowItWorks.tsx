@@ -106,7 +106,7 @@ export const HowItWorks: React.FC = () => {
                 >
                   <button
                     onClick={() => toggle(step.id)}
-                    className="w-full px-6 py-5 text-left flex items-start lg:items-center gap-4 group hover:bg-slate-50 transition-colors"
+                    className="w-full px-6 py-5 text-left flex items-center gap-4 group hover:bg-slate-50 transition-colors"
                     aria-expanded={isOpen}
                   >
                     {/* Step number badge */}
@@ -128,15 +128,11 @@ export const HowItWorks: React.FC = () => {
                       >
                         {step.title}
                       </h3>
-                      {isOpen && (
-                        <p className="text-sm text-slate-600 mt-2 leading-relaxed lg:hidden">
-                          {step.description}
-                        </p>
-                      )}
                     </div>
 
+                    {/* Down chevron — mobile only */}
                     <svg
-                      className={`flex-shrink-0 w-5 h-5 text-slate-400 transition-transform duration-300 ${
+                      className={`lg:hidden flex-shrink-0 w-5 h-5 text-slate-400 transition-transform duration-300 ${
                         isOpen ? "rotate-180 text-blue-500" : ""
                       }`}
                       fill="none"
@@ -150,7 +146,29 @@ export const HowItWorks: React.FC = () => {
                         d="M19 9l-7 7-7-7"
                       />
                     </svg>
+                    {/* Right arrow — desktop only */}
+                    <svg
+                      className={`hidden lg:block flex-shrink-0 w-5 h-5 transition-colors duration-300 ${
+                        isOpen ? "text-blue-500" : "text-slate-300"
+                      }`}
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M9 5l7 7-7 7"
+                      />
+                    </svg>
                   </button>
+
+                  {isOpen && (
+                    <p className="px-6 pb-4 text-sm text-slate-600 leading-relaxed lg:hidden">
+                      {step.description}
+                    </p>
+                  )}
 
                   {isOpen && (
                     <div className="px-6 pb-6 lg:hidden">
@@ -177,7 +195,7 @@ export const HowItWorks: React.FC = () => {
               ) : (
                 <div className="aspect-video flex items-center justify-center text-slate-400">
                   <div className="text-center">
-                    <div className="text-6xl mb-3">👆</div>
+                    <div className="text-6xl mb-3">👈</div>
                     <div className="text-sm">Select a step to preview</div>
                   </div>
                 </div>
@@ -191,7 +209,7 @@ export const HowItWorks: React.FC = () => {
 };
 
 const StepPreview: React.FC<{ step: Step }> = ({ step }) => (
-  <div className="aspect-video bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 rounded-xl overflow-hidden relative">
+  <div className="aspect-video bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 rounded-xl overflow-hidden relative border border-slate-200 shadow-sm">
     <img
       src={step.image}
       alt={step.imageAlt}

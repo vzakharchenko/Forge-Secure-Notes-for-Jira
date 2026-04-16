@@ -18,16 +18,18 @@ export const ProductDemo: React.FC = () => {
         </div>
 
         <div className="max-w-5xl mx-auto">
-          <div className="aspect-video bg-gradient-to-br from-slate-200 to-slate-300 rounded-2xl overflow-hidden shadow-2xl border-4 border-white">
-            <iframe
-              width="100%"
-              height="100%"
-              src={PRODUCT_DEMO_YOUTUBE_LINK}
-              title="Secure Notes for Jira — Full Product Demo"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-              allowFullScreen
-              className="w-full h-full"
-            ></iframe>
+          <div className="relative rounded-2xl overflow-hidden shadow-2xl border-2 border-white bg-white p-1">
+            <div className="aspect-video bg-slate-900 rounded-lg overflow-hidden">
+              <iframe
+                width="100%"
+                height="100%"
+                src={PRODUCT_DEMO_YOUTUBE_LINK}
+                title="Secure Notes for Jira — Full Product Demo"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                allowFullScreen
+                className="w-full h-full"
+              ></iframe>
+            </div>
           </div>
           <div className="mt-6 text-center">
             <h3 className="text-xl md:text-2xl font-bold text-slate-900 mb-3">
