@@ -37,13 +37,23 @@ const accomplishments = [
     text: "Forge-native without external services",
     icon: "⚡",
   },
+  {
+    id: "privacy-by-design",
+    text: "Privacy by design — your data never leaves Atlassian's infrastructure",
+    icon: "🔒",
+  },
+  {
+    id: "atlassian-verified",
+    text: "Runs on Atlassian Forge — no external servers or infrastructure to maintain",
+    icon: "☁️",
+  },
 ];
 
 export const CodeQuality: React.FC = () => {
   return (
     <section
       id="quality"
-      className="scroll-mt-28 py-24 px-4 bg-gradient-to-b from-slate-50 to-white"
+      className="scroll-mt-28 py-12 md:py-24 px-4 sm:px-6 bg-gradient-to-b from-slate-50 to-white"
     >
       <div className="container mx-auto max-w-7xl">
         <div className="text-center mb-16">

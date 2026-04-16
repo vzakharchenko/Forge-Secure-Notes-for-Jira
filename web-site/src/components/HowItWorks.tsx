@@ -75,7 +75,7 @@ export const HowItWorks: React.FC = () => {
   return (
     <section
       id="how-it-works"
-      className="scroll-mt-28 py-24 px-4 bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50"
+      className="scroll-mt-28 py-12 md:py-24 px-4 sm:px-6 bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50"
     >
       <div className="container mx-auto max-w-7xl">
         <div className="text-center mb-16">
@@ -99,7 +99,7 @@ export const HowItWorks: React.FC = () => {
                 >
                   <button
                     onClick={() => toggle(step.id)}
-                    className="w-full px-6 py-5 text-left flex items-center gap-4 group hover:bg-slate-50 transition-colors"
+                    className="w-full px-6 py-5 text-left flex items-start gap-4 group hover:bg-slate-50 transition-colors"
                     aria-expanded={isOpen}
                   >
                     {/* Step number badge */}

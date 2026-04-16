@@ -39,7 +39,7 @@ export const SecurityModel: React.FC = () => {
   return (
     <section
       id="security"
-      className="scroll-mt-28 py-24 px-4 relative bg-gradient-to-br from-slate-900 via-blue-900 to-indigo-900 text-white overflow-hidden"
+      className="scroll-mt-28 py-12 md:py-24 px-4 sm:px-6 relative bg-gradient-to-br from-blue-800 via-indigo-800 to-purple-800 text-white overflow-hidden"
     >
       {/* Background pattern */}
       <div className="absolute inset-0 opacity-10">
@@ -54,10 +54,10 @@ export const SecurityModel: React.FC = () => {
 
       <div className="container mx-auto max-w-7xl relative z-10">
         <div className="text-center mb-16">
-          <SectionBadge label="🔒 Security First" className="mb-6" />
+          <SectionBadge label="🔒 Security First" variant="cta" className="mb-6" />
           <h2 className="text-3xl md:text-5xl lg:text-6xl font-bold mb-4">
             <span className="block pb-1 bg-gradient-to-r from-white to-blue-200 bg-clip-text text-transparent">
-              Three-Layer Security Model
+              Multi-Layer Security Model
             </span>
           </h2>
           <p className="text-lg md:text-xl text-blue-200 max-w-3xl mx-auto leading-relaxed">
@@ -70,7 +70,7 @@ export const SecurityModel: React.FC = () => {
           {securityFeatures.map((feature) => (
             <div
               key={feature.id}
-              className="group relative bg-white/5 backdrop-blur-sm p-8 rounded-2xl border border-white/10 hover:border-white/30 transition-all duration-300 hover:bg-white/10"
+              className="group relative bg-white/5 backdrop-blur-sm p-8 rounded-2xl border border-white/10 hover:border-white/30 transition-all duration-300 hover:bg-white/5"
             >
               <div className="flex items-start gap-6">
                 <div className="flex-shrink-0">
@@ -79,7 +79,7 @@ export const SecurityModel: React.FC = () => {
                   </div>
                 </div>
                 <div className="flex-1">
-                  <h3 className="text-xl md:text-2xl font-bold mb-3 text-white group-hover:text-blue-300 transition-colors">
+                  <h3 className="text-xl md:text-2xl font-bold mb-3 text-white group-hover:text-blue-200 transition-colors">
                     {feature.title}
                   </h3>
                   <p className="text-blue-100 leading-relaxed">{feature.description}</p>

@@ -5,7 +5,7 @@ import { SectionBadge } from "@src/shared/components/SectionBadge";
 
 export const CallToAction: React.FC = () => {
   return (
-    <section className="py-24 px-4 relative bg-gradient-to-br from-blue-600 via-indigo-600 to-purple-600 text-white overflow-hidden">
+    <section className="py-12 md:py-24 px-4 sm:px-6 relative bg-gradient-to-br from-blue-800 via-indigo-800 to-purple-800 text-white overflow-hidden">
       {/* Background pattern */}
       <div className="absolute inset-0 opacity-10">
         <div
@@ -18,7 +18,7 @@ export const CallToAction: React.FC = () => {
       </div>
 
       <div className="container mx-auto max-w-7xl text-center relative z-10">
-        <SectionBadge label="🚀 Ready to Get Started?" variant="cta" className="mb-6" />
+        <SectionBadge label="🚀 Free Trial" variant="cta" className="mb-6" />
 
         <h2 className="text-3xl md:text-5xl lg:text-6xl font-extrabold mb-4 leading-tight">
           <span className="block">Ready to Secure Your</span>
@@ -28,7 +28,8 @@ export const CallToAction: React.FC = () => {
         </h2>
 
         <p className="text-lg md:text-xl mb-12 text-blue-100 max-w-3xl mx-auto leading-relaxed">
-          Start sharing sensitive information securely today.{/* */}
+          Start sharing sensitive information securely today.
+          <br />
           <span className="text-white font-semibold"> Zero-trust encryption</span>,{/* */}
           <span className="text-white font-semibold"> burn-after-reading</span>, and{/* */}
           <span className="text-white font-semibold"> comprehensive audit trails</span>.

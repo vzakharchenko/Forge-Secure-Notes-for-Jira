@@ -16,6 +16,8 @@ export const SNYK_LINK = "https://snyk.io/test/github/vzakharchenko/Forge-Secure
 export const SONAR_LINK =
   "https://sonarcloud.io/summary/new_code?id=vzakharchenko_Forge-Secure-Notes-for-Jira";
 
+export const CODEGEIST_LINK = "https://codegeistxawr.devpost.com/";
+
 export const PRODUCT_DEMO_YOUTUBE_LINK = "https://www.youtube.com/embed/1FOlNEBFGfY";
 
 export const JSM_PORTAL_INTEGRATION_YOUTUBE_LINK = "https://www.youtube.com/embed/WbE65Iwv-hE";

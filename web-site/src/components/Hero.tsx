@@ -5,7 +5,7 @@ import { SectionBadge } from "@src/shared/components/SectionBadge";
 
 export const Hero: React.FC = () => {
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-to-br from-slate-900 via-blue-900 to-indigo-900">
+    <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-to-br from-blue-800 via-indigo-800 to-purple-800">
       {/* Animated background elements */}
       <div className="absolute inset-0 overflow-hidden">
         <div className="absolute -top-40 -right-40 w-80 h-80 bg-blue-500 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-blob"></div>
@@ -75,18 +75,18 @@ export const Hero: React.FC = () => {
             </a>
           </div>
 
-          <div className="flex items-center justify-center gap-8 text-sm text-blue-200">
+          <div className="flex flex-wrap items-center justify-center gap-6 text-sm text-blue-200">
             <div className="flex items-center gap-2">
               <CheckIcon />
-              <span>Source-available</span>
+              <span>Atlassian Marketplace Verified</span>
             </div>
             <div className="flex items-center gap-2">
               <CheckIcon />
-              <span>Zero Vulnerabilities</span>
+              <span>Zero-Trust Architecture</span>
             </div>
             <div className="flex items-center gap-2">
               <CheckIcon />
-              <span>85% Test Coverage</span>
+              <span>No Data Leaves Atlassian</span>
             </div>
           </div>
         </div>

@@ -6,7 +6,7 @@ export const JSMIntegration: React.FC = () => {
   return (
     <section
       id="jsm-portal"
-      className="scroll-mt-28 py-24 px-4 bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 relative overflow-hidden"
+      className="scroll-mt-28 py-12 md:py-24 px-4 sm:px-6 bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 relative overflow-hidden"
     >
       {/* Background decoration */}
       <div className="absolute inset-0 opacity-5">
@@ -20,21 +20,22 @@ export const JSMIntegration: React.FC = () => {
       </div>
 
       <div className="container mx-auto max-w-7xl relative z-10">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-          {/* Left side - Content */}
+        {/* Centered header */}
+        <div className="text-center mb-16">
+          <SectionBadge label="🎯 Primary Feature" variant="light" className="mb-6" />
+          <h2 className="text-3xl md:text-5xl lg:text-6xl font-bold mb-4 pb-1 bg-gradient-to-r from-slate-900 via-blue-800 to-indigo-800 bg-clip-text text-transparent">
+            Seamless JSM Portal Integration
+          </h2>
+          <p className="text-lg md:text-xl text-slate-700 max-w-3xl mx-auto leading-relaxed">
+            Share sensitive information securely with your customers directly in Jira Service
+            Management portals. The same encryption and security features work seamlessly for both
+            portal customers and Jira agents.
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 ">
+          {/* Left side - Feature points */}
           <div>
-            <SectionBadge label="🎯 Primary Feature" variant="light" className="mb-6" />
-
-            <h2 className="text-3xl md:text-5xl lg:text-6xl font-bold pb-6 bg-gradient-to-r from-slate-900 via-blue-800 to-indigo-800 bg-clip-text text-transparent">
-              Seamless Jira Service Management Portal Integration
-            </h2>
-
-            <p className="text-lg md:text-xl text-slate-700 mb-8 leading-relaxed">
-              Share sensitive information securely with your customers directly in JSM portals. The
-              same powerful encryption and security features work seamlessly for both portal
-              customers and Jira agents.
-            </p>
-
             <div className="space-y-6 mb-8">
               <div className="flex items-start gap-4">
                 <div className="flex-shrink-0 w-16 h-16 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-xl flex items-center justify-center text-3xl shadow-lg">

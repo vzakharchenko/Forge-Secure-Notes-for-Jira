@@ -10,10 +10,10 @@ import {
 } from "@src/shared/constants";
 
 const resourceLinks = [
-  { label: "Atlassian Marketplace", href: MARKETPLACE_LINK },
-  { label: "GitHub Repository", href: GITHUB_LINK },
-  { label: "Devpost Submission", href: DEVPOST_LINK },
-  { label: "Support", href: `mailto:${SUPPORT_EMAIL}` },
+  { label: "Atlassian Marketplace", href: MARKETPLACE_LINK, external: true },
+  { label: "GitHub Repository", href: GITHUB_LINK, external: true },
+  { label: "Devpost Submission", href: DEVPOST_LINK, external: true },
+  { label: "Support", href: `mailto:${SUPPORT_EMAIL}`, external: false },
 ];
 
 export const Footer: React.FC = () => {
@@ -68,8 +68,7 @@ export const Footer: React.FC = () => {
                   <li key={link.href}>
                     <a
                       href={link.href}
-                      target="_blank"
-                      rel="noopener noreferrer"
+                      {...(link.external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
                       className="hover:text-blue-400 transition-colors flex items-center gap-2 group"
                     >
                       <span>{link.label}</span>
