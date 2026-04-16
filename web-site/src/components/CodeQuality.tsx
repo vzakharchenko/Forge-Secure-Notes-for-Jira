@@ -1,5 +1,5 @@
 import React from "react";
-import { SNYK_LINK, SONAR_LINK } from "@src/shared/constants";
+import { SONAR_LINK } from "@src/shared/constants";
 
 const accomplishments = [
   {
@@ -85,19 +85,19 @@ export const CodeQuality: React.FC = () => {
 
         <div className="text-center">
           <div className="inline-flex flex-wrap gap-4 justify-center">
-            <a
-              href={SNYK_LINK}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="group px-6 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-xl hover:from-blue-700 hover:to-indigo-700 transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105 transform font-semibold"
-            >
-              <span className="flex items-center gap-2">
-                View Snyk Report
-                <span className="text-sm group-hover:translate-x-1 transition-transform inline-block">
-                  ↗
-                </span>
-              </span>
-            </a>
+            {/*<a*/}
+            {/*  href={SNYK_LINK}*/}
+            {/*  target="_blank"*/}
+            {/*  rel="noopener noreferrer"*/}
+            {/*  className="group px-6 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-xl hover:from-blue-700 hover:to-indigo-700 transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105 transform font-semibold"*/}
+            {/*>*/}
+            {/*  <span className="flex items-center gap-2">*/}
+            {/*    View Snyk Report*/}
+            {/*    <span className="text-sm group-hover:translate-x-1 transition-transform inline-block">*/}
+            {/*      ↗*/}
+            {/*    </span>*/}
+            {/*  </span>*/}
+            {/*</a>*/}
             <a
               href={SONAR_LINK}
               target="_blank"
