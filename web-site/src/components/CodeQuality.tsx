@@ -89,10 +89,10 @@ export const CodeQuality: React.FC = () => {
               href={SNYK_LINK}
               target="_blank"
               rel="noopener noreferrer"
-              className="group px-6 py-3 bg-slate-900 text-white rounded-xl hover:bg-slate-800 transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105 transform font-semibold"
+              className="group px-6 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-xl hover:from-blue-700 hover:to-indigo-700 transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105 transform font-semibold"
             >
               <span className="flex items-center gap-2">
-                View Snyk Report{/* */}
+                View Snyk Report
                 <span className="text-sm group-hover:translate-x-1 transition-transform inline-block">
                   ↗
                 </span>
@@ -102,10 +102,10 @@ export const CodeQuality: React.FC = () => {
               href={SONAR_LINK}
               target="_blank"
               rel="noopener noreferrer"
-              className="group px-6 py-3 bg-slate-900 text-white rounded-xl hover:bg-slate-800 transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105 transform font-semibold"
+              className="group px-6 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-xl hover:from-blue-700 hover:to-indigo-700 transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105 transform font-semibold"
             >
               <span className="flex items-center gap-2">
-                View SonarCloud{/* */}
+                View SonarCloud
                 <span className="text-sm group-hover:translate-x-1 transition-transform inline-block">
                   ↗
                 </span>
