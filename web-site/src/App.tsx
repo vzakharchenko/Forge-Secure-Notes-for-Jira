@@ -1,36 +1,32 @@
-// libs
 import React from "react";
-
-// styles
 import "./App.css";
-
-// components
 import {
-  Accomplishments,
-  Accordion,
   CallToAction,
+  CodeQuality,
   Features,
   Footer,
+  Header,
   Hero,
   HowItWorks,
   JSMIntegration,
-  Screenshots,
-  Security,
+  ProductDemo,
+  SecurityModel,
 } from "./components";
 
 const App = () => {
-  // @ts-ignore
   return (
     <div className="min-h-screen bg-white">
-      <Hero />
-      <JSMIntegration />
-      <Features />
-      <Security />
-      <HowItWorks />
-      <Screenshots />
-      <Accordion />
-      <Accomplishments />
-      <CallToAction />
+      <Header />
+      <main>
+        <Hero />
+        <Features />
+        <JSMIntegration />
+        <SecurityModel />
+        <ProductDemo />
+        <HowItWorks />
+        <CodeQuality />
+        <CallToAction />
+      </main>
       <Footer />
     </div>
   );

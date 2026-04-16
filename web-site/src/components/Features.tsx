@@ -2,51 +2,67 @@ import React from "react";
 
 const features = [
   {
-    id: "jsm-portal",
-    icon: "🎯",
-    title: "JSM Portal Integration",
-    description:
-      "Seamlessly works in Jira Service Management portals. Automatic context detection for customer requests and agents. No configuration needed.",
-    gradient: "from-blue-600 to-indigo-600",
-  },
-  {
     id: "e2e-encryption",
     icon: "🔐",
     title: "End-to-End Encryption",
     description:
-      "AES-GCM encryption performed entirely in the browser. Your secrets never leave your device unencrypted.",
+      "AES-GCM encryption runs entirely in the browser. Atlassian stores only ciphertext — they never see the plaintext or the key.",
     gradient: "from-blue-500 to-cyan-500",
-  },
-  {
-    id: "automatic-expiration",
-    icon: "⏰",
-    title: "Automatic Expiration",
-    description:
-      "Set expiration times from 1 hour to custom dates. Notes automatically self-destruct when expired.",
-    gradient: "from-purple-500 to-pink-500",
   },
   {
     id: "one-time-access",
     icon: "👁️",
     title: "One-Time Access",
     description:
-      "Burn-after-reading protection. Notes are permanently destroyed immediately after viewing.",
+      "Burn-after-reading protection built in. Once a recipient decrypts a note, it is permanently destroyed — no copy is ever retained.",
     gradient: "from-orange-500 to-red-500",
+  },
+  {
+    id: "automatic-expiration",
+    icon: "⏰",
+    title: "Automatic Expiration",
+    description:
+      "Set expiration from 1 hour to a custom date. Notes self-destruct automatically when time elapses — even if the recipient never opened them.",
+    gradient: "from-purple-500 to-pink-500",
+  },
+  {
+    id: "recipient-verification",
+    icon: "🪪",
+    title: "Recipient Verification",
+    description:
+      "Only the designated Atlassian account can decrypt a note. Platform-level identity verification is enforced — there is no way to bypass it or open a note under a different account.",
+    gradient: "from-teal-500 to-cyan-600",
   },
   {
     id: "multiple-recipients",
     icon: "👥",
     title: "Multiple Recipients",
     description:
-      "Share secure notes with one or multiple users. Each recipient has independent access tracking.",
+      "Share one encrypted note with multiple recipients simultaneously. Each gets their own access link and independent tracking — burn-after-reading applies per recipient.",
     gradient: "from-green-500 to-emerald-500",
+  },
+  {
+    id: "email-notifications",
+    icon: "📧",
+    title: "Email Notifications",
+    description:
+      "Recipients are automatically notified by email when a secure note is created for them. No manual outreach needed — they receive a direct link to decrypt their note.",
+    gradient: "from-rose-500 to-pink-500",
+  },
+  {
+    id: "jsm-portal",
+    icon: "🎯",
+    title: "JSM Portal Integration",
+    description:
+      "Seamlessly works in Jira Service Management portals. Automatic context detection for customer requests and agents. No configuration needed.",
+    gradient: "from-amber-500 to-orange-500",
   },
   {
     id: "audit-compliance",
     icon: "📊",
     title: "Audit & Compliance",
     description:
-      "Comprehensive audit dashboard with CSV export. Track all activity without exposing secrets.",
+      "Four audit views — by note, issue, project, and user. Full status timeline per note, CSV export, and a one-click Rovo AI button on every page.",
     gradient: "from-indigo-500 to-blue-500",
   },
   {
@@ -54,20 +70,23 @@ const features = [
     icon: "🤖",
     title: "Rovo AI Analytics",
     description:
-      "Natural language queries about your secure notes. Get insights with AI-powered analytics.",
+      'Ask plain-English questions like "Show notes shared with me last week". Read-only queries with automatic row-level security — encryption keys and sensitive fields are never exposed.',
     gradient: "from-violet-500 to-purple-500",
   },
 ];
 
 export const Features: React.FC = () => {
   return (
-    <section className="py-24 px-4 bg-gradient-to-b from-white to-slate-50">
+    <section
+      id="features"
+      className="scroll-mt-28 py-12 md:py-24 px-4 sm:px-6 bg-gradient-to-b from-white to-slate-50"
+    >
       <div className="container mx-auto max-w-7xl">
         <div className="text-center mb-16">
-          <h2 className="text-5xl md:text-6xl font-bold mb-4 bg-gradient-to-r from-slate-900 to-slate-700 bg-clip-text text-transparent">
+          <h2 className="text-3xl md:text-5xl lg:text-6xl font-bold mb-4 pb-1 bg-gradient-to-r from-slate-900 to-slate-700 bg-clip-text text-transparent">
             Powerful Features
           </h2>
-          <p className="text-xl text-slate-600 max-w-2xl mx-auto">
+          <p className="text-lg md:text-xl text-slate-600 max-w-2xl mx-auto">
             Everything you need for secure, confidential communication in Jira
           </p>
         </div>
@@ -93,7 +112,7 @@ export const Features: React.FC = () => {
               </div>
 
               {/* Content */}
-              <h3 className="text-2xl font-bold mb-3 text-slate-900 group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-slate-900 group-hover:to-slate-700 transition-all duration-300">
+              <h3 className="text-xl md:text-2xl font-bold mb-3 text-slate-900 group-hover:text-blue-600 transition-colors duration-300">
                 {feature.title}
               </h3>
               <p className="text-slate-600 leading-relaxed relative z-10">{feature.description}</p>

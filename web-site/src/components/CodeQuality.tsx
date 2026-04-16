@@ -1,4 +1,5 @@
 import React from "react";
+import { SONAR_LINK } from "@src/shared/constants";
 
 const accomplishments = [
   {
@@ -36,17 +37,30 @@ const accomplishments = [
     text: "Forge-native without external services",
     icon: "⚡",
   },
+  {
+    id: "privacy-by-design",
+    text: "Privacy by design — your data never leaves Atlassian's infrastructure",
+    icon: "🔒",
+  },
+  {
+    id: "atlassian-verified",
+    text: "Runs on Atlassian Forge — no external servers or infrastructure to maintain",
+    icon: "☁️",
+  },
 ];
 
-export const Accomplishments: React.FC = () => {
+export const CodeQuality: React.FC = () => {
   return (
-    <section className="py-24 px-4 bg-gradient-to-b from-white to-slate-50">
+    <section
+      id="quality"
+      className="scroll-mt-28 py-12 md:py-24 px-4 sm:px-6 bg-gradient-to-b from-slate-50 to-white"
+    >
       <div className="container mx-auto max-w-7xl">
         <div className="text-center mb-16">
-          <h2 className="text-5xl md:text-6xl font-bold mb-4 bg-gradient-to-r from-slate-900 to-slate-700 bg-clip-text text-transparent">
+          <h2 className="text-3xl md:text-5xl lg:text-6xl font-bold mb-4 pb-1 bg-gradient-to-r from-slate-900 to-slate-700 bg-clip-text text-transparent">
             Production-Ready Quality
           </h2>
-          <p className="text-xl text-slate-600 max-w-3xl mx-auto">
+          <p className="text-lg md:text-xl text-slate-600 max-w-3xl mx-auto">
             Built for banking and enterprise environments with security and engineering excellence
           </p>
         </div>
@@ -71,27 +85,27 @@ export const Accomplishments: React.FC = () => {
 
         <div className="text-center">
           <div className="inline-flex flex-wrap gap-4 justify-center">
+            {/*<a*/}
+            {/*  href={SNYK_LINK}*/}
+            {/*  target="_blank"*/}
+            {/*  rel="noopener noreferrer"*/}
+            {/*  className="group px-6 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-xl hover:from-blue-700 hover:to-indigo-700 transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105 transform font-semibold"*/}
+            {/*>*/}
+            {/*  <span className="flex items-center gap-2">*/}
+            {/*    View Snyk Report*/}
+            {/*    <span className="text-sm group-hover:translate-x-1 transition-transform inline-block">*/}
+            {/*      ↗*/}
+            {/*    </span>*/}
+            {/*  </span>*/}
+            {/*</a>*/}
             <a
-              href="https://snyk.io/test/github/vzakharchenko/Forge-Secure-Notes-for-Jira"
+              href={SONAR_LINK}
               target="_blank"
               rel="noopener noreferrer"
-              className="group px-6 py-3 bg-slate-900 text-white rounded-xl hover:bg-slate-800 transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105 transform font-semibold"
+              className="group px-6 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-xl hover:from-blue-700 hover:to-indigo-700 transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105 transform font-semibold"
             >
               <span className="flex items-center gap-2">
-                View Snyk Report{/* */}
-                <span className="text-sm group-hover:translate-x-1 transition-transform inline-block">
-                  ↗
-                </span>
-              </span>
-            </a>
-            <a
-              href="https://sonarcloud.io/summary/new_code?id=vzakharchenko_Forge-Secure-Notes-for-Jira"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="group px-6 py-3 bg-slate-900 text-white rounded-xl hover:bg-slate-800 transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105 transform font-semibold"
-            >
-              <span className="flex items-center gap-2">
-                View SonarCloud{/* */}
+                View SonarCloud
                 <span className="text-sm group-hover:translate-x-1 transition-transform inline-block">
                   ↗
                 </span>

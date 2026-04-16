@@ -1,4 +1,5 @@
 import React from "react";
+import { SectionBadge } from "@src/shared/components/SectionBadge";
 
 const securityFeatures = [
   {
@@ -34,9 +35,12 @@ const securityFeatures = [
   },
 ];
 
-export const Security: React.FC = () => {
+export const SecurityModel: React.FC = () => {
   return (
-    <section className="py-24 px-4 relative bg-gradient-to-br from-slate-900 via-blue-900 to-indigo-900 text-white overflow-hidden">
+    <section
+      id="security"
+      className="scroll-mt-28 py-12 md:py-24 px-4 sm:px-6 relative bg-gradient-to-br from-blue-800 via-indigo-800 to-purple-800 text-white overflow-hidden"
+    >
       {/* Background pattern */}
       <div className="absolute inset-0 opacity-10">
         <div
@@ -50,15 +54,13 @@ export const Security: React.FC = () => {
 
       <div className="container mx-auto max-w-7xl relative z-10">
         <div className="text-center mb-16">
-          <div className="inline-block mb-4 px-4 py-2 bg-blue-500/20 backdrop-blur-sm border border-blue-400/30 rounded-full">
-            <span className="text-blue-300 text-sm font-medium">🔒 Security First</span>
-          </div>
-          <h2 className="text-5xl md:text-6xl font-bold mb-6">
-            <span className="bg-gradient-to-r from-white to-blue-200 bg-clip-text text-transparent">
-              Three-Layer Security Model
+          <SectionBadge label="🔒 Security First" variant="cta" className="mb-6" />
+          <h2 className="text-3xl md:text-5xl lg:text-6xl font-bold mb-4">
+            <span className="block pb-1 bg-gradient-to-r from-white to-blue-200 bg-clip-text text-transparent">
+              Multi-Layer Security Model
             </span>
           </h2>
-          <p className="text-xl text-blue-200 max-w-3xl mx-auto leading-relaxed">
+          <p className="text-lg md:text-xl text-blue-200 max-w-3xl mx-auto leading-relaxed">
             Together, these layers ensure confidentiality even if infrastructure or metadata is
             exposed.
           </p>
@@ -68,7 +70,7 @@ export const Security: React.FC = () => {
           {securityFeatures.map((feature) => (
             <div
               key={feature.id}
-              className="group relative bg-white/5 backdrop-blur-sm p-8 rounded-2xl border border-white/10 hover:border-white/30 transition-all duration-300 hover:bg-white/10"
+              className="group relative bg-white/5 backdrop-blur-sm p-8 rounded-2xl border border-white/10 hover:border-white/30 transition-all duration-300 hover:bg-white/5"
             >
               <div className="flex items-start gap-6">
                 <div className="flex-shrink-0">
@@ -77,7 +79,7 @@ export const Security: React.FC = () => {
                   </div>
                 </div>
                 <div className="flex-1">
-                  <h3 className="text-2xl font-bold mb-3 text-white group-hover:text-blue-300 transition-colors">
+                  <h3 className="text-xl md:text-2xl font-bold mb-3 text-white group-hover:text-blue-200 transition-colors">
                     {feature.title}
                   </h3>
                   <p className="text-blue-100 leading-relaxed">{feature.description}</p>
@@ -109,7 +111,7 @@ export const Security: React.FC = () => {
 
           <div className="text-center">
             <div className="inline-block max-w-4xl bg-white/10 backdrop-blur-sm p-8 rounded-2xl border border-white/20 shadow-xl">
-              <h3 className="text-2xl font-bold mb-4 text-white">
+              <h3 className="text-xl md:text-2xl font-bold mb-4 text-white">
                 🔐 Double Protection: Out-of-Band Key + Authorization
               </h3>
               <div className="text-left space-y-4 text-blue-100">

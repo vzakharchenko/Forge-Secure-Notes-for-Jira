@@ -25,5 +25,6 @@
     }
   },
   "types": ["vite/client", "vite-plugin-svgr/client"],
-  "include": ["../shared", "src", "typings"]
+  "include": ["../shared", "src", "typings"],
+  "references": [{ "path": "./tsconfig.node.json" }]
 }

@@ -1,10 +1,10 @@
+export { Header } from "./Header";
 export { Hero } from "./Hero";
 export { JSMIntegration } from "./JSMIntegration";
 export { Features } from "./Features";
-export { Security } from "./Security";
+export { SecurityModel } from "./SecurityModel";
+export { ProductDemo } from "./ProductDemo";
 export { HowItWorks } from "./HowItWorks";
-export { Screenshots } from "./Screenshots";
-export { Accordion } from "./Accordion";
-export { Accomplishments } from "./Accomplishments";
+export { CodeQuality } from "./CodeQuality";
 export { CallToAction } from "./CallToAction";
 export { Footer } from "./Footer";

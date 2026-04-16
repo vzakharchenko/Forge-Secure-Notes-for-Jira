@@ -1,18 +1,14 @@
-// libs
 import React from "react";
-import { createRoot } from "react-dom/client";
-
-// styles
+import { createRoot, hydrateRoot } from "react-dom/client";
 import "./index.css";
-
-// components
 import App from "./App";
 
-const container = document.getElementById("root");
-const root = createRoot(container!);
+const container = document.getElementById("root")!;
 
-const renderApp = () => {
-  root.render(<App />);
-};
-
-renderApp();
+// Use hydrateRoot when the server has pre-rendered content (production prerender),
+// fall back to createRoot for a clean client-side render (dev mode).
+if (container.hasChildNodes()) {
+  hydrateRoot(container, <App />);
+} else {
+  createRoot(container).render(<App />);
+}
