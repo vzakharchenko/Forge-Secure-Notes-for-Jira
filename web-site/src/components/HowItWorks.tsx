@@ -18,7 +18,7 @@ const steps: Step[] = [
     title: "Create Secure Note",
     description:
       "Open any Jira issue or JSM portal request. The 'Secure Notes' panel appears in the issue view — it lists existing notes and provides a 'Create secure note' button to get started.",
-    image: "/img/screenshot1.png",
+    image: "./img/screenshot1.png",
     imageAlt: "Secure Notes panel inside a Jira issue",
   },
   {
@@ -28,7 +28,7 @@ const steps: Step[] = [
     title: "Copy & Share Decryption Key",
     description:
       "Fill in the form: choose recipients, write your secret, set expiration. A decryption key is auto-generated in your browser — it is shown only once and never sent to Atlassian's servers. Copy it immediately and share it with the recipient via Slack, Teams, email, or phone. ⚠️ Never share the key through Jira comments or any Atlassian channel — that would violate Zero Trust.",
-    image: "/img/screenshot2.png",
+    image: "./img/screenshot2.png",
     imageAlt: "Create secure note form with auto-generated decryption key",
   },
   {
@@ -38,7 +38,7 @@ const steps: Step[] = [
     title: "Decrypt the Note",
     description:
       "The recipient opens the link from their email notification, enters the decryption key received out-of-band, and clicks 'Decrypt note'. The app verifies their identity — only the designated recipient's Atlassian account can complete decryption. The app itself never has access to the key.",
-    image: "/img/screenshot3.png",
+    image: "./img/screenshot3.png",
     imageAlt: "Secure note decryption page where recipient enters the key",
   },
   {
@@ -48,7 +48,7 @@ const steps: Step[] = [
     title: "View Decrypted Note",
     description:
       "The decrypted content appears with a countdown timer. The note is available only once — click 'Copy and Close' to copy the content and permanently destroy the note. Closing without copying also destroys it. If an expiration was set, the note auto-deletes when the time elapses even if never viewed.",
-    image: "/img/screenshot4.png",
+    image: "./img/screenshot4.png",
     imageAlt: "Decrypted secure note with countdown timer and Copy and Close button",
   },
   {
@@ -58,7 +58,7 @@ const steps: Step[] = [
     title: "Track & Audit",
     description:
       "The Audit Dashboard gives full visibility into all note activity — browse by note, issue, or project; expand rows to see the full status timeline (Created → Viewed → Deleted/Expired); export any view to CSV. Admins can see all users. Click 'Ask Rovo' on any audit page to run natural language queries on your data with the built-in Rovo AI agent.",
-    image: "/img/screenshot5.png",
+    image: "./img/screenshot5.png",
     imageAlt: "Audit dashboard showing note activity history",
   },
 ];
