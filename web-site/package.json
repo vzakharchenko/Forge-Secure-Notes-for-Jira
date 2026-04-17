@@ -31,14 +31,14 @@
     "build:husky": "vite build",
     "build:deploy": "vite build && cd  && ./deploy.sh ",
     "start": "PORT=3099 vite serve",
-    "prettier": "prettier src vite.config.ts --write",
+    "prettier": "prettier src vite.config.ts index.html --write",
     "lint": "eslint src  --ext .ts,.tsx",
     "lint:fix": "eslint src --ext .ts,.tsx --fix",
     "knip": "knip",
     "update": "npx npm-check-updates -u && npm install"
   },
   "lint-staged": {
-    "*.{ts,tsx,css,scss,md}": [
+    "*.{ts,tsx,css,scss,md,html}": [
       "prettier --write",
       "eslint --fix"
     ]
