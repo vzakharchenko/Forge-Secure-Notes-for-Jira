@@ -8,7 +8,7 @@
     <meta name="google-site-verification" content="1wFDRMNOktJYbfcUIDnbrVSx4G5LS68xKLUtUioZkYI" />
 
     <!-- Primary meta tags -->
-    <title>Secure Notes for Jira — Encrypted Jira App | Atlassian Marketplace</title>
+    <title>Secure Notes for Jira | Atlassian Marketplace</title>
     <meta
       name="description"
       content="Share sensitive information securely within Jira issues and JSM portals. Zero-trust encryption, burn-after-reading protection, and automatic expiration. Available on Atlassian Marketplace."
@@ -20,7 +20,7 @@
     <link rel="canonical" href="https://vzakharchenko.github.io/Forge-Secure-Notes-for-Jira/" />
 
     <!-- Favicon & web app manifest -->
-    <link rel="icon" href="./app.png" type="image/png" />
+    <link rel="icon" href="./app.png" type="image/png" sizes="512x512" />
     <link rel="manifest" href="./manifest.json" />
 
     <!-- Preload LCP asset -->
@@ -34,7 +34,7 @@
     />
     <meta
       property="og:title"
-      content="Secure Notes for Jira — Encrypted Jira App | Atlassian Marketplace"
+      content="Secure Notes for Jira | Atlassian Marketplace"
     />
     <meta
       property="og:description"
@@ -53,7 +53,7 @@
     <meta name="twitter:card" content="summary_large_image" />
     <meta
       name="twitter:title"
-      content="Secure Notes for Jira — Encrypted Jira App | Atlassian Marketplace"
+      content="Secure Notes for Jira | Atlassian Marketplace"
     />
     <meta
       name="twitter:description"
@@ -70,12 +70,40 @@
         "@context": "https://schema.org",
         "@graph": [
           {
-            "@type": "WebPage",
-            "@id": "https://vzakharchenko.github.io/Forge-Secure-Notes-for-Jira/",
+            "@type": "WebSite",
+            "@id": "https://vzakharchenko.github.io/Forge-Secure-Notes-for-Jira/#website",
             "url": "https://vzakharchenko.github.io/Forge-Secure-Notes-for-Jira/",
-            "name": "Secure Notes for Jira — Encrypted Jira App | Atlassian Marketplace",
+            "name": "Secure Notes for Jira"
+          },
+          {
+            "@type": "Organization",
+            "@id": "https://vzakharchenko.github.io/Forge-Secure-Notes-for-Jira/#organization",
+            "name": "Secure Notes for Jira",
+            "url": "https://vzakharchenko.github.io/Forge-Secure-Notes-for-Jira/",
+            "logo": {
+              "@type": "ImageObject",
+              "url": "https://vzakharchenko.github.io/Forge-Secure-Notes-for-Jira/app.png",
+              "width": 512,
+              "height": 512
+            },
+            "sameAs": [
+              "https://github.com/vzakharchenko/Forge-Secure-Notes-for-Jira",
+              "https://marketplace.atlassian.com/apps/1267328525/secure-notes-for-jira"
+            ]
+          },
+          {
+            "@type": "WebPage",
+            "@id": "https://vzakharchenko.github.io/Forge-Secure-Notes-for-Jira/#webpage",
+            "url": "https://vzakharchenko.github.io/Forge-Secure-Notes-for-Jira/",
+            "name": "Secure Notes for Jira | Atlassian Marketplace",
             "description": "Share sensitive information securely within Jira issues and JSM portals. Zero-trust encryption, burn-after-reading protection, and automatic expiration.",
-            "inLanguage": "en-US"
+            "inLanguage": "en-US",
+            "isPartOf": {
+              "@id": "https://vzakharchenko.github.io/Forge-Secure-Notes-for-Jira/#website"
+            },
+            "publisher": {
+              "@id": "https://vzakharchenko.github.io/Forge-Secure-Notes-for-Jira/#organization"
+            }
           },
           {
             "@type": "SoftwareApplication",
@@ -102,9 +130,7 @@
               "priceCurrency": "USD"
             },
             "author": {
-              "@type": "Organization",
-              "name": "Secure Notes for Jira",
-              "url": "https://github.com/vzakharchenko/Forge-Secure-Notes-for-Jira"
+              "@id": "https://vzakharchenko.github.io/Forge-Secure-Notes-for-Jira/#organization"
             }
           },
           {
@@ -112,18 +138,20 @@
             "name": "Secure Notes for Jira — Full Product Demo",
             "description": "Watch how to create encrypted notes, share encryption keys out-of-band, decrypt content as a recipient, and use the audit dashboard — all within your Jira workflow.",
             "thumbnailUrl": "https://img.youtube.com/vi/1FOlNEBFGfY/maxresdefault.jpg",
-            "uploadDate": "2025-01-01",
+            "uploadDate": "2025-01-01T00:00:00+00:00",
             "embedUrl": "https://www.youtube.com/embed/1FOlNEBFGfY",
-            "contentUrl": "https://www.youtube.com/watch?v=1FOlNEBFGfY"
+            "contentUrl": "https://www.youtube.com/watch?v=1FOlNEBFGfY",
+            "publisher": { "@id": "https://vzakharchenko.github.io/Forge-Secure-Notes-for-Jira/#organization" }
           },
           {
             "@type": "VideoObject",
             "name": "Secure Notes for Jira — JSM Portal Integration",
             "description": "See how Secure Notes integrates seamlessly with Jira Service Management portals, enabling secure end-to-end encrypted communication between agents and customers.",
             "thumbnailUrl": "https://img.youtube.com/vi/WbE65Iwv-hE/maxresdefault.jpg",
-            "uploadDate": "2025-01-01",
+            "uploadDate": "2025-01-01T00:00:00+00:00",
             "embedUrl": "https://www.youtube.com/embed/WbE65Iwv-hE",
-            "contentUrl": "https://www.youtube.com/watch?v=WbE65Iwv-hE"
+            "contentUrl": "https://www.youtube.com/watch?v=WbE65Iwv-hE",
+            "publisher": { "@id": "https://vzakharchenko.github.io/Forge-Secure-Notes-for-Jira/#organization" }
           }
         ]
       }
