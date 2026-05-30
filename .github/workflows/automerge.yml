@@ -1,0 +1,27 @@
+name: Auto-merge dependencies
+
+on:
+  pull_request:
+    types:
+      - opened
+      - synchronize
+      - reopened
+      - labeled
+permissions:
+  pull-requests: write
+  contents: write
+
+jobs:
+  enable-automerge:
+    runs-on: ubuntu-latest
+    # Match: dependabot bot PRs, plus any PR carrying the dependencies_updated
+    # label (set by .github/workflows/autoupdate.yml).
+    if: >
+      github.actor == 'dependabot[bot]' ||
+      contains(github.event.pull_request.labels.*.name, 'dependencies_updated')
+    steps:
+      - name: Enable auto-merge for PR
+        run: gh pr merge --auto --merge "$PR_URL"
+        env:
+          PR_URL: ${{ github.event.pull_request.html_url }}
+          GH_TOKEN: ${{ secrets.AUTOUPDATE_PAT }}

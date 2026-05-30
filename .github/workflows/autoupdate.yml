@@ -1,0 +1,128 @@
+name: Dependency autoupdate (every 6h)
+
+on:
+  schedule:
+    # Every 6 hours at the top of the hour (00:00, 06:00, 12:00, 18:00 UTC)
+    - cron: "0 */6 * * *"
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+  pull-requests: write
+  issues: write
+
+concurrency:
+  group: autoupdate
+  cancel-in-progress: true
+
+jobs:
+  autoupdate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - name: Checkout master
+        uses: actions/checkout@v4
+        with:
+          ref: master
+          fetch-depth: 0
+          token: ${{ secrets.AUTOUPDATE_PAT }}
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24.x
+          cache: "npm"
+
+      - name: Install ncu globally (pinned + no install scripts)
+        # Pinned version satisfies S8543; --ignore-scripts satisfies S6505.
+        run: npm install -g --ignore-scripts npm-check-updates@18.0.2
+
+      - name: Configure git as PR author
+        run: |
+          git config user.name "Vasyl Zakharchenko"
+          git config user.email "vaszakharchenko@gmail.com"
+
+      - name: Ensure label exists
+        env:
+          GH_TOKEN: ${{ secrets.AUTOUPDATE_PAT }}
+        run: |
+          gh label create dependencies_updated \
+            --color "0E8A16" \
+            --description "Automated dependency updates" \
+            --force
+
+      - name: Close existing autoupdate PRs and delete their branches
+        env:
+          GH_TOKEN: ${{ secrets.AUTOUPDATE_PAT }}
+        run: |
+          # 1) Close PRs carrying the label (auto-deletes the head branch).
+          prs=$(gh pr list --label dependencies_updated --state open --json number --jq '.[].number')
+          if [ -n "$prs" ]; then
+            for pr in $prs; do
+              echo "Closing PR #$pr"
+              gh pr close "$pr" \
+                --delete-branch \
+                --comment "Superseded by today's autoupdate run."
+            done
+          else
+            echo "No existing autoupdate PRs to close."
+          fi
+
+          # 2) Sweep up orphan dependencies/auto-* branches (pushed but never
+          #    PR'd — e.g. when a previous run failed before gh pr create).
+          orphans=$(gh api -X GET repos/${{ github.repository }}/branches \
+            --paginate --jq '.[].name' | grep '^dependencies/auto-' || true)
+          for b in $orphans; do
+            echo "Deleting orphan branch $b"
+            git push origin --delete "$b" || true
+          done
+
+      - name: Run autoupdate.sh
+        run: |
+          chmod +x ./autoupdate.sh
+          ./autoupdate.sh
+
+      - name: Detect changes
+        id: changes
+        run: |
+          # autoupdate.sh stages files per section; merge into one staged set
+          if git diff --cached --quiet && git diff --quiet; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+            echo "Nothing to update."
+          else
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Create branch, commit, push, open PR
+        if: steps.changes.outputs.changed == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.AUTOUPDATE_PAT }}
+        run: |
+          DATE=$(date -u +%Y-%m-%d)
+          BRANCH="dependencies/auto-${DATE}"
+
+          git checkout -b "$BRANCH"
+          # Stage anything autoupdate.sh did not stage explicitly
+          git add -A
+
+          # Final guard: the husky pre-commit hook re-runs npm i during commit,
+          # which can regenerate package-lock.json deterministically and
+          # collapse the diff that Detect changes saw. If nothing remains
+          # staged after the final add -A, exit cleanly — no PR needed.
+          if git diff --cached --quiet; then
+            echo "Nothing staged to commit after final add -A. Exiting cleanly."
+            exit 0
+          fi
+
+          git commit -m "chore(deps): daily autoupdate ${DATE}"
+          # Force-push as a safety net: the orphan-branch sweep above usually
+          # clears any pre-existing remote ref, but a same-day re-run would
+          # otherwise hit non-fast-forward on the second push.
+          git push -u origin "$BRANCH" --force
+
+          gh pr create \
+            --base master \
+            --head "$BRANCH" \
+            --title "chore(deps): daily autoupdate ${DATE}" \
+            --body "Automated dependency update produced by \`.github/workflows/autoupdate.yml\`. Will auto-merge once required checks pass." \
+            --label dependencies_updated
