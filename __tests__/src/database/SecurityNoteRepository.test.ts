@@ -15,7 +15,6 @@ const createChainableMock = (finalResult: any) => {
 };
 
 vi.mock("../../../src/database/DbUtils", () => {
-  const mockSelectCacheable = vi.fn();
   const mockSelect = vi.fn();
   const mockSelectFrom = vi.fn();
   const mockModifyWithVersioningAndEvictCache = vi.fn();
@@ -23,14 +22,12 @@ vi.mock("../../../src/database/DbUtils", () => {
 
   return {
     FORGE_SQL_ORM: {
-      selectCacheable: mockSelectCacheable,
       select: mockSelect,
       selectFrom: mockSelectFrom,
       modifyWithVersioningAndEvictCache: mockModifyWithVersioningAndEvictCache,
       executeCacheable: mockExecuteCacheable,
     },
     __mocks: {
-      mockSelectCacheable,
       mockSelect,
       mockSelectFrom,
       mockModifyWithVersioningAndEvictCache,
@@ -48,7 +45,6 @@ vi.mock("../../../src/controllers", () => ({
 
 describe("SecurityNoteRepository", () => {
   let repository: SecurityNoteRepository;
-  let mockSelectCacheable: ReturnType<typeof vi.fn>;
   let mockSelect: ReturnType<typeof vi.fn>;
   let mockSelectFrom: ReturnType<typeof vi.fn>;
   let mockModifyWithVersioningAndEvictCache: ReturnType<typeof vi.fn>;
@@ -57,7 +53,6 @@ describe("SecurityNoteRepository", () => {
   beforeEach(() => {
     repository = new SecurityNoteRepository();
     // Get mocks from the mocked module
-    mockSelectCacheable = vi.mocked(DbUtils.FORGE_SQL_ORM.selectCacheable);
     mockSelect = vi.mocked(DbUtils.FORGE_SQL_ORM.select);
     mockSelectFrom = vi.mocked(DbUtils.FORGE_SQL_ORM.selectFrom);
     mockModifyWithVersioningAndEvictCache = vi.mocked(
@@ -70,52 +65,52 @@ describe("SecurityNoteRepository", () => {
   describe("getAllSecurityNotesByIssue", () => {
     it("should return security notes by issue without accountId filter", async () => {
       const mockResult = [{ id: "1", issueKey: "TEST-1", count: 1 }];
-      mockSelectCacheable.mockReturnValue(createChainableMock(mockResult));
+      mockSelect.mockReturnValue(createChainableMock(mockResult));
 
       const result = await repository.getAllSecurityNotesByIssue("TEST-1", 10, 0, null);
 
-      expect(mockSelectCacheable).toHaveBeenCalled();
+      expect(mockSelect).toHaveBeenCalled();
       expect(result).toEqual(mockResult);
     });
 
     it("should return security notes by issue with accountId filter", async () => {
       const mockResult = [{ id: "1", issueKey: "TEST-1", count: 1 }];
-      mockSelectCacheable.mockReturnValue(createChainableMock(mockResult));
+      mockSelect.mockReturnValue(createChainableMock(mockResult));
 
       const result = await repository.getAllSecurityNotesByIssue("TEST-1", 10, 0, "user-123");
 
-      expect(mockSelectCacheable).toHaveBeenCalled();
+      expect(mockSelect).toHaveBeenCalled();
       expect(result).toEqual(mockResult);
     });
 
     it("should handle both issueId and issueKey matching", async () => {
       const mockResult = [{ id: "1", issueKey: "TEST-1", count: 1 }];
-      mockSelectCacheable.mockReturnValue(createChainableMock(mockResult));
+      mockSelect.mockReturnValue(createChainableMock(mockResult));
 
       await repository.getAllSecurityNotesByIssue("TEST-1", 10, 0, null);
 
-      expect(mockSelectCacheable).toHaveBeenCalled();
+      expect(mockSelect).toHaveBeenCalled();
     });
   });
 
   describe("getAllSecurityNotesByProject", () => {
     it("should return security notes by project without accountId filter", async () => {
       const mockResult = [{ id: "1", projectKey: "PROJ", count: 1 }];
-      mockSelectCacheable.mockReturnValue(createChainableMock(mockResult));
+      mockSelect.mockReturnValue(createChainableMock(mockResult));
 
       const result = await repository.getAllSecurityNotesByProject("PROJ", 10, 0, null);
 
-      expect(mockSelectCacheable).toHaveBeenCalled();
+      expect(mockSelect).toHaveBeenCalled();
       expect(result).toEqual(mockResult);
     });
 
     it("should return security notes by project with accountId filter", async () => {
       const mockResult = [{ id: "1", projectKey: "PROJ", count: 1 }];
-      mockSelectCacheable.mockReturnValue(createChainableMock(mockResult));
+      mockSelect.mockReturnValue(createChainableMock(mockResult));
 
       const result = await repository.getAllSecurityNotesByProject("PROJ", 10, 0, "user-123");
 
-      expect(mockSelectCacheable).toHaveBeenCalled();
+      expect(mockSelect).toHaveBeenCalled();
       expect(result).toEqual(mockResult);
     });
   });
@@ -128,11 +123,11 @@ describe("SecurityNoteRepository", () => {
       const chain = createChainableMock(mockResult);
       // groupBy doesn't have limit, so we need to make it return the result
       chain.groupBy = vi.fn().mockResolvedValue(mockResult);
-      mockSelectCacheable.mockReturnValue(chain);
+      mockSelect.mockReturnValue(chain);
 
       const result = await repository.getIssuesAndProjects();
 
-      expect(mockSelectCacheable).toHaveBeenCalled();
+      expect(mockSelect).toHaveBeenCalled();
       expect(result).toEqual(mockResult);
     });
   });
@@ -140,11 +135,11 @@ describe("SecurityNoteRepository", () => {
   describe("getAllSecurityNotesByAccountId", () => {
     it("should return security notes by accountId", async () => {
       const mockResult = [{ id: "1", createdBy: "user-123", count: 1 }];
-      mockSelectCacheable.mockReturnValue(createChainableMock(mockResult));
+      mockSelect.mockReturnValue(createChainableMock(mockResult));
 
       const result = await repository.getAllSecurityNotesByAccountId("user-123", 10, 0);
 
-      expect(mockSelectCacheable).toHaveBeenCalled();
+      expect(mockSelect).toHaveBeenCalled();
       expect(result).toEqual(mockResult);
     });
   });

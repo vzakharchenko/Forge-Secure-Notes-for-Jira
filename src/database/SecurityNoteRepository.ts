@@ -48,7 +48,7 @@ export class SecurityNoteRepository {
     const whereCondition = accountIdCondition
       ? and(baseCondition, accountIdCondition)
       : baseCondition;
-    return FORGE_SQL_ORM.selectCacheable({
+    return FORGE_SQL_ORM.select({
       ...getTableColumns(securityNotes),
       count: sql<number>`COUNT(*) OVER()`,
     })
@@ -86,7 +86,7 @@ export class SecurityNoteRepository {
       ? and(baseCondition, accountIdCondition)
       : baseCondition;
 
-    return FORGE_SQL_ORM.selectCacheable({
+    return FORGE_SQL_ORM.select({
       ...getTableColumns(securityNotes),
       count: sql<number>`COUNT(*) OVER()`,
     })
@@ -96,6 +96,7 @@ export class SecurityNoteRepository {
       .offset(formatLimitOffset(offset))
       .limit(formatLimitOffset(limit));
   }
+
   async getIssuesAndProjects(): Promise<
     {
       issueId: string | null;
@@ -104,7 +105,7 @@ export class SecurityNoteRepository {
       projectKey: string | null;
     }[]
   > {
-    return FORGE_SQL_ORM.selectCacheable({
+    return FORGE_SQL_ORM.select({
       issueId: securityNotes.issueId,
       issueKey: securityNotes.issueKey,
       projectId: securityNotes.projectId,
@@ -128,7 +129,7 @@ export class SecurityNoteRepository {
       count: number;
     })[]
   > {
-    return FORGE_SQL_ORM.selectCacheable({
+    return FORGE_SQL_ORM.select({
       ...getTableColumns(securityNotes),
       count: sql<number>`COUNT(*) OVER()`,
     })
