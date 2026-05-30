@@ -47,9 +47,9 @@ modules:
           route: userHistory
           icon: resource:main;app.png
   scheduledTrigger:
-#    - key: scheduled-fiveMinute
-#      function: runFiveMinute
-#      interval: fiveMinute
+    - key: scheduled-fiveMinute
+      function: runFiveMinute
+      interval: fiveMinute
     - key: runSlowQuery
       function: runSlowQueryFunc
       interval: day
