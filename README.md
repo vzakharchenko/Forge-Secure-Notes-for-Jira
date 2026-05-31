@@ -10,6 +10,9 @@
 [![Code Smells](https://sonarcloud.io/api/project_badges/measure?project=vzakharchenko_Forge-Secure-Notes-for-Jira&metric=code_smells)](https://sonarcloud.io/summary/new_code?id=vzakharchenko_Forge-Secure-Notes-for-Jira)
 
 ![GitHub repo size](https://img.shields.io/github/repo-size/vzakharchenko/Forge-Secure-Notes-for-Jira)
+
+[![LoC (src)](https://raw.githubusercontent.com/vzakharchenko/Forge-Secure-Notes-for-Jira/badges/loc-src.svg)](https://github.com/vzakharchenko/Forge-Secure-Notes-for-Jira/actions/workflows/loc-badge.yml)
+
 [![REUSE status](https://api.reuse.software/badge/github.com/vzakharchenko/Forge-Secure-Notes-for-Jira)](https://api.reuse.software/info/github.com/vzakharchenko/Forge-Secure-Notes-for-Jira)
 
 

@@ -30,32 +30,15 @@ jobs:
       - name: Prepare output dir
         run: mkdir -p output
 
-      # cloc-based LoC counter; pinned to commit SHA per repo policy.
-      # `loc-full` counts everything (incl. examples) minus markup/config noise.
-      - name: LoC (whole repo, including examples)
+      - name: LoC
         uses: alexispurslane/GHA-LoC-Badge@811a7fa2bae9860e8f254bcb9cfb71d021931a77 # v2.0.0
         with:
           debug: true
           directory: ./
-          badge: ./output/loc-full.svg
-          badge_label: "LoC (full)"
-          badge_color: "blue"
-          ignore: "node_modules|dist|dist-cli|build|build-static|coverage|.qlty|*.js|*.jsx|*.mjs|*.cjs|*.min.js|package-lock.json|*.json|*.yml|*.yaml|*.md|*.css|*.html"
-
-      # `loc-src` counts only src/ + static/src/.
-      # The action's `directory:` doesn't combine well with a synthetic staging
-      # dir (cloc receives glob-relative paths but runs from the workspace
-      # root, so a sub-`directory:` resolves to nothing). Restricting via
-      # `patterns:` keeps glob anchored at the workspace root.
-      - name: LoC (library + CLI sources only)
-        uses: alexispurslane/GHA-LoC-Badge@811a7fa2bae9860e8f254bcb9cfb71d021931a77 # v2.0.0
-        with:
-          debug: true
-          directory: ./
-          badge: ./output/loc-src.svg
+          badge: ./output/loc.svg
           badge_label: "LoC (src)"
           badge_color: "green"
-          patterns: "src/**|static/src/**"
+          patterns: "src/**|static/src/**|shared/**"
           ignore: "*.js|*.jsx|*.mjs|*.cjs|*.min.js"
 
       - name: Publish badges to `badges` branch
@@ -68,17 +51,16 @@ jobs:
           # Stash badge SVGs outside the worktree so the orphan reset
           # below doesn't wipe them.
           TMP=$(mktemp -d)
-          cp output/loc-full.svg "$TMP/"
-          cp output/loc-src.svg  "$TMP/"
+          
+          cp output/loc.svg  "$TMP/"
 
           git checkout --orphan badges
           git rm -rf --quiet . || true
           git clean -fdx -e output
+          
+          mv "$TMP/loc.svg"  ./loc.svg
 
-          mv "$TMP/loc-full.svg" ./loc-full.svg
-          mv "$TMP/loc-src.svg"  ./loc-src.svg
-
-          git add loc-full.svg loc-src.svg
+          git add loc.svg
           if git diff --cached --quiet; then
             echo "No badge changes — nothing to publish."
             exit 0
