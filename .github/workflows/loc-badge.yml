@@ -47,7 +47,7 @@ jobs:
           directory: ./
           badge: ./output/loc-backend.svg
           badge_label: "LoC (backend)"
-          badge_color: "green"
+          badge_color: "blue"
           patterns: "src/**"
           ignore: "*.js|*.jsx|*.mjs|*.cjs|*.min.js"
 
@@ -58,7 +58,7 @@ jobs:
           directory: ./
           badge: ./output/loc-frontend.svg
           badge_label: "LoC (frontend)"
-          badge_color: "green"
+          badge_color: "orange"
           patterns: "static/src/**"
           ignore: "*.js|*.jsx|*.mjs|*.cjs|*.min.js"
 
@@ -67,9 +67,9 @@ jobs:
         with:
           debug: true
           directory: ./
-          badge: ./output/loc-frontend.svg
+          badge: ./output/loc-shared.svg
           badge_label: "LoC (shared)"
-          badge_color: "green"
+          badge_color: "blueviolet"
           patterns: "shared/**"
           ignore: "*.js|*.jsx|*.mjs|*.cjs|*.min.js"
 
@@ -94,6 +94,9 @@ jobs:
           git clean -fdx -e output
           
           mv "$TMP/loc.svg"  ./loc.svg
+          mv "$TMP/loc-backend.svg"  ./loc-backend.svg
+          mv "$TMP/loc-frontend.svg"  ./loc-frontend.svg
+          mv "$TMP/loc-shared.svg"  ./loc-shared.svg
 
           git add loc.svg loc-backend.svg loc-frontend.svg loc-shared.svg
           if git diff --cached --quiet; then
