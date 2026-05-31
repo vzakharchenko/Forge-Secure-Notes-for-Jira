@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: 2025 Trust Logic / Vasyl Zakharchenko
+// SPDX-License-Identifier: BUSL-1.1
+
 export type { AuditUser } from "./AuditUser";
 export type { AuditUsers } from "./AuditUsers";
 export type { Bootstrap } from "./Bootstrap";

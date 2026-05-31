@@ -11,7 +11,10 @@
 
 ![GitHub repo size](https://img.shields.io/github/repo-size/vzakharchenko/Forge-Secure-Notes-for-Jira)
 
-[![LoC (src)](https://raw.githubusercontent.com/vzakharchenko/Forge-Secure-Notes-for-Jira/badges/loc-src.svg)](https://github.com/vzakharchenko/Forge-Secure-Notes-for-Jira/actions/workflows/loc-badge.yml)
+[![LoC (repository)](https://raw.githubusercontent.com/vzakharchenko/Forge-Secure-Notes-for-Jira/badges/loc.svg)](https://github.com/vzakharchenko/Forge-Secure-Notes-for-Jira/actions/workflows/loc-badge.yml)
+[![LoC (backend)](https://raw.githubusercontent.com/vzakharchenko/Forge-Secure-Notes-for-Jira/badges/loc-backend.svg)](https://github.com/vzakharchenko/Forge-Secure-Notes-for-Jira/actions/workflows/loc-badge.yml)
+[![LoC (frontend)](https://raw.githubusercontent.com/vzakharchenko/Forge-Secure-Notes-for-Jira/badges/loc-frontend.svg)](https://github.com/vzakharchenko/Forge-Secure-Notes-for-Jira/actions/workflows/loc-badge.yml)
+[![LoC (shared)](https://raw.githubusercontent.com/vzakharchenko/Forge-Secure-Notes-for-Jira/badges/loc-shared.svg)](https://github.com/vzakharchenko/Forge-Secure-Notes-for-Jira/actions/workflows/loc-badge.yml)
 
 [![REUSE status](https://api.reuse.software/badge/github.com/vzakharchenko/Forge-Secure-Notes-for-Jira)](https://api.reuse.software/info/github.com/vzakharchenko/Forge-Secure-Notes-for-Jira)
 

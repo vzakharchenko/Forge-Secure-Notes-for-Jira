@@ -30,15 +30,47 @@ jobs:
       - name: Prepare output dir
         run: mkdir -p output
 
-      - name: LoC
+      - name: LoC-total
         uses: alexispurslane/GHA-LoC-Badge@811a7fa2bae9860e8f254bcb9cfb71d021931a77 # v2.0.0
         with:
           debug: true
           directory: ./
           badge: ./output/loc.svg
-          badge_label: "LoC (src)"
+          badge_label: "LoC"
           badge_color: "green"
           patterns: "src/**|static/src/**|shared/**"
+          ignore: "*.js|*.jsx|*.mjs|*.cjs|*.min.js"
+      - name: LoC-backend
+        uses: alexispurslane/GHA-LoC-Badge@811a7fa2bae9860e8f254bcb9cfb71d021931a77 # v2.0.0
+        with:
+          debug: true
+          directory: ./
+          badge: ./output/loc-backend.svg
+          badge_label: "LoC (backend)"
+          badge_color: "green"
+          patterns: "src/**"
+          ignore: "*.js|*.jsx|*.mjs|*.cjs|*.min.js"
+
+      - name: LoC-frontend
+        uses: alexispurslane/GHA-LoC-Badge@811a7fa2bae9860e8f254bcb9cfb71d021931a77 # v2.0.0
+        with:
+          debug: true
+          directory: ./
+          badge: ./output/loc-frontend.svg
+          badge_label: "LoC (frontend)"
+          badge_color: "green"
+          patterns: "static/src/**"
+          ignore: "*.js|*.jsx|*.mjs|*.cjs|*.min.js"
+
+      - name: LoC-common
+        uses: alexispurslane/GHA-LoC-Badge@811a7fa2bae9860e8f254bcb9cfb71d021931a77 # v2.0.0
+        with:
+          debug: true
+          directory: ./
+          badge: ./output/loc-frontend.svg
+          badge_label: "LoC (shared)"
+          badge_color: "green"
+          patterns: "shared/**"
           ignore: "*.js|*.jsx|*.mjs|*.cjs|*.min.js"
 
       - name: Publish badges to `badges` branch
@@ -53,6 +85,9 @@ jobs:
           TMP=$(mktemp -d)
           
           cp output/loc.svg  "$TMP/"
+          cp output/loc-backend.svg  "$TMP/"
+          cp output/loc-frontend.svg  "$TMP/"
+          cp output/loc-shared.svg  "$TMP/"
 
           git checkout --orphan badges
           git rm -rf --quiet . || true
@@ -60,7 +95,7 @@ jobs:
           
           mv "$TMP/loc.svg"  ./loc.svg
 
-          git add loc.svg
+          git add loc.svg loc-backend.svg loc-frontend.svg loc-shared.svg
           if git diff --cached --quiet; then
             echo "No badge changes — nothing to publish."
             exit 0

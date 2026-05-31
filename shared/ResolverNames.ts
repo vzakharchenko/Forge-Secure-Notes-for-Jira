@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: 2025 Trust Logic / Vasyl Zakharchenko
+// SPDX-License-Identifier: BUSL-1.1
+
 export enum ResolverNames {
   GET_MY_SECURED_NOTES = "getMySecuredNotes",
   CREATE_SECURITY_NOTE = "createSecurityNote",
