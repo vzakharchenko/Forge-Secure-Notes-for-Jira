@@ -7,9 +7,12 @@ import { join } from "node:path";
 import { afterEach, describe, expect, it, vi } from "vitest";
 
 const SCRIPT_SPECIFIER = "../../scripts/add-spdx-header.mjs";
+// Tokens split so the REUSE scanner does not parse these fixtures as real SPDX
+// license expressions (matches the convention used by the script under test).
+const TAG_COPY = "SPDX-File" + "CopyrightText";
+const TAG_LIC = "SPDX-License" + "-Identifier";
 const EXPECTED_HEADER =
-  "// SPDX-FileCopyrightText: 2025 Trust Logic / Vasyl Zakharchenko\n" +
-  "// SPDX-License-Identifier: BUSL-1.1\n";
+  `// ${TAG_COPY}: 2025 Trust Logic / Vasyl Zakharchenko\n` + `// ${TAG_LIC}: BUSL-1.1\n`;
 
 const tempDirs: string[] = [];
 
@@ -67,10 +70,7 @@ describe("add-spdx-header.mjs", () => {
   });
 
   it("skips files that already contain SPDX-License-Identifier in the first 500 chars", async () => {
-    const existing =
-      "// SPDX-FileCopyrightText: 2025 Trust Logic / Vasyl Zakharchenko\n" +
-      "// SPDX-License-Identifier: BUSL-1.1\n\n" +
-      "export const x = 1;\n";
+    const existing = `${EXPECTED_HEADER}\nexport const x = 1;\n`;
     const file = tempFile("already.ts", existing);
 
     const { stdout } = await runScript(file);
@@ -108,10 +108,7 @@ describe("add-spdx-header.mjs", () => {
   it("processes multiple files and reports how many were updated", async () => {
     const file1 = tempFile("one.ts", "const a = 1;\n");
     const file2 = tempFile("two.ts", "const b = 2;\n");
-    const existing =
-      "// SPDX-FileCopyrightText: 2025 Trust Logic / Vasyl Zakharchenko\n" +
-      "// SPDX-License-Identifier: BUSL-1.1\n\n" +
-      "const c = 3;\n";
+    const existing = `${EXPECTED_HEADER}\nconst c = 3;\n`;
     const file3 = tempFile("three.ts", existing);
 
     const { stdout } = await runScript(file1, file2, file3);
@@ -123,10 +120,7 @@ describe("add-spdx-header.mjs", () => {
   });
 
   it("prints nothing when no files need updating", async () => {
-    const existing =
-      "// SPDX-FileCopyrightText: 2025 Trust Logic / Vasyl Zakharchenko\n" +
-      "// SPDX-License-Identifier: BUSL-1.1\n\n" +
-      "export const x = 1;\n";
+    const existing = `${EXPECTED_HEADER}\nexport const x = 1;\n`;
     const file = tempFile("unchanged.ts", existing);
 
     const { stdout } = await runScript(file);
