@@ -1,0 +1,24 @@
+BUSINESS SOURCE LICENSE 1.1
+
+Parameters:
+
+License Change Date: 2030-01-01
+Change License: MIT License
+Licensor: Vasyl Zakharchenko
+Licensed Work: Secure Notes for Jira (The Software)
+Copyright (c) <year> <copyright holders>
+
+TERMS:
+
+The Licensor hereby grants you the right to copy, modify, create derivative works, redistribute, and make non-production use of the Licensed Work. The Licensor also grants you the right to use the Licensed Work for security auditing, educational purposes, and internal testing.
+
+"Production use" is defined as running the Software in a live Atlassian environment (Jira/Confluence) for internal business operations or providing the Software as a service to third parties.
+
+Any use of the Licensed Work for Production purposes requires a valid commercial license obtained via the Atlassian Marketplace.
+
+On the License Change Date, the Licensor will automatically grant to you a perpetual, worldwide, non-exclusive, no-charge, royalty-free, irrevocable copyright license under the Change License (MIT).
+
+-------------------------------------------------------------------------
+This license is based on the Business Source License 1.1 available at 
+https://mariadb.com/bsl11/
+-------------------------------------------------------------------------
