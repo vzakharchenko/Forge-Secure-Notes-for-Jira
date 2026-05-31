@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: 2025 Trust Logic / Vasyl Zakharchenko
+// SPDX-License-Identifier: BUSL-1.1
+
 import { resolver, exceptionHandler } from "../../core";
 import { KVSSchemaMigrationService, SecurityNoteService } from "../../services";
 import { ActualResolver } from "..";

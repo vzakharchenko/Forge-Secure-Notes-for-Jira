@@ -1,10 +1,10 @@
 #!/usr/bin/env node
-// SPDX-FileCopyrightText: 2025-2026 Trust-Logic
-// SPDX-License-Identifier: BSL
+// SPDX-FileCopyrightText: 2025 Trust Logic / Vasyl Zakharchenko
+// SPDX-License-Identifier: BUSL-1.1
 import { readFileSync, writeFileSync } from "node:fs";
 
-const COPYRIGHT = "2025-2026 Trust-Logic";
-const LICENSE = "BSL";
+const COPYRIGHT = "2025 Trust Logic / Vasyl Zakharchenko";
+const LICENSE = "BUSL-1.1";
 // Tokens split so the REUSE scanner does not try to parse template
 // expressions like `${LICENSE}` as SPDX license expressions.
 const TAG_COPY = "SPDX-File" + "CopyrightText";

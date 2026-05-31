@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: 2025 Trust Logic / Vasyl Zakharchenko
+// SPDX-License-Identifier: BUSL-1.1
+
 import { withAppContext } from "../controllers";
 import { FORGE_INJECTION_TOKENS } from "../constants";
 import { inject, injectable } from "inversify";

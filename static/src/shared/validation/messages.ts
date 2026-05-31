@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: 2025 Trust Logic / Vasyl Zakharchenko
+// SPDX-License-Identifier: BUSL-1.1
+
 export const VALIDATION_MESSAGES = {
   MIN_LENGTH: (min: number) => `The minimum allowed value is ${min}`,
   MAX_LENGTH: (max: number) => `The maximum allowed value is ${max}`,

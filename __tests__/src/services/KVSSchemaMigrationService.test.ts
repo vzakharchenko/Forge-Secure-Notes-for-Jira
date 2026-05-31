@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: 2025 Trust Logic / Vasyl Zakharchenko
+// SPDX-License-Identifier: BUSL-1.1
+
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { KVSSchemaMigrationService } from "../../../src/services";
 import { kvs } from "@forge/kvs";

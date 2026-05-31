@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: 2025 Trust Logic / Vasyl Zakharchenko
+// SPDX-License-Identifier: BUSL-1.1
+
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { BootstrapService } from "../../../src/services";
 import { JiraUserService } from "../../../src/jira";

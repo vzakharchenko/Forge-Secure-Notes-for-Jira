@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: 2025 Trust Logic / Vasyl Zakharchenko
+// SPDX-License-Identifier: BUSL-1.1
+
 export const DEFAULT_DEBOUNCE_TIME = 350;
 
 export const INCREASED_DEBOUNCE_TIME = 450;

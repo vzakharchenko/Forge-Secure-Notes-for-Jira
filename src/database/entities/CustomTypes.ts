@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: 2025 Trust Logic / Vasyl Zakharchenko
+// SPDX-License-Identifier: BUSL-1.1
+
 import { customType } from "drizzle-orm/mysql-core";
 import { stringify } from "uuid";
 import { sql } from "drizzle-orm";

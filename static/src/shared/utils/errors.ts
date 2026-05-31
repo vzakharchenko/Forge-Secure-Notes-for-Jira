@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: 2025 Trust Logic / Vasyl Zakharchenko
+// SPDX-License-Identifier: BUSL-1.1
+
 // models
 import { ServerError } from "@src/shared/models/remoteClient";
 import { ValidationErrors } from "@shared/Types";

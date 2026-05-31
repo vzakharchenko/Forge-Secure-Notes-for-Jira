@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: 2025 Trust Logic / Vasyl Zakharchenko
+// SPDX-License-Identifier: BUSL-1.1
+
 export { OpenSecurityNoteController } from "./OpenSecurityNoteController";
 export { FetchSecurityNoteController } from "./FetchSecurityNoteController";
 export { AuditUsersController as AuditUserController } from "./AuditUserController";

@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: 2025 Trust Logic / Vasyl Zakharchenko
+// SPDX-License-Identifier: BUSL-1.1
+
 export const DERIVE_PURPOSE_ENCRYPTION = "forge-secure-note:v1:encrypt";
 export const DERIVE_PURPOSE_VERIFICATION = "forge-secure-note:v1:verify";
 

@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: 2025 Trust Logic / Vasyl Zakharchenko
+// SPDX-License-Identifier: BUSL-1.1
+
 import { ReactNode, useEffect, useState } from "react";
 import { view } from "@forge/bridge";
 import { Action, History, Location } from "history";

@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: 2025 Trust Logic / Vasyl Zakharchenko
+// SPDX-License-Identifier: BUSL-1.1
+
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import FiveMinutesTrigger from "../../../../src/controllers/triggers/FiveMinutesTrigger";
 import { SchedulerTriggerRequest } from "../../../../src/core";

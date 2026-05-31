@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: 2025 Trust Logic / Vasyl Zakharchenko
+// SPDX-License-Identifier: BUSL-1.1
+
 import "reflect-metadata";
 import Resolver, { Request } from "@forge/resolver";
 import { ErrorResponse } from "../../shared/Types";

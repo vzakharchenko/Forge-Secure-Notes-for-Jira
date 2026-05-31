@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: 2025 Trust Logic / Vasyl Zakharchenko
+// SPDX-License-Identifier: BUSL-1.1
+
 import { Result } from "@forge/sql/out/utils/types";
 import { FORGE_SQL_ORM, securityNotes } from "../database";
 import { inject, injectable } from "inversify";

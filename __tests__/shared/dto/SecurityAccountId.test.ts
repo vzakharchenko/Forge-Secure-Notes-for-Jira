@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: 2025 Trust Logic / Vasyl Zakharchenko
+// SPDX-License-Identifier: BUSL-1.1
+
 import { describe, it, expect } from "vitest";
 import { validate } from "class-validator";
 import { SecurityAccountId } from "../../../shared/dto";

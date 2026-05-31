@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: 2025 Trust Logic / Vasyl Zakharchenko
+// SPDX-License-Identifier: BUSL-1.1
+
 import { SecurityNoteStatus, SHARED_EVENT_NAME } from "../../shared/Types";
 import { getAppContext, withAppContext } from "../controllers";
 import { NewSecurityNote } from "../../shared/dto";

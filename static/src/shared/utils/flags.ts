@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: 2025 Trust Logic / Vasyl Zakharchenko
+// SPDX-License-Identifier: BUSL-1.1
+
 // libs
 import { showFlag } from "@forge/bridge";
 import { v4 as uuidv4 } from "uuid";

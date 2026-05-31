@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: 2025 Trust Logic / Vasyl Zakharchenko
+// SPDX-License-Identifier: BUSL-1.1
+
 export const EXPIRY_OPTIONS = [
   { label: "1 Hour", value: "1h" },
   { label: "1 Day", value: "1d" },
