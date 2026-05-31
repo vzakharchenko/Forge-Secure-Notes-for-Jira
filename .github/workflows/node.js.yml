@@ -36,8 +36,8 @@ jobs:
           cache: 'npm'
 
       - name: REUSE / SPDX compliance
-        uses: fsfe/reuse-action@bb774aa972c2a89ff34781233d275075cbddf542 #
-        v5
+        uses: fsfe/reuse-action@bb774aa972c2a89ff34781233d275075cbddf542 #v5
+
       - name: Backend install
         run: npm ci --ignore-scripts
       - name: Install oxc binding (Linux)
