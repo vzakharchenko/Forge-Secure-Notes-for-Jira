@@ -10,6 +10,8 @@
 [![Code Smells](https://sonarcloud.io/api/project_badges/measure?project=vzakharchenko_Forge-Secure-Notes-for-Jira&metric=code_smells)](https://sonarcloud.io/summary/new_code?id=vzakharchenko_Forge-Secure-Notes-for-Jira)
 
 ![GitHub repo size](https://img.shields.io/github/repo-size/vzakharchenko/Forge-Secure-Notes-for-Jira)
+[![REUSE status](https://api.reuse.software/badge/github.com/vzakharchenko/Forge-Secure-Notes-for-Jira)](https://api.reuse.software/info/github.com/vzakharchenko/Forge-Secure-Notes-for-Jira)
+
 
 Share sensitive information securely within Jira issues. Create one-time, expiring encrypted notes with out-of-band key exchange. Built with Atlassian Forge, Custom UI &amp; @forge/sql, @forge/kvs.
 
