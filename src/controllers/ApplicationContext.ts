@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: 2025 Trust Logic / Vasyl Zakharchenko
+// SPDX-License-Identifier: BUSL-1.1
+
 import { AsyncLocalStorage } from "node:async_hooks";
 import { BaseContext } from "../core";
 

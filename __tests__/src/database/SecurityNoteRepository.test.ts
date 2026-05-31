@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: 2025 Trust Logic / Vasyl Zakharchenko
+// SPDX-License-Identifier: BUSL-1.1
+
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { SecurityNoteRepository, securityNotes } from "../../../src/database";
 import * as DbUtils from "../../../src/database/DbUtils";

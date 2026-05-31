@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: 2025 Trust Logic / Vasyl Zakharchenko
+// SPDX-License-Identifier: BUSL-1.1
+
 import { describe, it, expect } from "vitest";
 import { SecurityNoteData, PERMISSION_ERROR_OBJECT } from "../../../shared/responses";
 

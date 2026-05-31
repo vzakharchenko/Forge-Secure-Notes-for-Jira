@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: 2025 Trust Logic / Vasyl Zakharchenko
+// SPDX-License-Identifier: BUSL-1.1
+
 export const DATE_FORMATS = {
   DATE: "YYYY-MM-DD",
   SHORT_DATE: "yyyy-MM-dd",

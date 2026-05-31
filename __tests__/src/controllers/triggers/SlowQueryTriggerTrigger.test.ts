@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: 2025 Trust Logic / Vasyl Zakharchenko
+// SPDX-License-Identifier: BUSL-1.1
+
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import SlowQueryTriggerTrigger from "../../../../src/controllers/triggers/SlowQueryTriggerTrigger";
 import { FORGE_SQL_ORM } from "../../../../src/database";

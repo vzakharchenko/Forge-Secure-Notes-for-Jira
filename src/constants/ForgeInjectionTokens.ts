@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: 2025 Trust Logic / Vasyl Zakharchenko
+// SPDX-License-Identifier: BUSL-1.1
+
 export const FORGE_INJECTION_TOKENS = {
   AnalyticService: Symbol.for("AnalyticService"),
   BootstrapService: Symbol.for("BootstrapService"),

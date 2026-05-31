@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: 2025 Trust Logic / Vasyl Zakharchenko
+// SPDX-License-Identifier: BUSL-1.1
+
 import { forgeDateTimeString } from "forge-sql-orm";
 
 import { mysqlTable, primaryKey, varchar, tinyint } from "drizzle-orm/mysql-core";

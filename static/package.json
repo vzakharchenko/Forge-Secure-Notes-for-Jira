@@ -69,7 +69,12 @@
     "update": "npx npm-check-updates -u && npm install"
   },
   "lint-staged": {
-    "*.{ts,tsx,css,scss,md}": [
+    "*.{css,scss,md}": [
+      "prettier --write",
+      "eslint --fix"
+    ],
+    "*.{ts,tsx}": [
+      "node ../scripts/add-spdx-header.mjs",
       "prettier --write",
       "eslint --fix"
     ]

@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: 2025 Trust Logic / Vasyl Zakharchenko
+// SPDX-License-Identifier: BUSL-1.1
+
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { AsyncService } from "../../../src/services";
 import { AsyncEvent } from "@forge/events";

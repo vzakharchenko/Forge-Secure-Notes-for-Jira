@@ -6,7 +6,7 @@ License Change Date: 2030-01-01
 Change License: MIT License
 Licensor: Vasyl Zakharchenko
 Licensed Work: Secure Notes for Jira (The Software)
-Copyright (c) <year> <copyright holders>
+Copyright (c) 2025 Trust Logic / Vasyl Zakharchenko
 
 TERMS:
 
@@ -19,6 +19,6 @@ Any use of the Licensed Work for Production purposes requires a valid commercial
 On the License Change Date, the Licensor will automatically grant to you a perpetual, worldwide, non-exclusive, no-charge, royalty-free, irrevocable copyright license under the Change License (MIT).
 
 -------------------------------------------------------------------------
-This license is based on the Business Source License 1.1 available at 
+This license is based on the Business Source License 1.1 available at
 https://mariadb.com/bsl11/
 -------------------------------------------------------------------------

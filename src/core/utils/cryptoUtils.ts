@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: 2025 Trust Logic / Vasyl Zakharchenko
+// SPDX-License-Identifier: BUSL-1.1
+
 import { pbkdf2, timingSafeEqual } from "node:crypto";
 import { promisify } from "node:util";
 import { SALT_ITERATIONS } from "../../../shared/Types";

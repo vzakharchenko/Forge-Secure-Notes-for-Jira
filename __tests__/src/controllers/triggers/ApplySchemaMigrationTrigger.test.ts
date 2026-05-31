@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: 2025 Trust Logic / Vasyl Zakharchenko
+// SPDX-License-Identifier: BUSL-1.1
+
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import ApplySchemaMigrationTrigger from "../../../../src/controllers/triggers/ApplySchemaMigrationTrigger";
 import * as forgeSqlOrm from "forge-sql-orm";

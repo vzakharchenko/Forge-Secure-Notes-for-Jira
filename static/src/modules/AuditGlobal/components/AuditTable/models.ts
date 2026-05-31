@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: 2025 Trust Logic / Vasyl Zakharchenko
+// SPDX-License-Identifier: BUSL-1.1
+
 // models
 import { ViewMySecurityNotes } from "@shared/responses/ViewMySecurityNotes";
 import { ExportConfig } from "./hooks/useExportNotes";

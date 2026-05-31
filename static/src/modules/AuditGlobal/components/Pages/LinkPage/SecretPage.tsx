@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: 2025 Trust Logic / Vasyl Zakharchenko
+// SPDX-License-Identifier: BUSL-1.1
+
 // libs
 import React, { useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
