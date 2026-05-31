@@ -65,7 +65,7 @@
     "ajv": "npm:ajv@6.14.0"
   },
   "lint-staged": {
-    "{src,static,__tests__,web-site}/**/*.{ts,tsx,mts,cts}": [
+    "{src,static,__tests__,web-site,shared}/**/*.{ts,tsx,mts,cts}": [
       "node scripts/add-spdx-header.mjs",
       "prettier --write",
       "eslint --fix"
