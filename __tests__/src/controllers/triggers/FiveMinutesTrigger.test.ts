@@ -5,10 +5,10 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import FiveMinutesTrigger from "../../../../src/controllers/triggers/FiveMinutesTrigger";
 import { SchedulerTriggerRequest } from "../../../../src/core";
 import { FORGE_SQL_ORM } from "../../../../src/database";
-import * as forgeSqlOrm from "forge-sql-orm";
+import * as forgeSqlOrmExtra from "forge-sql-orm-extra";
 
-vi.mock("forge-sql-orm", async (importOriginal) => {
-  const actual = await importOriginal<typeof forgeSqlOrm>();
+vi.mock("forge-sql-orm-extra", async (importOriginal) => {
+  const actual = await importOriginal<typeof forgeSqlOrmExtra>();
   return {
     ...actual,
     clearCacheSchedulerTrigger: vi.fn(),
@@ -36,7 +36,7 @@ vi.mock("../../../../src/database/DbUtils", () => ({
     select: vi.fn(() => createChainableSelect()),
     selectCacheable: vi.fn(() => createChainableSelect()),
     selectFrom: vi.fn(() => createChainableSelectFrom()),
-    modifyWithVersioningAndEvictCache: vi.fn(),
+    modifyWithVersioning: vi.fn(),
     executeCacheable: vi.fn(),
   },
 }));
@@ -79,7 +79,7 @@ describe("FiveMinutesTrigger", () => {
       };
 
       const mockExecuteWithMetadata = vi.mocked(FORGE_SQL_ORM.executeWithMetadata);
-      const mockClearCache = vi.mocked(forgeSqlOrm.clearCacheSchedulerTrigger);
+      const mockClearCache = vi.mocked(forgeSqlOrmExtra.clearCacheSchedulerTrigger);
       mockClearCache.mockResolvedValue("Cache cleared" as any);
       mockExecuteWithMetadata.mockImplementation(async (fn, callback) => {
         const result = await fn();
@@ -99,7 +99,7 @@ describe("FiveMinutesTrigger", () => {
 
     it("should send analytics with correct parameters", async () => {
       const mockExecuteWithMetadata = vi.mocked(FORGE_SQL_ORM.executeWithMetadata);
-      const mockClearCache = vi.mocked(forgeSqlOrm.clearCacheSchedulerTrigger);
+      const mockClearCache = vi.mocked(forgeSqlOrmExtra.clearCacheSchedulerTrigger);
       mockClearCache.mockResolvedValue("Cache cleared" as any);
       const mockCallback = vi.fn();
       mockExecuteWithMetadata.mockImplementation(async (fn, callback) => {
@@ -133,7 +133,7 @@ describe("FiveMinutesTrigger", () => {
       };
 
       const mockExecuteWithMetadata = vi.mocked(FORGE_SQL_ORM.executeWithMetadata);
-      const mockClearCache = vi.mocked(forgeSqlOrm.clearCacheSchedulerTrigger);
+      const mockClearCache = vi.mocked(forgeSqlOrmExtra.clearCacheSchedulerTrigger);
       mockClearCache.mockResolvedValue("Cache cleared" as any);
       const mockPrintQueries = vi.fn();
       const consoleWarnSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
@@ -170,7 +170,7 @@ describe("FiveMinutesTrigger", () => {
       };
 
       const mockExecuteWithMetadata = vi.mocked(FORGE_SQL_ORM.executeWithMetadata);
-      const mockClearCache = vi.mocked(forgeSqlOrm.clearCacheSchedulerTrigger);
+      const mockClearCache = vi.mocked(forgeSqlOrmExtra.clearCacheSchedulerTrigger);
       mockClearCache.mockResolvedValue("Cache cleared" as any);
       const consoleDebugSpy = vi.spyOn(console, "debug").mockImplementation(() => {});
       mockExecuteWithMetadata.mockImplementation(async (fn, callback) => {

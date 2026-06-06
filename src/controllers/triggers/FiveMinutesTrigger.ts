@@ -9,7 +9,7 @@ import {
   SchedulerTriggerResponse,
 } from "../../core";
 import { SecurityNoteService, AnalyticService, BootstrapService } from "../../services";
-import { clearCacheSchedulerTrigger } from "forge-sql-orm";
+import { clearCacheSchedulerTrigger } from "forge-sql-orm-extra";
 import { FORGE_SQL_ORM, SecurityNoteRepository } from "../../database";
 import { Container } from "inversify";
 import { FORGE_INJECTION_TOKENS } from "../../constants";

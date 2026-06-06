@@ -144,7 +144,7 @@ export class SecurityNoteRepository {
   }
 
   async viewSecurityNote(id: string): Promise<void> {
-    await FORGE_SQL_ORM.modifyWithVersioningAndEvictCache().updateById(
+    await FORGE_SQL_ORM.modifyWithVersioning().updateById(
       { status: "VIEWED", viewedAt: new Date(), id },
       securityNotes,
     );
@@ -154,7 +154,7 @@ export class SecurityNoteRepository {
   async createSecurityNote(
     datas: Partial<InferInsertModel<typeof securityNotes>>[],
   ): Promise<void> {
-    await FORGE_SQL_ORM.modifyWithVersioningAndEvictCache().insert(
+    await FORGE_SQL_ORM.modifyWithVersioning().insert(
       securityNotes,
       datas as InferInsertModel<typeof securityNotes>[],
     );
@@ -201,14 +201,14 @@ export class SecurityNoteRepository {
   }
 
   async deleteSecurityNote(id: string): Promise<void> {
-    await FORGE_SQL_ORM.modifyWithVersioningAndEvictCache().updateById(
+    await FORGE_SQL_ORM.modifyWithVersioning().updateById(
       { status: "DELETED", deletedAt: new Date(), id },
       securityNotes,
     );
   }
 
   async expireSecurityNote(ids: string[]): Promise<void> {
-    await FORGE_SQL_ORM.modifyWithVersioningAndEvictCache().updateFields(
+    await FORGE_SQL_ORM.modifyWithVersioning().updateFields(
       { status: "EXPIRED", expiredAt: new Date() },
       securityNotes,
       inArray(securityNotes.id, ids),
