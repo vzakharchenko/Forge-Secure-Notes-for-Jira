@@ -20,20 +20,20 @@ const createChainableMock = (finalResult: any) => {
 vi.mock("../../../src/database/DbUtils", () => {
   const mockSelect = vi.fn();
   const mockSelectFrom = vi.fn();
-  const mockModifyWithVersioningAndEvictCache = vi.fn();
+  const mockModifyWithVersioning = vi.fn();
   const mockExecuteCacheable = vi.fn();
 
   return {
     FORGE_SQL_ORM: {
       select: mockSelect,
       selectFrom: mockSelectFrom,
-      modifyWithVersioningAndEvictCache: mockModifyWithVersioningAndEvictCache,
+      modifyWithVersioning: mockModifyWithVersioning,
       executeCacheable: mockExecuteCacheable,
     },
     __mocks: {
       mockSelect,
       mockSelectFrom,
-      mockModifyWithVersioningAndEvictCache,
+      mockModifyWithVersioning,
       mockExecuteCacheable,
     },
   };
@@ -50,7 +50,7 @@ describe("SecurityNoteRepository", () => {
   let repository: SecurityNoteRepository;
   let mockSelect: ReturnType<typeof vi.fn>;
   let mockSelectFrom: ReturnType<typeof vi.fn>;
-  let mockModifyWithVersioningAndEvictCache: ReturnType<typeof vi.fn>;
+  let mockModifyWithVersioning: ReturnType<typeof vi.fn>;
   let mockExecuteCacheable: ReturnType<typeof vi.fn>;
 
   beforeEach(() => {
@@ -58,9 +58,7 @@ describe("SecurityNoteRepository", () => {
     // Get mocks from the mocked module
     mockSelect = vi.mocked(DbUtils.FORGE_SQL_ORM.select);
     mockSelectFrom = vi.mocked(DbUtils.FORGE_SQL_ORM.selectFrom);
-    mockModifyWithVersioningAndEvictCache = vi.mocked(
-      DbUtils.FORGE_SQL_ORM.modifyWithVersioningAndEvictCache,
-    );
+    mockModifyWithVersioning = vi.mocked(DbUtils.FORGE_SQL_ORM.modifyWithVersioning);
     mockExecuteCacheable = vi.mocked(DbUtils.FORGE_SQL_ORM.executeCacheable);
     vi.clearAllMocks();
   });
@@ -150,13 +148,13 @@ describe("SecurityNoteRepository", () => {
   describe("viewSecurityNote", () => {
     it("should update security note status to VIEWED", async () => {
       const mockUpdateById = vi.fn().mockResolvedValue(undefined);
-      mockModifyWithVersioningAndEvictCache.mockReturnValue({
+      mockModifyWithVersioning.mockReturnValue({
         updateById: mockUpdateById,
       });
 
       await repository.viewSecurityNote("note-id-123");
 
-      expect(mockModifyWithVersioningAndEvictCache).toHaveBeenCalled();
+      expect(mockModifyWithVersioning).toHaveBeenCalled();
       expect(mockUpdateById).toHaveBeenCalledWith(
         expect.objectContaining({
           status: "VIEWED",
@@ -170,7 +168,7 @@ describe("SecurityNoteRepository", () => {
   describe("createSecurityNote", () => {
     it("should create security notes", async () => {
       const mockInsert = vi.fn().mockResolvedValue(undefined);
-      mockModifyWithVersioningAndEvictCache.mockReturnValue({
+      mockModifyWithVersioning.mockReturnValue({
         insert: mockInsert,
       });
 
@@ -194,7 +192,7 @@ describe("SecurityNoteRepository", () => {
 
       await repository.createSecurityNote(mockData);
 
-      expect(mockModifyWithVersioningAndEvictCache).toHaveBeenCalled();
+      expect(mockModifyWithVersioning).toHaveBeenCalled();
       expect(mockInsert).toHaveBeenCalledWith(securityNotes, expect.any(Array));
     });
   });
@@ -229,13 +227,13 @@ describe("SecurityNoteRepository", () => {
   describe("deleteSecurityNote", () => {
     it("should delete security note", async () => {
       const mockUpdateById = vi.fn().mockResolvedValue(undefined);
-      mockModifyWithVersioningAndEvictCache.mockReturnValue({
+      mockModifyWithVersioning.mockReturnValue({
         updateById: mockUpdateById,
       });
 
       await repository.deleteSecurityNote("note-id-123");
 
-      expect(mockModifyWithVersioningAndEvictCache).toHaveBeenCalled();
+      expect(mockModifyWithVersioning).toHaveBeenCalled();
       expect(mockUpdateById).toHaveBeenCalledWith(
         expect.objectContaining({
           status: "DELETED",
@@ -249,13 +247,13 @@ describe("SecurityNoteRepository", () => {
   describe("expireSecurityNote", () => {
     it("should expire security notes", async () => {
       const mockUpdateFields = vi.fn().mockResolvedValue(undefined);
-      mockModifyWithVersioningAndEvictCache.mockReturnValue({
+      mockModifyWithVersioning.mockReturnValue({
         updateFields: mockUpdateFields,
       });
 
       await repository.expireSecurityNote(["note-id-1", "note-id-2"]);
 
-      expect(mockModifyWithVersioningAndEvictCache).toHaveBeenCalled();
+      expect(mockModifyWithVersioning).toHaveBeenCalled();
       expect(mockUpdateFields).toHaveBeenCalled();
     });
   });

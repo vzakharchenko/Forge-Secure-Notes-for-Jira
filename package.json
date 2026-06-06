@@ -13,10 +13,10 @@
     "@forge/sql": "^3.0.25",
     "class-validator": "^0.15.1",
     "drizzle-orm": "^0.45.2",
-    "forge-sql-orm": "^2.1.29",
+    "forge-sql-orm-extra": "^2.2.0",
+    "forge-sql-orm": "^2.2.0",
     "inversify": "^7.11.0",
-    "luxon": "^3.7.2",
-    "uuid": "^14.0.0"
+    "luxon": "^3.7.2"
   },
   "scripts": {
     "models:create": "forge-sql-orm-cli generate:model --output src/database/entities",
