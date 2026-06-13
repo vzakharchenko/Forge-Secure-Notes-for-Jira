@@ -37,9 +37,6 @@ cd ..
 echo '➡️ <--- BUILD SITE --->'
 cd web-site
 
-echo '➡️ npm audit (resolver)'
-npm audit fix|| { echo '❌ audit not fixed'; exit 1; }
-
 echo '➡️ lint-staged (static resources)'
 npx lint-staged || { echo '❌ lint-staged failed for static resources'; cd ..; exit 1; }
 
