@@ -13,8 +13,8 @@
     "@forge/sql": "^3.0.26",
     "class-validator": "^0.15.1",
     "drizzle-orm": "^0.45.2",
-    "forge-sql-orm-extra": "^2.2.0",
     "forge-sql-orm": "^2.2.0",
+    "forge-sql-orm-extra": "^2.2.1",
     "inversify": "^7.11.0",
     "luxon": "^3.7.2"
   },
