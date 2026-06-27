@@ -44,6 +44,7 @@ export default defineConfig(async (env: ConfigEnv): Promise<UserConfig> => {
       alias: {
         "@shared": resolve(__dirname, "../shared"),
         "@src": resolve(__dirname, "src"),
+        "@popperjs/core": "@popperjs/core/dist/cjs/popper.js",
       },
     },
     server: {
