@@ -22,6 +22,6 @@ export const defaultConfig: KnipConfig = {
 const config: KnipConfig = {
   ...defaultConfig,
   project: ["src/**/*.ts"],
-  ignoreDependencies: ["globals", "@oxc-project/runtime"],
+  ignoreDependencies: ["globals", "@oxc-project/runtime", "@oxc-resolver/binding-linux-x64-gnu"],
 };
 export default config;
