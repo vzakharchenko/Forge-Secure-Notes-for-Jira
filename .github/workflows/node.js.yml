@@ -66,7 +66,7 @@ jobs:
         if: github.actor != 'dependabot[bot]'
       - name: SonarQube Scan
         if: github.actor != 'dependabot[bot]'
-        uses: SonarSource/sonarqube-scan-action@a31c9398be7ace6bbfaf30c0bd5d415f843d45e9
+        uses: SonarSource/sonarqube-scan-action@70bad232163b09d998ea0707ee80c0ec80798c16 # v8.5.1
         env:
           SONAR_TOKEN: ${{ secrets.SONARCLOUD_TOKEN }}
       - name: Site install & build
@@ -156,7 +156,7 @@ jobs:
         if: github.actor != 'dependabot[bot]'
       - name: SonarQube Scan
         if: github.actor != 'dependabot[bot]'
-        uses: SonarSource/sonarqube-scan-action@a31c9398be7ace6bbfaf30c0bd5d415f843d45e9
+        uses: SonarSource/sonarqube-scan-action@70bad232163b09d998ea0707ee80c0ec80798c16 # v8.5.1
         env:
           SONAR_TOKEN: ${{ secrets.SONARCLOUD_TOKEN }}
 
