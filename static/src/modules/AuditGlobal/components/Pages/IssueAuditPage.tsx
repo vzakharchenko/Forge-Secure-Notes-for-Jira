@@ -5,7 +5,8 @@
 import React, { useCallback, useState } from "react";
 
 // helpers
-import { invoke, showFlag } from "@forge/bridge";
+import { showFlag } from "@forge/bridge";
+import { invokeBody } from "@src/api/invokeBody";
 
 // models
 import { ResolverNames } from "@shared/ResolverNames";
@@ -40,7 +41,7 @@ export default function IssueAuditPage(props: { timezone: string }) {
         return { notes: [], totalCount: 0 };
       }
 
-      const response = await invoke<AuditUser>(ResolverNames.AUDIT_DATA_PER_ISSUE, {
+      const response = await invokeBody<AuditUser>(ResolverNames.AUDIT_DATA_PER_ISSUE, {
         issueId: issueKey,
         limit: limit,
         offset: offset,

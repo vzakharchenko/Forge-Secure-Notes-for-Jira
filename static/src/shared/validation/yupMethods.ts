@@ -4,7 +4,7 @@
 // libs
 import { addMethod, string, StringSchema, ValidationError } from "yup";
 
-addMethod(string, "sequence", function (schemas: StringSchema[]) {
+addMethod<StringSchema>(string, "sequence", function (schemas: StringSchema[]) {
   return string().test(async (value, context) => {
     try {
       for (const schema of schemas) {

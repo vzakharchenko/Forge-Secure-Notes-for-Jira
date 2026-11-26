@@ -11,20 +11,19 @@
     "forceConsistentCasingInFileNames": true,
     "noFallthroughCasesInSwitch": true,
     "module": "esnext",
-    "moduleResolution": "node",
+    "moduleResolution": "Bundler",
     "outDir": "dist",
+    "rootDir": "..",
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
     "jsx": "react-jsx",
+    "types": ["vite/client"],
     "sourceMap": true,
-    "baseUrl": ".",
     "paths": {
       "@shared/*": ["../shared/*"],
-      "@src/*": ["src/*"]
+      "@src/*": ["./src/*"]
     }
   },
-  "types": ["vite/client", "vite-plugin-svgr/client"],
-  "include": ["../shared", "src", "typings"],
-  "references": [{ "path": "./tsconfig.node.json" }]
+  "include": ["../shared", "src", "typings"]
 }

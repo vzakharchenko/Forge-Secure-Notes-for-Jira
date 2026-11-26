@@ -5,7 +5,8 @@
 import { useEffect, useState, useCallback } from "react";
 
 // helpers
-import { invoke, showFlag } from "@forge/bridge";
+import { showFlag } from "@forge/bridge";
+import { invokeBody } from "@src/api/invokeBody";
 import { useLocation } from "react-router-dom";
 
 // models
@@ -21,7 +22,7 @@ export const useProjectIssuesList = (type: ProjectIssuesListType, detailPathSegm
   const fetchItems = useCallback(async () => {
     setIsLoading(true);
     try {
-      const response = await invoke<ProjectIssue>(ResolverNames.AUDIT_ISSUES_AND_PROJECTS);
+      const response = await invokeBody<ProjectIssue>(ResolverNames.AUDIT_ISSUES_AND_PROJECTS);
 
       if (response.isError) {
         showFlag({

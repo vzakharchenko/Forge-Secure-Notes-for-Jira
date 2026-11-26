@@ -2,14 +2,13 @@
 // SPDX-License-Identifier: BUSL-1.1
 
 //libs
-import { invoke } from "@forge/bridge";
+import { invokeBody, type InvokePayload } from "@src/api/invokeBody";
 
 // helpers
 import { showErrorFlag, showWarningFlag } from "@src/shared/utils/flags";
 import ApiError from "@src/shared/services/ApiError";
 
 // models
-import { InvokePayload } from "@forge/bridge/out/types";
 import { ErrorResponse } from "@shared/Types";
 
 const handleForgeApiError = (errorResponse: ErrorResponse): Promise<never> => {
@@ -57,7 +56,7 @@ export default {
     functionKey: string,
     payload?: InvokePayload | undefined,
   ): Promise<T> {
-    let response = await invoke<T>(functionKey, payload);
+    let response = await invokeBody<T>(functionKey, payload);
 
     if (response.isError && response.errorType === "INSTALLATION") {
       showWarningFlag({
@@ -65,7 +64,7 @@ export default {
         description: "Please wait",
       });
       await new Promise((resolve) => setTimeout(resolve, 20000));
-      response = await invoke<T>(functionKey, payload);
+      response = await invokeBody<T>(functionKey, payload);
     }
 
     if (response.isError && response.errorType !== "INSTALLATION") {

@@ -21,7 +21,6 @@ const FormTextArea = ({
 }: FormTextAreaProps) => {
   return (
     <Field<string, HTMLTextAreaElement>
-      aria-required={isRequired}
       name={name}
       label={label}
       defaultValue={defaultValue}

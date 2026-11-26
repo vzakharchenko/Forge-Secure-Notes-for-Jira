@@ -4,7 +4,7 @@
 import { ReactNode, useEffect, useState } from "react";
 import { view } from "@forge/bridge";
 import { Action, History, Location } from "history";
-import { Router } from "react-router";
+import { NavigationType, Router } from "react-router";
 import Loading from "@src/components/Loading";
 
 const AppForge = ({ children }: { children: ReactNode }) => {
@@ -47,10 +47,9 @@ const AppForge = ({ children }: { children: ReactNode }) => {
   return (
     <div>
       {history && historyState ? (
-        // @ts-expect-error unknown issue
         <Router
           navigator={history}
-          navigationType={historyState.action}
+          navigationType={historyState.action as unknown as NavigationType}
           location={historyState.location}
         >
           {children}

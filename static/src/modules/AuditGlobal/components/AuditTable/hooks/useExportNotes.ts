@@ -2,7 +2,8 @@
 // SPDX-License-Identifier: BUSL-1.1
 
 // libs
-import { invoke, showFlag } from "@forge/bridge";
+import { showFlag } from "@forge/bridge";
+import { invokeBody } from "@src/api/invokeBody";
 
 // models
 import { AuditUser } from "@shared/responses/AuditUser";
@@ -35,7 +36,7 @@ export const useExportNotes = () => {
       let hasMore = true;
 
       while (hasMore) {
-        const response = await invoke<AuditUser>(config.resolverName, {
+        const response = await invokeBody<AuditUser>(config.resolverName, {
           ...config.params,
           limit: 100,
           offset: offset,

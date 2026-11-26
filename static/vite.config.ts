@@ -35,15 +35,15 @@ export default defineConfig(async (env: ConfigEnv): Promise<UserConfig> => {
     acc[`process.env.${key}`] = JSON.stringify(envVars[key]);
     return acc;
   }, {});
-  const buildPath = resolve(__dirname, envVars["BUILD_PATH"] || "./site");
+  const buildPath = resolve(import.meta.dirname, envVars["BUILD_PATH"] || "./site");
   return {
     define: envKeys,
     base: "./",
     plugins: [react()],
     resolve: {
       alias: {
-        "@shared": resolve(__dirname, "../shared"),
-        "@src": resolve(__dirname, "src"),
+        "@shared": resolve(import.meta.dirname, "../shared"),
+        "@src": resolve(import.meta.dirname, "src"),
         "@popperjs/core": "@popperjs/core/dist/cjs/popper.js",
       },
     },

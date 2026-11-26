@@ -39,7 +39,6 @@ const FormMultiAutocomplete = <Option extends SelectOption>({
 
   return (
     <Field<ValueType<Option, true>>
-      aria-required={isRequired}
       name={name}
       label={label}
       defaultValue={defaultValue}
