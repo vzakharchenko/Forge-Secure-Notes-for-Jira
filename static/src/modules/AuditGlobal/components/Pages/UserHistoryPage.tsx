@@ -5,7 +5,8 @@
 import React, { useEffect, useState, useCallback } from "react";
 
 // helpers
-import { invoke, showFlag } from "@forge/bridge";
+import { showFlag } from "@forge/bridge";
+import { invokeBody } from "@src/api/invokeBody";
 
 // models
 import { ResolverNames } from "@shared/ResolverNames";
@@ -38,7 +39,7 @@ export default function UserHistoryPage(props: { timezone: string }) {
   const fetchUsers = async () => {
     setIsLoadingUsers(true);
     try {
-      const response = await invoke<AuditUsers>(ResolverNames.AUDIT_USERS_ALL);
+      const response = await invokeBody<AuditUsers>(ResolverNames.AUDIT_USERS_ALL);
 
       if (response.isError) {
         showFlag({
@@ -74,7 +75,7 @@ export default function UserHistoryPage(props: { timezone: string }) {
         return { notes: [], totalCount: 0 };
       }
 
-      const response = await invoke<AuditUser>(ResolverNames.AUDIT_DATA_PER_USER, {
+      const response = await invokeBody<AuditUser>(ResolverNames.AUDIT_DATA_PER_USER, {
         accountId: selectedUser.accountId,
         limit: limit,
         offset: offset,

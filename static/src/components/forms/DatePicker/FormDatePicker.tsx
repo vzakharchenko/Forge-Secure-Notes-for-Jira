@@ -42,7 +42,6 @@ const FormDatePicker = ({
 
   return (
     <Field
-      aria-required={isRequired}
       name={name}
       label={label}
       defaultValue={defaultValue}
